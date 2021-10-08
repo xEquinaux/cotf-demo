@@ -125,7 +125,7 @@ namespace MonoGamePort
                     else
                     {
                         alpha = 0.1f;
-                        foreach (SquareBrush b in Main.square.Where(t => t.Distance(t.Center, Center) < spellRange))
+                        foreach (SquareBrush b in Main.square.Where(t => NPC.Distance(t.Center, Center) < spellRange))
                         {
                             if (!b.Active)
                             {
@@ -193,7 +193,6 @@ namespace MonoGamePort
             if (!init)
             {
                 Name = "Player001";
-                NPCs.Wurm_Head.NewWurm((int)Main.LocalPlayer.X, (int)Main.LocalPlayer.Y, 6, 0);
                 //  DEBUG adding player and singular light source
                 Light.entity.Add(this);
                 //Light.entity.Add(new SimpleEntity()
@@ -526,7 +525,7 @@ namespace MonoGamePort
             else Main.TimeScale = 1;
             foreach (NPC npc in Main.npc.Where(t => t != null && t.active))
             {
-                if (npc.Distance(Center, npc.Center) < range)
+                if (NPC.Distance(Center, npc.Center) < range)
                     Main.TimeScale = 1;
             }
 

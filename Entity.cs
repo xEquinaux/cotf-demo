@@ -41,7 +41,7 @@ namespace MonoGamePort
         public bool discovered;
         public float alpha = 1f;
         public Stats stats;
-        public float Distance(Vector2 one, Vector2 two)
+        public static float Distance(Vector2 one, Vector2 two)
         {
             Vector2 v1 = one;
             Vector2 v2 = two;

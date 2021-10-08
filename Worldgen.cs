@@ -327,7 +327,7 @@ namespace MonoGamePort
                     //  Adding tile objects
                     for (int k = 0; k < nodes.Length; k++)
                     {
-                        if (!b.Active && b.Distance(nodes[k], b.Center) < range * mult)
+                        if (!b.Active && Distance(nodes[k], b.Center) < range * mult)
                         {
                             Vector2 randv2 = Vector2.Zero;
                             do
@@ -354,7 +354,11 @@ namespace MonoGamePort
                                     break;
                                 case TileID.Monster:
                                     if (numNPCs++ < 12)
-                                        NPC.NewNPC((int)randv2.X, (int)randv2.Y, NPCID.Kobold, Color.White);
+                                    {
+                                        if (Main.rand.Next(4) == 0)
+                                            NPCs.Wurm_Head.NewWurm((int)randv2.X, (int)randv2.Y, 6, 0);
+                                        else NPC.NewNPC((int)randv2.X, (int)randv2.Y, NPCID.Kobold, Color.White);
+                                    }
                                     break;
                                 case TileID.Trap:
                                     if (numTraps++ < 10)
@@ -460,7 +464,7 @@ namespace MonoGamePort
             {
                 foreach (Vector2 node in nodes)
                 {
-                    if (b.Distance(node, b.Center) < range)
+                    if (NPC.Distance(node, b.Center) < range)
                     {
                         b.active(false);
                     }
@@ -479,7 +483,7 @@ namespace MonoGamePort
                     start.Y += line.Y;
                     foreach (var b in brush)
                     {
-                        if (b.Distance(start, b.Center) < size * 1.34f)
+                        if (NPC.Distance(start, b.Center) < size * 1.34f)
                         {
                             b.active(false);
                         }
@@ -498,7 +502,7 @@ namespace MonoGamePort
                     start.Y += line.Y;
                     foreach (var b in brush)
                     {
-                        if (b.Distance(start, b.Center) < size * 1.34f)
+                        if (NPC.Distance(start, b.Center) < size * 1.34f)
                         {
                             b.active(false);
                         }
@@ -557,7 +561,7 @@ namespace MonoGamePort
                     } while (brush[randX / size, randY / size].Active);
                     for (int k = 0; k < nodes.Length; k++)
                     {
-                        if (!b.Active && b.Distance(nodes[k], b.Center) < range)
+                        if (!b.Active && NPC.Distance(nodes[k], b.Center) < range)
                         {
                             int rand = Main.rand.Next(13);
                             switch (rand)

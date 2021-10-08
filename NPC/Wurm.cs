@@ -13,11 +13,12 @@ namespace MonoGamePort.NPCs
     {
         public const byte
             Normal = 0;
-        public static Wurm_Head head;
+        public Wurm_Head head;
         public Wurm_Body[] body;
         public Wurm_Tail tail;
         const int maxIFrames = 15;
         private int length;
+        public float rotation;
         public bool IsHit()
         {
             foreach (Projectile proj in Main.projectile)
@@ -80,7 +81,20 @@ namespace MonoGamePort.NPCs
                 courage = 0.25f,
                 wellBeing = 0.02f
             };
-            head = wurm;
+            for (int i = 0; i < Main.wurm.Length; i++)
+            {
+                int num = 100;
+                if (Main.wurm[i] == null || !Main.wurm[i].active)
+                {
+                    Main.wurm[i] = wurm;
+                    Main.wurm[i].head = wurm;
+                    break;
+                }
+                if (i == num)
+                {
+                    Main.wurm[num] = wurm;
+                }
+            }
             return wurm;
         }
         public override void Kill()
@@ -95,6 +109,12 @@ namespace MonoGamePort.NPCs
         {
             if (!active) return;
 
+            if (NPC.LineIntersect(this.Center, Main.player[0].position))
+            {
+                return;
+            }
+            rotation = Helper.AngleTo(Center, Main.LocalPlayer.Center);
+
             hitbox = new Rectangle((int)position.X, (int)position.Y, width, height);
 
             float range = 24f;
@@ -108,6 +128,8 @@ namespace MonoGamePort.NPCs
 
             if (Main.LocalPlayer.Movement())
             {
+                if (head == null)
+                    return;
                 if (stats.iFrames > 0)
                     stats.iFrames--;
 
@@ -149,7 +171,7 @@ namespace MonoGamePort.NPCs
             if (!active) return;
 
             //  Head
-            sb.Draw(Main.MagicPixel, hitbox, new Rectangle(0, 0, width, height), IFrames(Color.Blue), Helper.AngleTo(Center, Main.LocalPlayer.Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            sb.Draw(Main.MagicPixel, hitbox, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Tail + 1
             sb.Draw(Main.MagicPixel, body[0].hitbox, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(body[0].Center, body[1].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Body

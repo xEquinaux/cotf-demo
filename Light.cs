@@ -76,7 +76,7 @@ namespace MonoGamePort
                                 {
                                     ground.discovered = true;
                                 }
-                                foreach (SquareBrush sq in Main.square.Where(t => t != null && !t.discovered && t.Distance(ent.Center, t.Center) < range))
+                                foreach (SquareBrush sq in Main.square.Where(t => t != null && !t.discovered && NPC.Distance(ent.Center, t.Center) < range))
                                 {
                                     sq.discovered = true;
                                 }

@@ -313,8 +313,11 @@ namespace MonoGamePort
 
                     if (ticks++ > 15)
                     {
-                        velocity = AngleToSpeed(NPC.AngleTo(Center, Target.Center), maxSpeed * 3f);
-                        ticks = 0;
+                        if (!LineIntersect(Center, Main.LocalPlayer.Center))
+                        { 
+                            velocity = AngleToSpeed(NPC.AngleTo(Center, Target.Center), maxSpeed * 3f);
+                            ticks = 0;
+                        }
                     }
 
                     //  Collision reaction
@@ -340,6 +343,21 @@ namespace MonoGamePort
             float cos = (float)(amount * Math.Cos(angle));
             float sine = (float)(amount * Math.Sin(angle));
             return new Vector2(cos, sine);
+        }
+        public static bool LineIntersect(Vector2 from, Vector2 to)
+        {
+            for (float i = 0f; i < Distance(from, to); i++)
+            {
+                float angle = NPC.AngleTo(from, to);
+                float cos = from.X + (float)(i * Math.Cos(angle));
+                float sin = from.Y + (float)(i * Math.Sin(angle));
+                Vector2 line = new Vector2(cos, sin);
+                if (SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50).Active && SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50).Hitbox.Contains(line))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public void PreDraw(SpriteBatch sb)
         {

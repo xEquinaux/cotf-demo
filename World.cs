@@ -42,6 +42,10 @@ namespace MonoGamePort
             this.width = width;
             this.height = height;
         }
+        public static SquareBrush GetSafely(int x, int y)
+        {
+            return Main.squareMulti[Math.Max(0, Math.Min(Main.squareMulti.GetLength(0) - 1, x)), Math.Max(0, Math.Min(Main.squareMulti.GetLength(1) - 1, y))];
+        }
         public static SquareBrush NewBrush(int x, int y, int width, int height, bool active = true, bool discovered = false)
         {
             int num = Main.square.Count - 1;
@@ -57,8 +61,8 @@ namespace MonoGamePort
                     break;
                 }
             }
-            int m = x / width;
-            int n = y / height;
+            int m = Math.Min(x / width, Main.squareMulti.GetLength(0) - 1);
+            int n = Math.Min(y / height, Main.squareMulti.GetLength(1) - 1);
             Main.squareMulti[m, n] = new SquareBrush(x, y, width, height);
             Main.squareMulti[m, n].active(active);
             Main.squareMulti[m, n].discovered = discovered;

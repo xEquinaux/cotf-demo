@@ -31,6 +31,7 @@ namespace MonoGamePort
         public static GUI[,] skill = new GUI[10, 4];
         //public static TriangleBrush[] triangle = new TriangleBrush[256];
         public static Item[] item = new Item[501];
+        public static NPCs.Wurm_Head[] wurm = new NPCs.Wurm_Head[101];
         public static IList<Foreground> Fg = new List<Foreground>();
         public static Player[] player = new Player[256];
         public static Worldgen worldgen;
@@ -227,9 +228,10 @@ namespace MonoGamePort
                         i.Draw(sb);
                     foreach (Foreground fg in Fg)
                         fg?.Draw(sb);
+                    foreach (NPCs.Wurm_Head w in Main.wurm)
+                        w?.Draw(sb);
                     foreach (SquareBrush sq in square)
                         sq?.PreDraw(sb);
-                    NPCs.Wurm_Head.head?.Draw(sb);
                     if (!IsZoomed)
                     {
                         foreach (Light l in Light.light)
@@ -330,7 +332,8 @@ namespace MonoGamePort
                         pr.AI();
                     }
                 }
-                NPCs.Wurm_Head.head?.AI();
+                foreach (NPCs.Wurm_Head w in Main.wurm)
+                    w?.AI();
                 foreach (Dust d in dust.Where(t => t != null))
                     d.Update();
                 foreach (GUI g in gui.Where(t => t != null))
@@ -454,33 +457,30 @@ namespace MonoGamePort
                 using (FileStream stream = new FileStream("player", FileMode.OpenOrCreate, FileAccess.Read))
                 using (BinaryReader br = new BinaryReader(stream))
                 {
-                    try
-                    {
-                        Player player = LocalPlayer;
-                        player.Name = br.ReadString();
+                    Player player = LocalPlayer;
+                    player.Name = br.ReadString();
 
-                        Level.floorNumber = br.ReadInt32();
-                        if (!LoadLevel(Level.floorNumber))
-                            GenerateLevel();
+                    Level.floorNumber = br.ReadInt32();
+                    if (!LoadLevel(Level.floorNumber))
+                        GenerateLevel();
 
-                        player.position = new Vector2(br.ReadSingle(), br.ReadSingle());
+                    //  Reading through unused data
+                    float x = br.ReadSingle();
+                    float y = br.ReadSingle();
 
-                        player.Stats = new Stats();
-                        player.Stats.totalLife = br.ReadInt32();
-                        player.Stats.currentLife = br.ReadInt32();
-                        player.Stats.totalMana = br.ReadInt32();
-                        player.Stats.mana = br.ReadInt32();
+                    player.position = Main.stair.First(t => t.transition == Staircase.Transition.GoingUp).position;
 
-                        player.Traits = new Traits();
-                        player.Traits.bookSmarts = br.ReadSingle();
-                        player.Traits.courage = br.ReadSingle();
-                        player.Traits.streetSmarts = br.ReadSingle();
-                        player.Traits.wellBeing = br.ReadSingle();
-                    }
-                    catch
-                    {
-                        return false;
-                    }
+                    player.Stats = new Stats();
+                    player.Stats.totalLife = br.ReadInt32();
+                    player.Stats.currentLife = br.ReadInt32();
+                    player.Stats.totalMana = br.ReadInt32();
+                    player.Stats.mana = br.ReadInt32();
+
+                    player.Traits = new Traits();
+                    player.Traits.bookSmarts = br.ReadSingle();
+                    player.Traits.courage = br.ReadSingle();
+                    player.Traits.streetSmarts = br.ReadSingle();
+                    player.Traits.wellBeing = br.ReadSingle();
                 }
                 return true;
             }

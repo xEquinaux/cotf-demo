@@ -263,8 +263,8 @@ namespace MonoGamePort
             Initialize(floorIndex);
 
             //  Iterate through unused values
-            read.ReadString();
-            read.ReadInt32();
+            string text = read.ReadString();
+            int num     = read.ReadInt32();
 
             //  Get array lengths
             int torchLength = read.ReadInt32();
