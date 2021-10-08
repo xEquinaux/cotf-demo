@@ -127,7 +127,7 @@ namespace MonoGamePort
                         alpha = 0.1f;
                         foreach (SquareBrush b in Main.square.Where(t => NPC.Distance(t.Center, Center) < spellRange))
                         {
-                            if (!b.Active)
+                            if (!b.active())
                             {
                                 phase = false;
                                 position = b.Center - new Vector2(b.width / 2, b.height / 2);
@@ -610,12 +610,12 @@ namespace MonoGamePort
 
         public void ToggleZoom()
         {
-            if (KeyDown(Keys.Z) && flag3 % 2 == 0)
+            if (KeyDown(Keys.M) && flag3 % 2 == 0)
             {
                 flag3++;
                 Main.IsZoomed = !Main.IsZoomed;
             }
-            if (KeyUp(Keys.Z))
+            if (KeyUp(Keys.M))
             {
                 flag3 = 0;
             }

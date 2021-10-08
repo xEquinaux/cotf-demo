@@ -117,9 +117,13 @@ namespace MonoGamePort
                             ClearPreviousLevel();
                             Level.floorNumber--;
                             Light.entity.Add(player);
-                            Level.LoadFloor(Level.floorNumber);
-                            Light.light.Clear();
-                            Light.Create(0, 0, Main.LevelWidth, Main.LevelHeight, null);
+                            if (File.Exists(Level.Name + Level.floorNumber))
+                            {
+                                Level.LoadFloor(Level.floorNumber);
+                                Light.light.Clear();
+                                Light.Create(0, 0, Main.LevelWidth, Main.LevelHeight, null);
+                            }
+                            else Main.GenerateLevel();
                             player.position = Main.stair.Where(t => t.transition == Transition.GoingDown).First().position;
                         }
                         break;
@@ -180,29 +184,29 @@ namespace MonoGamePort
             write.Write(Name);
             write.Write(floorNumber);
 
-            write.Write(Light.entity.Where(t => t.owner == Item.Owner_World).Count());
-            write.Write(Main.square.Where(t => t != null).Count());
-            write.Write(Main.ground.Where(t => t != null).Count());
+            write.Write(Light.entity.Where(t => t.owner == Item.Owner_World && t.active == true).Count());
+            write.Write(Main.square.Where(t => t != null && t.active()).Count());
+            write.Write(Main.ground.Where(t => t != null && t.active == true).Count());
             write.Write(Main.item.Where(t => t != null).Count());
             write.Write(Main.trap.Where(t => t != null).Count());
             write.Write(Main.stair.Where(t => t != null).Count());
             write.Write(Main.npc.Where(t => t != null).Count());
 
-            foreach (SimpleEntity ent in Light.entity.Where(t => t.owner == Item.Owner_World))
+            foreach (SimpleEntity ent in Light.entity.Where(t => t.owner == Item.Owner_World && t.active == true))
             {
                 write.Write(ent.owner);
                 write.Write(ent.range);
                 write.Write(ent.X);
                 write.Write(ent.Y);
             }
-            foreach (SquareBrush sq in Main.square.Where(t => t != null))
+            foreach (SquareBrush sq in Main.square.Where(t => t != null && t.active()))
             {
-                write.Write(sq.Active);
+                write.Write(sq.active());
                 write.Write(sq.discovered);
                 write.Write(sq.X);
                 write.Write(sq.Y);
             }
-            foreach (Background bg in Main.ground.Where(t => t != null))
+            foreach (Background bg in Main.ground.Where(t => t != null && t.active == true))
             {
                 write.Write(bg.active);
                 write.Write(bg.discovered);
@@ -264,7 +268,9 @@ namespace MonoGamePort
 
             //  Iterate through unused values
             string text = read.ReadString();
-            int num     = read.ReadInt32();
+
+            //  Floor index
+            Level.floorNumber = read.ReadInt32();
 
             //  Get array lengths
             int torchLength = read.ReadInt32();
@@ -289,7 +295,7 @@ namespace MonoGamePort
                     position = new Vector2(x, y)
                 });
             }
-            SquareBrush.InitializeArray(brushLength);
+            SquareBrush.InitializeArray(brushLength, true);
             for (int n = 0; n < brushLength; n++)
             {
                 bool active = read.ReadBoolean();
@@ -312,6 +318,10 @@ namespace MonoGamePort
                 int y = read.ReadInt32();
                 int width = read.ReadInt32();
                 int height = read.ReadInt32();
+                if (x > 3000 || y > 3000)
+                {
+                    throw new Exception("Maps coordinates outside nonimal range.");
+                }
                 
                 var bg = Background.NewGround(x, y, width, height, style, range);
                 bg.active = active;
@@ -354,13 +364,14 @@ namespace MonoGamePort
             {
                 bool active = read.ReadBoolean();
                 bool discovered = read.ReadBoolean();
-                Enum.TryParse(typeof(Staircase.Transition), read.ReadString(), out object transition);
+                string text2 = read.ReadString();
+                Enum.TryParse(typeof(Staircase.Transition), text2, out object transition);
                 int x = read.ReadInt32();
                 int y = read.ReadInt32();
                 int width = read.ReadInt32();
                 int height = read.ReadInt32();
 
-                var stair = Staircase.NewStairs(x, y, 50, floorIndex, (Staircase.Transition)transition);
+                var stair = Staircase.NewStairs(x, y, 50, floorIndex, transition == null ? default : (Staircase.Transition)transition);
                 stair.active = active;
                 stair.discovered = discovered;
             }

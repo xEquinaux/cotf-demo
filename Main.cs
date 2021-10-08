@@ -216,10 +216,10 @@ namespace MonoGamePort
                 PreDraw(sb);
                 if (!InventoryOpen)
                 {
-                    foreach (Staircase s in Main.stair)
-                        s?.Draw(sb);   
                     foreach (Trap traps in trap.Where(t => t != null))
                         traps.Draw(sb);
+                    foreach (Staircase s in Main.stair)
+                        s?.Draw(sb);   
                     foreach (NPC n in npc.Where(t => t != null))
                         n.PreDraw(sb);
                     foreach (Dust d in dust.Where(t => t != null))
@@ -363,15 +363,7 @@ namespace MonoGamePort
             //    worldgen.DungeonGen(size, width, height, maxNodes, 250f);
 
             Light.Create(0, 0, Main.LevelWidth, Main.LevelHeight, null);
-            if (Level.floorNumber == 0)
-            {
-                Background bg = null;
-                do
-                {
-                    bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
-                } while (bg == null || !bg.active);
-                Main.LocalPlayer.position = bg.position;
-            }
+
             //  Old player placement
             //Main.stair.Where(t => t.transition == Staircase.Transition.GoingUp).First().position;
             Main.UpdateBrushes();
@@ -452,23 +444,26 @@ namespace MonoGamePort
         }
         public static bool LoadPlayer()
         {
+            Player player = LocalPlayer;
             if (File.Exists("player"))
             {
                 using (FileStream stream = new FileStream("player", FileMode.OpenOrCreate, FileAccess.Read))
                 using (BinaryReader br = new BinaryReader(stream))
                 {
-                    Player player = LocalPlayer;
                     player.Name = br.ReadString();
 
                     Level.floorNumber = br.ReadInt32();
                     if (!LoadLevel(Level.floorNumber))
                         GenerateLevel();
 
-                    //  Reading through unused data
+                    //  Reading previous player coordinates
                     float x = br.ReadSingle();
                     float y = br.ReadSingle();
 
-                    player.position = Main.stair.First(t => t.transition == Staircase.Transition.GoingUp).position;
+                    player.position = new Vector2(x, y);
+
+                    //  DEBUG reset player position
+                    //player.position = Main.stair.First(t => t.transition == Staircase.Transition.GoingUp).position;
 
                     player.Stats = new Stats();
                     player.Stats.totalLife = br.ReadInt32();
@@ -482,10 +477,20 @@ namespace MonoGamePort
                     player.Traits.streetSmarts = br.ReadSingle();
                     player.Traits.wellBeing = br.ReadSingle();
                 }
+                //  DEBUG set player position
+                if (Level.floorNumber == 0)
+                {
+                    Background bg = null;
+                    do
+                    {
+                        bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+                    } while (bg == null || !bg.active);
+                    Main.LocalPlayer.position = bg.position;
+                }
                 return true;
             }
             if (!LoadLevel(Level.floorNumber))
-                GenerateLevel();
+                GenerateLevel();                              
             return false;
         }
         public static bool LoadLevel(int floor)

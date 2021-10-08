@@ -18,7 +18,7 @@ namespace MonoGamePort
         public int Y;
         public int i => X / width;
         public int j => Y / height;
-        public bool Active = true;
+        private bool Active = true;
         public bool Square = true;
         public const int Size = 50;
         public new Vector2 Center
@@ -34,6 +34,10 @@ namespace MonoGamePort
         {
             Active = active;
             return active;
+        }
+        public new bool active()
+        {
+            return Active;
         }
         public SquareBrush(int x, int y, int width, int height)
         {
@@ -66,7 +70,7 @@ namespace MonoGamePort
             Main.squareMulti[m, n] = new SquareBrush(x, y, width, height);
             Main.squareMulti[m, n].active(active);
             Main.squareMulti[m, n].discovered = discovered;
-            Main.squareMulti[m, n].whoAmI = num;
+            Main.squareMulti[m, n].whoAmI = Math.Max(num, 0);
             if (!discovered)
                 Main.squareMulti[m, n].alpha = 0f;
             return Main.squareMulti[m, n];
@@ -120,11 +124,23 @@ namespace MonoGamePort
             }
             else alpha = 1f;
             sb.Draw(Main.MagicPixel, Hitbox, Color.Red * alpha);
+
+            //  TODO: torch lighting on brushes
+            if (NPC.Distance(Center, Main.player[0].Center) > Light.range)
+                return;
+            //for (int n = 0; n < 50; n += 10)
+            //for (int i = Hitbox.X + n; i < Hitbox.X + Hitbox.Width; i += 10)
+            //{ 
+            //    for (int j = Hitbox.Y + n; j < Hitbox.Y + Hitbox.Height; j += 10)
+            //    { 
+            sb.Draw(Main.MagicPixel, Hitbox, Color.Orange * alpha * ((NPC.Distance(Center, Main.player[0].Center) * -1f + Light.range) / Light.range));
+            //    }
+            //}
         }
         public void Dispose()
         {
-            Main.square[whoAmI]?.active(false);
-            Main.square[whoAmI] = null;
+            Main.square[Math.Max(whoAmI, 0)]?.active(false);
+            Main.square[Math.Max(whoAmI, 0)] = null;
         }
         public static void ClearBrushes()
         {
@@ -133,9 +149,10 @@ namespace MonoGamePort
                 Main.square[i]?.Dispose();
             }
         }
-        public static void InitializeArray(int length)
+        public static void InitializeArray(int length, bool loading = false)
         {
-            length = (int)Math.Sqrt(length);
+            if (!loading)
+                length = (int)Math.Sqrt(length);
             Main.squareMulti = new SquareBrush[length,length];
         }
     }

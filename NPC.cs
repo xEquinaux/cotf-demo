@@ -183,6 +183,7 @@ namespace MonoGamePort
         private Dust[] targets = new Dust[1001];
         private bool moving;
         public bool collide, colUp, colRight, colDown, colLeft;
+        public bool hidden = false;
         public virtual void AI()
         {
             if (!discovered)
@@ -313,7 +314,7 @@ namespace MonoGamePort
 
                     if (ticks++ > 15)
                     {
-                        if (!LineIntersect(Center, Main.LocalPlayer.Center))
+                        if (!(hidden = LineIntersect(Center, Main.LocalPlayer.Center)))
                         { 
                             velocity = AngleToSpeed(NPC.AngleTo(Center, Target.Center), maxSpeed * 3f);
                             ticks = 0;
@@ -352,7 +353,9 @@ namespace MonoGamePort
                 float cos = from.X + (float)(i * Math.Cos(angle));
                 float sin = from.Y + (float)(i * Math.Sin(angle));
                 Vector2 line = new Vector2(cos, sin);
-                if (SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50).Active && SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50).Hitbox.Contains(line))
+                SquareBrush brush = SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50);
+                if (brush == null) return false;
+                if (brush.active() && brush.Hitbox.Contains(line))
                 {
                     return true;
                 }
@@ -361,7 +364,7 @@ namespace MonoGamePort
         }
         public void PreDraw(SpriteBatch sb)
         {
-            if (!discovered || !active)
+            if (!discovered || !active || hidden || texture == null)
                 return;
 
             if (iFrameCounter > 0)

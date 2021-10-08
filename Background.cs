@@ -97,7 +97,7 @@ namespace MonoGamePort
         }
         public void PreDraw(SpriteBatch sb)
         {
-            if (!active || !discovered)
+            if (!active || !discovered || texture == null)
             {
                 alpha = 0f;
                 return;

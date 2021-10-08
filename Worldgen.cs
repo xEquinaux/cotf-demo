@@ -322,12 +322,12 @@ namespace MonoGamePort
                 foreach (var b in brush)
                 {
                     //  Adding background objects
-                    if (!b.Active) Background.NewGround((int)b.Center.X - size / 2, (int)b.Center.Y - size / 2, size, size, 0, 128f);
+                    if (!b.active()) Background.NewGround((int)b.Center.X - size / 2, (int)b.Center.Y - size / 2, size, size, 0, 128f);
                     
                     //  Adding tile objects
                     for (int k = 0; k < nodes.Length; k++)
                     {
-                        if (!b.Active && Distance(nodes[k], b.Center) < range * mult)
+                        if (!b.active() && Distance(nodes[k], b.Center) < range * mult)
                         {
                             Vector2 randv2 = Vector2.Zero;
                             do
@@ -335,7 +335,7 @@ namespace MonoGamePort
                                 randX = Main.rand.Next(size, width - size);
                                 randY = Main.rand.Next(size, height - size);
                                 randv2 = new Vector2(randX, randY);
-                            } while (brush[randX / size, randY / size].Active);
+                            } while (brush[randX / size, randY / size].active());
                             int rand = Main.rand.Next(13);
                             randv2.X -= randv2.X % size;
                             randv2.Y -= randv2.Y % size;
@@ -420,7 +420,7 @@ namespace MonoGamePort
                         {
                             num = i;
                             Main.square[i] = b;
-                            Main.square[i].active(b.Active);
+                            Main.square[i].active(b.active());
                             break;
                         }
                     }
@@ -550,7 +550,7 @@ namespace MonoGamePort
             {
                 foreach (var b in brush)
                 {
-                    if (!b.Active) Background.NewGround((int)b.Center.X - size / 2, (int)b.Center.Y - size / 2, size, size, 0, 128f);
+                    if (!b.active()) Background.NewGround((int)b.Center.X - size / 2, (int)b.Center.Y - size / 2, size, size, 0, 128f);
                     //  Adding tile objects
                     Vector2 randv2 = Vector2.Zero;
                     do
@@ -558,10 +558,10 @@ namespace MonoGamePort
                         randX = Main.rand.Next(size, width - size);
                         randY = Main.rand.Next(size, height - size);
                         randv2 = new Vector2(randX, randY);
-                    } while (brush[randX / size, randY / size].Active);
+                    } while (brush[randX / size, randY / size].active());
                     for (int k = 0; k < nodes.Length; k++)
                     {
-                        if (!b.Active && NPC.Distance(nodes[k], b.Center) < range)
+                        if (!b.active() && NPC.Distance(nodes[k], b.Center) < range)
                         {
                             int rand = Main.rand.Next(13);
                             switch (rand)
@@ -643,7 +643,7 @@ namespace MonoGamePort
                         {
                             num = i;
                             Main.square[i] = b;
-                            Main.square[i].active(b.Active);
+                            Main.square[i].active(b.active());
                             break;
                         }
                     }

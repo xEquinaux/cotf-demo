@@ -109,7 +109,7 @@ namespace MonoGamePort.NPCs
         {
             if (!active) return;
 
-            if (NPC.LineIntersect(this.Center, Main.player[0].position))
+            if (hidden = NPC.LineIntersect(this.Center, Main.player[0].position))
             {
                 return;
             }
@@ -168,7 +168,7 @@ namespace MonoGamePort.NPCs
         }
         public void Draw(SpriteBatch sb)
         {
-            if (!active) return;
+            if (!active || hidden) return;
 
             //  Head
             sb.Draw(Main.MagicPixel, hitbox, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
