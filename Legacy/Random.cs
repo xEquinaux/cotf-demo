@@ -33,6 +33,10 @@ namespace MonoGamePort
         {
             return random.Next(2) == 1;
         }
+        public double NextFloat()
+        {
+            return (float)random.NextDouble();
+        }
         public double NextDouble()
         {
             return random.NextDouble();

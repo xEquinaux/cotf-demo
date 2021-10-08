@@ -108,6 +108,11 @@ namespace MonoGamePort.NPCs
         public override void AI()
         {
             if (!active) return;
+            
+            foreach (Foliage stuff in Main.foliage.Where(t => t != null))
+            {
+                stuff.NPCCollision(this);
+            }
 
             if (hidden = NPC.LineIntersect(this.Center, Main.player[0].position))
             {

@@ -12,6 +12,117 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGamePort
 {
+    public class Foliage : SimpleEntity
+    {
+        public bool cut = false;
+        public Background tile;
+        public bool modifiesMovement = false;
+        public int soundType;
+        public int lifeLeft = 100;
+        public Foliage(bool active = true)
+        {
+            this.active = active;
+        }
+        public static Foliage NewFoliage(float x, float y, int width, int height, int type, bool cuttable = false, Background tile = null)
+        {
+            int num = Main.foliage.Length;
+            for (int i = 0; i < num; i++)
+            {
+                if (Main.foliage[i] == null || !Main.foliage[i].active)
+                {
+                    num = i;
+                    break;
+                }
+                if (i == num - 1)
+                {
+                    break;
+                }
+            }
+            Main.foliage[num] = new Foliage();
+            Main.foliage[num].position = new Vector2(x, y);
+            Main.foliage[num].X = (int)x;
+            Main.foliage[num].Y = (int)y;
+            Main.foliage[num].width = width;
+            Main.foliage[num].height = height;
+            Main.foliage[num].type = type;
+            Main.foliage[num].cut = cuttable;
+            Main.foliage[num].tile = tile;
+            Main.foliage[num].whoAmI = num;
+            return Main.foliage[num];
+        }
+        public static int ChooseType()
+        {
+            return Main.rand.Next(FoliageID.Length);
+        }
+        public void Collision(Player player, int buffer = 4)
+        {
+            if (!active || type != FoliageID.StoneLarge) return;
+
+            if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y, Player.plrWidth, Player.plrHeight)))
+                player.collide = true;
+            //  Directions
+            if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y - buffer, Player.plrWidth, 2)))
+                player.colUp = true;
+            if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y + Player.plrHeight + buffer, Player.plrWidth, 2)))
+                player.colDown = true;
+            if (hitbox.Intersects(new Rectangle((int)player.position.X + Player.plrWidth + buffer, (int)player.position.Y, 2, Player.plrHeight)))
+                player.colRight = true;
+            if (hitbox.Intersects(new Rectangle((int)player.position.X - buffer, (int)player.position.Y, 2, Player.plrHeight)))
+                player.colLeft = true;
+        }
+        public void NPCCollision(NPC npc, int buffer = 4)
+        {
+            if (!active || type != FoliageID.StoneLarge) return;
+
+            if (hitbox.Intersects(new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height)))
+                npc.collide = true;
+            //  Directions
+            if (hitbox.Intersects(new Rectangle((int)npc.position.X, (int)npc.position.Y - buffer, npc.width, 2)))
+                npc.colUp = true;
+            if (hitbox.Intersects(new Rectangle((int)npc.position.X, (int)npc.position.Y + npc.height + buffer, npc.width, 2)))
+                npc.colDown = true;
+            if (hitbox.Intersects(new Rectangle((int)npc.position.X + npc.width + buffer, (int)npc.position.Y, 2, npc.height)))
+                npc.colRight = true;
+            if (hitbox.Intersects(new Rectangle((int)npc.position.X - buffer, (int)npc.position.Y, 2, npc.height)))
+                npc.colLeft = true;
+        }
+        public void Update()
+        {
+        }
+        public static void GenerateFoliage(int maxFoliage = 10)
+        {
+            for (int i = 0; i < maxFoliage; i++)
+            {
+                Background bg = null;
+                do
+                {
+                    bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+                } while (bg == null || !bg.active);
+                NewFoliage(bg.X, bg.Y, 40, 35, FoliageID.StoneLarge, false, bg);
+            }
+        }
+        public void Draw(SpriteBatch sb)
+        {
+            //  TODO get foliage sprites in gray tone and color them in Draw method
+            Color color = default(Color);
+            switch (type)
+            {
+                case FoliageID.Dirt:
+                    color = Color.Brown;
+                    sb.Draw(Main.MagicPixel, new Rectangle(X, Y, width, height), color);
+                    break;
+                case FoliageID.Puddle:
+                    color = Color.DeepSkyBlue;
+                    sb.Draw(Main.MagicPixel, new Rectangle(X, Y, width, height), color);
+                    break;
+                case FoliageID.StoneLarge:
+                    color = Color.Gray;
+                    sb.Draw(Main.Temporal, new Rectangle(X, Y, width, height), color);
+                    break;
+            }
+        }
+    }
+
     public class Background : SimpleEntity, IDisposable
     {
         public bool light;

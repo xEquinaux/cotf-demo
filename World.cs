@@ -126,14 +126,14 @@ namespace MonoGamePort
             sb.Draw(Main.MagicPixel, Hitbox, Color.Red * alpha);
 
             //  TODO: torch lighting on brushes
-            if (NPC.Distance(Center, Main.player[0].Center) > Light.range)
-                return;
+            //if (NPC.Distance(Center, Main.player[0].Center) > Light.range)
+            //    return;
             //for (int n = 0; n < 50; n += 10)
             //for (int i = Hitbox.X + n; i < Hitbox.X + Hitbox.Width; i += 10)
             //{ 
             //    for (int j = Hitbox.Y + n; j < Hitbox.Y + Hitbox.Height; j += 10)
             //    { 
-            sb.Draw(Main.MagicPixel, Hitbox, Color.Orange * alpha * ((NPC.Distance(Center, Main.player[0].Center) * -1f + Light.range) / Light.range));
+            //sb.Draw(Main.MagicPixel, Hitbox, Color.Orange * alpha * ((NPC.Distance(Center, Main.player[0].Center) * -1f + Light.range) / Light.range));
             //    }
             //}
         }

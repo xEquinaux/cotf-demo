@@ -113,6 +113,10 @@ namespace MonoGamePort
                     {
                         sq.NPCCollision(this);
                     }
+                    foreach (Foliage stuff in Main.foliage.Where(t => t != null))
+                    {
+                        stuff.NPCCollision(this);
+                    }
                     goto default;
                 default:
                     hitbox = new Rectangle((int)position.X, (int)position.Y, width, height);

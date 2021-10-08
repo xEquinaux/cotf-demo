@@ -32,6 +32,32 @@ namespace MonoGamePort
         public const byte
             Orb = 0;
     }
+    public class FoliageID
+    {
+        public static string GetIndexedName(int index)
+        {
+            switch (index)
+            {
+                case 0: return "Dirt";
+                case 1: return "StonesSmall";
+                case 2: return "StoneLarge";
+                case 3: return "DeadGrass";
+                case 4: return "GreenGrass";
+                case 5: return "Stalagmite";
+                case 6: return "Puddle";
+                default: return "";
+            }
+        }
+        public const byte Length = 7;
+        public const short
+            Dirt = 0,
+            StonesSmall = 1,
+            StoneLarge = 2,
+            DeadGrass = 3,
+            GreenGrass = 4,
+            Stalagmite = 5,
+            Puddle = 6;
+    }
     public class Stats
     {
         public int damage;

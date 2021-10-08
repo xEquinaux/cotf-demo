@@ -38,6 +38,7 @@ namespace MonoGamePort
         public static Trap[] trap = new Trap[101];
         public static Light[] light = new Light[1001];
         public static Staircase[] stair = new Staircase[51];
+        public static Foliage[] foliage = new Foliage[201];
 
         public static Texture2D MagicPixel;
         public static Texture2D Temporal;
@@ -216,6 +217,8 @@ namespace MonoGamePort
                 PreDraw(sb);
                 if (!InventoryOpen)
                 {
+                    foreach (Foliage stuff in Main.foliage)
+                        stuff?.Draw(sb);
                     foreach (Trap traps in trap.Where(t => t != null))
                         traps.Draw(sb);
                     foreach (Staircase s in Main.stair)
@@ -306,6 +309,8 @@ namespace MonoGamePort
                     sq.Collision(LocalPlayer);
                     sq.Update(100f);
                 }
+                foreach (Foliage stuff in foliage)
+                    stuff?.Collision(LocalPlayer);
                 foreach (Light l in Light.light)
                     l?.Update();
                 foreach (Light l in Main.light)
@@ -363,6 +368,7 @@ namespace MonoGamePort
             //    worldgen.DungeonGen(size, width, height, maxNodes, 250f);
 
             Light.Create(0, 0, Main.LevelWidth, Main.LevelHeight, null);
+            Foliage.GenerateFoliage(12);
 
             //  Old player placement
             //Main.stair.Where(t => t.transition == Staircase.Transition.GoingUp).First().position;
