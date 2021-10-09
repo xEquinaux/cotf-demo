@@ -88,6 +88,7 @@ namespace MonoGamePort
         }
         public void Update()
         {
+            VelocityMech.BasicSlowClamp()
         }
         public static void GenerateFoliage(int maxFoliage = 10)
         {

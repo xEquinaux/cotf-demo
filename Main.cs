@@ -330,6 +330,7 @@ namespace MonoGamePort
                         n.colDown = false;
                         n.colRight = false;
                         n.colLeft = false;
+                        n.PlayerNPCCollision();
                     }
                     foreach (Projectile pr in projectile.Where(t => t != null))
                     {
@@ -435,6 +436,7 @@ namespace MonoGamePort
                 bw.Write(player.Stats.currentLife);
                 bw.Write(player.Stats.totalMana);
                 bw.Write(player.Stats.mana);
+                bw.Write(player.Stats.iFrames);
                 //  TODO: Add more complete save of stats
 
                 //  Traits
@@ -476,6 +478,7 @@ namespace MonoGamePort
                     player.Stats.currentLife = br.ReadInt32();
                     player.Stats.totalMana = br.ReadInt32();
                     player.Stats.mana = br.ReadInt32();
+                    player.Stats.iFrames = br.ReadInt32();
 
                     player.Traits = new Traits();
                     player.Traits.bookSmarts = br.ReadSingle();
@@ -484,7 +487,7 @@ namespace MonoGamePort
                     player.Traits.wellBeing = br.ReadSingle();
                 }
                 //  DEBUG set player position
-                if (Level.floorNumber == 0)
+                if (Level.floorNumber == 0 || player.PlayerInWall())
                 {
                     Background bg = null;
                     do

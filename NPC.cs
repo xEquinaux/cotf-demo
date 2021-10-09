@@ -77,6 +77,45 @@ namespace MonoGamePort
                     break;
             }
         }
+        public bool PlayerNPCCollision(int buffer = 4)
+        {
+            if (!active) return false;
+            bool flag = false;
+            foreach (Player player in Main.player.Where(t => t != null && t.active))
+            {
+                if (player.hitbox.Intersects(new Rectangle((int)position.X, (int)position.Y, width, height)))
+                { 
+                    collide = true;
+                    player.collide = true;
+                }
+                //  Directions
+                if (player.hitbox.Intersects(new Rectangle((int)position.X, (int)position.Y - buffer, width, 2)))
+                { 
+                    colUp = true;
+                    player.colDown = true;
+                }
+                if (player.hitbox.Intersects(new Rectangle((int)position.X, (int)position.Y + height + buffer, width, 2)))
+                { 
+                    colDown = true;
+                    player.colUp = true;
+                }
+                if (player.hitbox.Intersects(new Rectangle((int)position.X + width + buffer, (int)position.Y, 2, height)))
+                { 
+                    colRight = true;
+                    player.colLeft = true;
+                }
+                if (player.hitbox.Intersects(new Rectangle((int)position.X - buffer, (int)position.Y, 2, height)))
+                { 
+                    colLeft = true;
+                    player.colRight = true;
+                }
+                if (flag = collide || colUp || colDown || colLeft || colRight && player.IsMovingNoCollide())
+                {
+                    player.npcCollide.Add(this);
+                }
+            }
+            return flag;
+        }
         public void Update()
         {   
             //  General all purpose discover based on range
@@ -316,12 +355,16 @@ namespace MonoGamePort
                         launch = false;
                     }
 
+                    if (collide)
+                    {
+                        return;
+                    }
                     if (ticks++ > 15)
                     {
+                        ticks = 0;
                         if (!(hidden = LineIntersect(Center, Main.LocalPlayer.Center)))
                         { 
                             velocity = AngleToSpeed(NPC.AngleTo(Center, Target.Center), maxSpeed * 3f);
-                            ticks = 0;
                         }
                     }
 

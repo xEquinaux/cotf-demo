@@ -77,6 +77,7 @@ namespace MonoGamePort
         internal bool downedUpdate;
         public new Rectangle hitbox;
         public KeyboardState keyboard;
+        public List<NPC> npcCollide = new List<NPC>();
         private Keys[] PressedKeys
         {
             get { return keyboard.GetPressedKeys(); }
@@ -86,17 +87,14 @@ namespace MonoGamePort
             if (Inventory.open)
                 return;
 
-            if (Movement())
+            if (iFrameCounter > 0)
             {
-                if (iFrameCounter > 0)
+                if (iFrameCounter % 5 == 0)
                 {
-                    if (iFrameCounter % 5 == 0)
-                    {
-                        invulnDraw = !invulnDraw;
-                    }
+                    invulnDraw = !invulnDraw;
                 }
-                else invulnDraw = false;
             }
+            else invulnDraw = false;
 
             sb.Draw(texture, hitbox, Color.Blue * (invulnDraw ? 0f : alpha));
             
@@ -321,22 +319,39 @@ namespace MonoGamePort
             }
 
             //  Player hurt
-            if (IsMoving())
+            //  Basic hitbox damage
+            //if (IsMoving())
+            //{
+            //    if (iFrameCounter > 0)
+            //        iFrameCounter--;
+            //    foreach (NPC npc in Main.npc.Where(t => t != null))
+            //    {
+            //        if (!npc.active || !npc.discovered)
+            //            continue;
+            //        if (iFrameCounter == 0 && npc.hitbox.Intersects(this.hitbox))
+            //        {
+            //            iFrameCounter = Stats.iFrames;
+            //            PlayerHurt(npc);
+            //            break;
+            //        }
+            //    }
+            //}
+            if (IsMovingNoCollide())
             {
                 if (iFrameCounter > 0)
                     iFrameCounter--;
-                foreach (NPC npc in Main.npc.Where(t => t != null))
+                foreach (NPC npc in npcCollide)
                 {
-                    if (!npc.active || !npc.discovered)
+                    if (npc == null || !npc.active || !npc.discovered)
                         continue;
-                    if (iFrameCounter == 0 && npc.hitbox.Intersects(this.hitbox))
+                    if (iFrameCounter == 0)
                     {
                         iFrameCounter = Stats.iFrames;
                         PlayerHurt(npc);
-                        break;
                     }
                 }
             }
+            npcCollide.Clear();
 
             //  Armory status
             foreach (GUI gui in Armory.Where(t => t != null && t.active))
@@ -620,6 +635,15 @@ namespace MonoGamePort
                 flag3 = 0;
             }
         }
+        public bool PlayerInWall()
+        {
+            foreach (SquareBrush brush in Main.square.Where(t => t != null && t.active()))
+            {
+                if (brush.Hitbox.Contains(this.Center))
+                    return true;
+            }
+            return false;
+        }
         public void ScrollMap()
         {
             if (Main.IsZoomed)
@@ -699,6 +723,10 @@ namespace MonoGamePort
             return keyboard.IsKeyDown(key);
         }
         
+        public bool IsMovingNoCollide()
+        {
+            return !KeyDown(Keys.Space) && (KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
+        }
         public bool IsMoving()
         {
             return !KeyDown(Keys.Space) && (KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f) && (!colDown || !colLeft || !colRight || !colUp);

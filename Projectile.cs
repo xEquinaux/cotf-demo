@@ -225,6 +225,22 @@ namespace MonoGamePort
                     position = new Vector2(plr.X + ang.X, plr.Y + ang.Y);
                     hitbox = new Rectangle((int)position.X, (int)position.Y, 32, 32);
                     break;
+                default:
+                    break;
+            }
+            foreach (Foliage fol in Main.foliage)
+            {
+                switch (fol.type)
+                {
+                    case FoliageID.StoneLarge:
+                        if (fol.Collision(this))
+                        {
+                            
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         public static Vector2 AngleToSpeed(float angle, float amount)

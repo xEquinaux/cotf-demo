@@ -41,6 +41,7 @@ namespace MonoGamePort
         public bool discovered;
         public float alpha = 1f;
         public Stats stats;
+        public bool collide, colUp, colDown, colRight, colLeft;
         public static float Distance(Vector2 one, Vector2 two)
         {
             Vector2 v1 = one;
@@ -50,8 +51,24 @@ namespace MonoGamePort
             int c = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             return c;
         }
+        public void Collision(Entity ent, int buffer = 4)
+        {
+            if (!active) return;
+
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+                ent.collide = true;
+            //  Directions
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+                ent.colUp = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+                ent.colDown = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colRight = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colLeft = true;
+        }
     }
-    public class SimpleEntity
+    public class SimpleEntity : Entity
     {
         public int X
         {
@@ -99,6 +116,7 @@ namespace MonoGamePort
         public Texture2D texture;
         public string text;
         public string Name;
+        public bool collide, colUp, colDown, colRight, colLeft;
         public float Distance(Vector2 other)
         {
             Vector2 v1 = other;
@@ -116,6 +134,40 @@ namespace MonoGamePort
             int b = (int)Math.Abs(v2.Y - v1.Y);
             int c = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             return c;
+        }
+        public bool Collision(SimpleEntity ent, int buffer = 4)
+        {
+            if (!active) return false;
+
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+                ent.collide = true;
+            //  Directions
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+                ent.colUp = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+                ent.colDown = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colRight = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colLeft = true;
+        }
+        public bool Collision(Entity ent, int buffer = 4)
+        {
+            if (!active) return false;
+
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+                ent.collide = true;
+            //  Directions
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+                ent.colUp = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+                ent.colDown = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colRight = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colLeft = true;
+            
+            return collide || colUp || colDown || colLeft || colRight;
         }
     }
 }
