@@ -334,7 +334,7 @@ namespace MonoGamePort
     }
     public class VelocityMech
     {
-        public static void BasicSlowClamp(NPC npc, float moveSpeed, float stopSpeed, float maxSpeed, bool moving = false)
+        public static void BasicSlowClamp(NPC npc, float minSpeed, float stopSpeed, float maxSpeed, bool moving = false)
         {
             //  Stopping movement
             if (npc.velocity.X > 0f && !moving)
@@ -357,14 +357,68 @@ namespace MonoGamePort
                 npc.velocity.Y = -maxSpeed;
 
             //  Movement zeroing
-            if (npc.velocity.X < moveSpeed && npc.velocity.X > -moveSpeed)
+            if (npc.velocity.X < minSpeed && npc.velocity.X > -minSpeed)
                 npc.velocity.X = 0f;
-            if (npc.velocity.Y < moveSpeed && npc.velocity.Y > -moveSpeed)
+            if (npc.velocity.Y < minSpeed && npc.velocity.Y > -minSpeed)
                 npc.velocity.Y = 0f;
+        }
+        public static void BasicSlowClamp(SimpleEntity ent, float minSpeed, float stopSpeed, float maxSpeed, bool moving = false)
+        {
+            //  Stopping movement
+            if (ent.velocity.X > 0f && !moving)
+                ent.velocity.X -= stopSpeed;
+            if (ent.velocity.X < 0f && !moving)
+                ent.velocity.X += stopSpeed;
+            if (ent.velocity.Y > 0f && !moving)
+                ent.velocity.Y -= stopSpeed;
+            if (ent.velocity.Y < 0f && !moving)
+                ent.velocity.Y += stopSpeed;
+
+            //  Clamp
+            if (ent.velocity.X > maxSpeed)
+                ent.velocity.X = maxSpeed;
+            if (ent.velocity.X < -maxSpeed)
+                ent.velocity.X = -maxSpeed;
+            if (ent.velocity.Y > maxSpeed)
+                ent.velocity.Y = maxSpeed;
+            if (ent.velocity.Y < -maxSpeed)
+                ent.velocity.Y = -maxSpeed;
+
+            //  Movement zeroing
+            if (ent.velocity.X < minSpeed && ent.velocity.X > -minSpeed)
+                ent.velocity.X = 0f;
+            if (ent.velocity.Y < minSpeed && ent.velocity.Y > -minSpeed)
+                ent.velocity.Y = 0f;
         }
     }
     public class Helper
     {
+        public static float Distance(Vector2 one, Vector2 two)
+        {
+            Vector2 v1 = one;
+            Vector2 v2 = two;
+            int a = (int)Math.Abs(v2.X - v1.X);
+            int b = (int)Math.Abs(v2.Y - v1.Y);
+            int c = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
+            return c;
+        }
+        public static bool LineIntersect(Vector2 from, Vector2 to)
+        {
+            for (float i = 0f; i < Distance(from, to); i++)
+            {
+                float angle = NPC.AngleTo(from, to);
+                float cos = from.X + (float)(i * Math.Cos(angle));
+                float sin = from.Y + (float)(i * Math.Sin(angle));
+                Vector2 line = new Vector2(cos, sin);
+                SquareBrush brush = SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50);
+                if (brush == null) return false;
+                if (brush.active() && brush.Hitbox.Contains(line))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public static float AngleTo(Vector2 from, Vector2 to)
         {
             return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);

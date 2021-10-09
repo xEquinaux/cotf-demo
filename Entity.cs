@@ -51,9 +51,9 @@ namespace MonoGamePort
             int c = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             return c;
         }
-        public void Collision(Entity ent, int buffer = 4)
+        public bool Collision(Entity ent, int buffer = 4)
         {
-            if (!active) return;
+            if (!active) return false;
 
             if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
                 ent.collide = true;
@@ -66,9 +66,29 @@ namespace MonoGamePort
                 ent.colRight = true;
             if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colLeft = true;
+
+            return collide || colUp || colDown || colLeft || colRight;
+        }
+        public bool Collision(SimpleEntity ent, int buffer = 4)
+        {
+            if (!active) return false;
+            bool flag = false;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+                ent.collide = true;
+            //  Directions
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+                ent.colUp = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+                ent.colDown = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colRight = true;
+            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+                ent.colLeft = true;
+            flag = collide || colUp || colDown || colLeft || colRight;
+            return flag;
         }
     }
-    public class SimpleEntity : Entity
+    public class SimpleEntity
     {
         public int X
         {
@@ -135,6 +155,18 @@ namespace MonoGamePort
             int c = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             return c;
         }
+        public void CollideResult()
+        {
+            //  Collision reaction
+            if (!colLeft && velocity.X < 0f)
+                position.X += velocity.X;
+            if (!colRight && velocity.X > 0f)
+                position.X += velocity.X;
+            if (!colUp && velocity.Y < 0f)
+                position.Y += velocity.Y;
+            if (!colDown & velocity.Y > 0f)
+                position.Y += velocity.Y;
+        }
         public bool Collision(SimpleEntity ent, int buffer = 4)
         {
             if (!active) return false;
@@ -150,6 +182,8 @@ namespace MonoGamePort
                 ent.colRight = true;
             if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colLeft = true;
+
+            return collide || colUp || colDown || colLeft || colRight;
         }
         public bool Collision(Entity ent, int buffer = 4)
         {

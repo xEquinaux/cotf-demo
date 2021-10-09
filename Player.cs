@@ -198,6 +198,18 @@ namespace MonoGamePort
                 //    active = true,
                 //    position = new Vector2(Main.ScreenWidth / 2, Main.ScreenHeight / 2)
                 //});
+
+                //  DEBUG set player position
+                if (Level.floorNumber == 0 || PlayerInWall())
+                {
+                    Background bg = null;
+                    do
+                    {
+                        bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+                    } while (bg == null || !bg.active);
+                    Main.LocalPlayer.position = bg.position;
+                }
+
                 Light.updating = true;
                 if (Stats == null)
                 {

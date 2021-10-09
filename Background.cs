@@ -88,7 +88,12 @@ namespace MonoGamePort
         }
         public void Update()
         {
-            VelocityMech.BasicSlowClamp()
+            position += velocity;
+            CollideResult();
+            if (velocity != Vector2.Zero)
+            { 
+                VelocityMech.BasicSlowClamp(this, 0.1f, 0.1f, 3f);
+            }
         }
         public static void GenerateFoliage(int maxFoliage = 10)
         {

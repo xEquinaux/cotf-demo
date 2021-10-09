@@ -309,8 +309,16 @@ namespace MonoGamePort
                     sq.Collision(LocalPlayer);
                     sq.Update(100f);
                 }
-                foreach (Foliage stuff in foliage)
-                    stuff?.Collision(LocalPlayer);
+                foreach (Foliage stuff in foliage.Where(t => t != null))
+                { 
+                    stuff.collide = false;
+                    stuff.colUp = false;
+                    stuff.colDown = false;
+                    stuff.colRight = false;
+                    stuff.colLeft = false;
+                    stuff.Collision(LocalPlayer);
+                    stuff.Update();
+                }
                 foreach (Light l in Light.light)
                     l?.Update();
                 foreach (Light l in Main.light)
@@ -487,15 +495,16 @@ namespace MonoGamePort
                     player.Traits.wellBeing = br.ReadSingle();
                 }
                 //  DEBUG set player position
-                if (Level.floorNumber == 0 || player.PlayerInWall())
-                {
-                    Background bg = null;
-                    do
-                    {
-                        bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
-                    } while (bg == null || !bg.active);
-                    Main.LocalPlayer.position = bg.position;
-                }
+                //  MOVED to player init
+                //if (Level.floorNumber == 0 || player.PlayerInWall())
+                //{
+                //    Background bg = null;
+                //    do
+                //    {
+                //        bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+                //    } while (bg == null || !bg.active);
+                //    Main.LocalPlayer.position = bg.position;
+                //}
                 return true;
             }
             if (!LoadLevel(Level.floorNumber))

@@ -228,20 +228,6 @@ namespace MonoGamePort
                 default:
                     break;
             }
-            foreach (Foliage fol in Main.foliage)
-            {
-                switch (fol.type)
-                {
-                    case FoliageID.StoneLarge:
-                        if (fol.Collision(this))
-                        {
-                            
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
         public static Vector2 AngleToSpeed(float angle, float amount)
         {
@@ -295,6 +281,20 @@ namespace MonoGamePort
                         Kill();
                     break;
             }
+            Foliage hit = default;
+            if ((hit = GetHitFoliage()) != null)
+                hit.velocity = Helper.AngleToSpeed(Helper.AngleTo(hit.Center, Center), 5f);
+        }
+        public Foliage GetHitFoliage()
+        {
+            foreach (Foliage fol in Main.foliage.Where(t => t != null && t.active))
+            {
+                if (fol.hitbox.Contains(strikePoint))
+                {
+                    return fol;
+                }
+            }
+            return default(Foliage);
         }
         public void Kill()
         {

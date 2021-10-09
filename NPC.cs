@@ -225,7 +225,6 @@ namespace MonoGamePort
         private int redOrbsCollected;
         private Dust[] targets = new Dust[1001];
         private bool moving;
-        public bool collide, colUp, colRight, colDown, colLeft;
         public bool hidden = false;
         public virtual void AI()
         {
