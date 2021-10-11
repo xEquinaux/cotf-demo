@@ -23,7 +23,7 @@ namespace MonoGamePort
             get; private set;
         }
         public Texture2D CoinIcon => Main.Temporal;
-        private string[] coinName => new string[] { "0", "0", "0", "0", "0" };
+        private string[] coinName => new string[] { "0", "0", "0", "0" };
         public static Color[] CoinColor;
         public static Dialog NewDialog(int x, int y, string[] contents, Item item)
         {
@@ -99,13 +99,14 @@ namespace MonoGamePort
             if (!active || Menu.Select?.active == true) return;
 
             var purse = Main.LocalPlayer.Armory[GUI.Purse];
-            if (purse.Item != null && purse.Item.equipped && (Item.Style)Selected?.itemStyle == Item.Style.Purse)
+            var item = purse.Item?.purse;
+            if (purse.Item != null && item != null && purse.Item.equipped && (Item.Style)Selected?.itemStyle == Item.Style.Purse)
             {
                 sb.Draw(Main.MagicPixel, Hitbox, Color.Black);
                 for (int i = 0; i < CoinColor.Length; i++)
                 {
                     sb.Draw(texture, new Rectangle(Hitbox.X + 32 * i, Hitbox.Y, 32, 32), CoinColor[i]);
-                    sb.DrawString(Game.Font[FontID.Arial], coinName[i], new Vector2(Hitbox.X + 32 * i, Hitbox.Y), Color.Red, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+                    sb.DrawString(Game.Font[FontID.Arial], new string[] { item.copper.ToString(), item.silver.ToString(), item.gold.ToString(), item.platinum.ToString() }[i], new Vector2(Hitbox.X + 32 * i, Hitbox.Y), Color.Red, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                 }
                 return;
             }

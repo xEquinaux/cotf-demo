@@ -109,7 +109,7 @@ namespace MonoGamePort
                     colLeft = true;
                     player.colRight = true;
                 }
-                if (flag = collide || colUp || colDown || colLeft || colRight && player.IsMovingNoCollide())
+                if (flag = collide || colUp || colDown || colLeft || colRight)
                 {
                     player.npcCollide.Add(this);
                 }
@@ -415,9 +415,9 @@ namespace MonoGamePort
 
             if (iFrameCounter > 0)
                 color = Color.Red;
-            else color = Color.White;
+            else color = Color.Gray;
 
-            sb.Draw(texture, hitbox, color);
+            sb.Draw(texture, hitbox, DynamicTorch(120f));
         }
         public void Dispose()
         {

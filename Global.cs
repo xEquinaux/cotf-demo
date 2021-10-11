@@ -364,15 +364,19 @@ namespace MonoGamePort
         }
         public static void BasicSlowClamp(SimpleEntity ent, float minSpeed, float stopSpeed, float maxSpeed, bool moving = false)
         {
+            float ratio = ent.velocity.Y / ent.velocity.X + 1f;
+
             //  Stopping movement
-            if (ent.velocity.X > 0f && !moving)
-                ent.velocity.X -= stopSpeed;
-            if (ent.velocity.X < 0f && !moving)
-                ent.velocity.X += stopSpeed;
-            if (ent.velocity.Y > 0f && !moving)
-                ent.velocity.Y -= stopSpeed;
-            if (ent.velocity.Y < 0f && !moving)
-                ent.velocity.Y += stopSpeed;
+            ent.velocity.X /= ratio;
+            ent.velocity.Y /= ratio;
+            //if (ent.velocity.X > 0f && !moving)
+            //    ent.velocity.X -= stopSpeed;
+            //if (ent.velocity.X < 0f && !moving)
+            //    ent.velocity.X += stopSpeed;
+            //if (ent.velocity.Y > 0f && !moving)
+            //    ent.velocity.Y -= stopSpeed;
+            //if (ent.velocity.Y < 0f && !moving)
+            //    ent.velocity.Y += stopSpeed;
 
             //  Clamp
             if (ent.velocity.X > maxSpeed)

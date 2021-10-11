@@ -94,6 +94,7 @@ namespace MonoGamePort
         public bool equipped;
         public bool inUse = true;
         public const int DrawSize = 28;
+        public Purse purse;
         public bool Enchanted { get; set; }
         public bool Cursed { get; set; }
         public enum Location
@@ -324,6 +325,7 @@ namespace MonoGamePort
                     // -->
                     goto default;
                 case Type.Purse:
+                    purse = new Purse(true);
                     type = GUI.Purse;
                     Name = "Purse";
                     damage = 0;
@@ -405,7 +407,7 @@ namespace MonoGamePort
                 if (Main.LocalPlayer.LeftMouse())
                 {
                     Menu.Current = this;
-                    MENU = Menu.NewMenu(position.X + width, position.Y, new string[] { "Pickup", "Equip", "Drop", "Close" });
+                    MENU = Menu.NewMenu(position.X + width, position.Y, new string[] { "Pickup", "Equip", "Drop", "Combine", "Close" });
 
                     foreach (var m in Inventory.itemProximate.Where(t => t != null))
                         m.menu = false;
@@ -427,6 +429,33 @@ namespace MonoGamePort
         {
             Kill();
             Main.item[whoAmI] = null;
+        }
+    }
+    public class Purse
+    {
+        public Item item;
+        public short
+            copper,
+            silver,
+            gold,
+            platinum;
+        public Purse(bool world)
+        {
+            if (world)
+            {
+                //  TODO: change random values based on floor level
+                copper = (short)Main.rand.Next(50);
+                silver = (short)Main.rand.Next(20);
+                gold = (short)Main.rand.Next(10);
+                platinum = (short)Main.rand.Next(2);
+            }
+        }
+        public void Combine(Purse other)
+        {
+            this.copper += other.copper;
+            this.silver += other.silver;
+            this.gold += other.gold;
+            this.platinum += other.platinum;
         }
     }
 }

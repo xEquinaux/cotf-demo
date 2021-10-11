@@ -40,7 +40,7 @@ namespace MonoGamePort
 
             Dialog.CoinColor = new Color[] 
             {
-                Color.FromNonPremultiplied(new Vector4(0.722f, 0.451f, 0.20f, 1f)),
+                //Color.FromNonPremultiplied(new Vector4(0.722f, 0.451f, 0.20f, 1f)),
                 Color.FromNonPremultiplied(new Vector4(0.804f, 0.498f, 0.196f, 1f)),
                 Color.Silver,                                                          
                 Color.Gold,

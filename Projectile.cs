@@ -257,6 +257,7 @@ namespace MonoGamePort
                         goto default;
                     default:
                         damage = item.damage;
+                        knockBack = item.knockBack;
                         break;
                 }
             }
@@ -281,9 +282,10 @@ namespace MonoGamePort
                         Kill();
                     break;
             }
-            Foliage hit = default;
-            if ((hit = GetHitFoliage()) != null)
-                hit.velocity = Helper.AngleToSpeed(Helper.AngleTo(hit.Center, Center), 5f);
+            //  TODO: Foliage collision needs adjusting
+            //Foliage hit = default;
+            //if ((hit = GetHitFoliage()) != null)
+            //    hit.velocity = Helper.AngleToSpeed(Helper.AngleTo(Main.player[owner].Center, hit.Center), 5f);
         }
         public Foliage GetHitFoliage()
         {

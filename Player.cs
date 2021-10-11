@@ -21,7 +21,6 @@ namespace MonoGamePort
         private bool clamp;
         public const int plrWidth = 32, plrHeight = 45;
         const int buffer = 4;
-        public bool colUp, colDown, colRight, colLeft, collide;
         public bool controlLeft, controlUp, controlRight, controlDown;
         public bool isAttacking;
         //  Initial values
@@ -32,6 +31,7 @@ namespace MonoGamePort
         float stopSpeed;
         float jumpSpeed;
         float fallSpeed = 0.917f;
+        public static Color torchLight = Color.White;
         public const int MaxHealth = 100, MaxMana = 20;
         public int ScaledMaxMana
         {
@@ -575,6 +575,19 @@ namespace MonoGamePort
             if (Main.MouseDevice.RightButton == ButtonState.Released && flag4 % 2 == 1)
                 flag4 = 0;
 
+            //  TODO: Torch light
+            var torch = this.Armory[GUI.Offhand].Item;
+            if (torch != null && torch.itemType == Item.Type.Torch && torch.inUse)
+            {
+                torchLight = Color.Orange;
+                lit = true;
+            }
+            else 
+            { 
+                torchLight = Color.Black;
+                lit = false;
+            }
+
             //  GUI
             if (isAttacking)
                 return;
@@ -737,7 +750,7 @@ namespace MonoGamePort
         
         public bool IsMovingNoCollide()
         {
-            return !KeyDown(Keys.Space) && (KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
+            return (KeyDown(Keys.Space) || KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
         }
         public bool IsMoving()
         {

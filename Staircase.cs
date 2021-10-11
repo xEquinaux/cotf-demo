@@ -128,6 +128,7 @@ namespace MonoGamePort
                         }
                         break;
                 }
+                
             }
         }
         private void ClearPreviousLevel()
@@ -191,6 +192,7 @@ namespace MonoGamePort
             write.Write(Main.trap.Where(t => t != null).Count());
             write.Write(Main.stair.Where(t => t != null).Count());
             write.Write(Main.npc.Where(t => t != null).Count());
+            write.Write(Main.foliage.Where(t => t != null && t.active).Count());
 
             foreach (SimpleEntity ent in Light.entity.Where(t => t.owner == Item.Owner_World && t.active == true))
             {
@@ -258,6 +260,15 @@ namespace MonoGamePort
                 write.Write(n.maxLife);
                 write.Write(n.type);
             }
+            foreach (Foliage fol in Main.foliage.Where(t => t != null && t.active))
+            {
+                write.Write(fol.discovered);
+                write.Write((int)fol.position.X);
+                write.Write((int)fol.position.Y);
+                write.Write(fol.width);
+                write.Write(fol.height);
+                write.Write(fol.type);
+            }
             write.Flush();
             stream.Flush();
             stream.Close();
@@ -280,6 +291,7 @@ namespace MonoGamePort
             int trapLength = read.ReadInt32();
             int stairLength = read.ReadInt32();
             int npcLength = read.ReadInt32();
+            int foliageLength = read.ReadInt32();
 
             for (int n = 0; n < torchLength; n++)
             {
@@ -388,6 +400,16 @@ namespace MonoGamePort
                 npc.discovered = discovered;
                 npc.active = active;
                 npc.statLife = statLife;
+            }
+            for (int n = 0; n < foliageLength; n++)
+            {
+                bool discovered = read.ReadBoolean();
+                int x = read.ReadInt32();
+                int y = read.ReadInt32();
+                int width = read.ReadInt32();
+                int height = read.ReadInt32();
+                int type = read.ReadInt32();
+                Foliage.NewFoliage(x, y, width, height, type);
             }
             stream.Flush();
             stream.Close();

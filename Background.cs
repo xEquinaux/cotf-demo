@@ -40,14 +40,15 @@ namespace MonoGamePort
             }
             Main.foliage[num] = new Foliage();
             Main.foliage[num].position = new Vector2(x, y);
-            Main.foliage[num].X = (int)x;
-            Main.foliage[num].Y = (int)y;
+            Main.foliage[num].X = (int)x + Main.rand.Next(50 - width);
+            Main.foliage[num].Y = (int)y + Main.rand.Next(50 - height);
             Main.foliage[num].width = width;
             Main.foliage[num].height = height;
             Main.foliage[num].type = type;
             Main.foliage[num].cut = cuttable;
             Main.foliage[num].tile = tile;
             Main.foliage[num].whoAmI = num;
+            Main.foliage[num].range  = 200f;
             return Main.foliage[num];
         }
         public static int ChooseType()
@@ -88,12 +89,29 @@ namespace MonoGamePort
         }
         public void Update()
         {
-            position += velocity;
-            CollideResult();
-            if (velocity != Vector2.Zero)
+            if (!discovered && Distance(Main.LocalPlayer.Center, Center) <= Math.Max(range, Light.range * Light.AddLight))
+                discovered = true;
+
+            if (!discovered)
             { 
-                VelocityMech.BasicSlowClamp(this, 0.1f, 0.1f, 3f);
+                alpha = 0f;
+                return; 
             }
+            else if (alpha < 1f)
+            {
+                alpha += 0.05f;
+            }
+
+            //  TODO: Foliage collision needs adjusting
+            //foreach (SquareBrush brush in Main.square.Where(t => t != null && t.active() && Proximity(t.Center, range * 2f)))
+            //{
+            //    Collision(this, brush);
+            //}
+            //CollideResult();
+            //if (velocity != Vector2.Zero)
+            //{ 
+            //    VelocityMech.BasicSlowClamp(this, 0.3f, 0.1f, 3f);
+            //}
         }
         public static void GenerateFoliage(int maxFoliage = 10)
         {
@@ -109,21 +127,22 @@ namespace MonoGamePort
         }
         public void Draw(SpriteBatch sb)
         {
+            if (!discovered) return;
             //  TODO get foliage sprites in gray tone and color them in Draw method
             Color color = default(Color);
             switch (type)
             {
                 case FoliageID.Dirt:
                     color = Color.Brown;
-                    sb.Draw(Main.MagicPixel, new Rectangle(X, Y, width, height), color);
+                    sb.Draw(Main.MagicPixel, new Rectangle(X, Y, width, height), color * alpha);
                     break;
                 case FoliageID.Puddle:
                     color = Color.DeepSkyBlue;
-                    sb.Draw(Main.MagicPixel, new Rectangle(X, Y, width, height), color);
+                    sb.Draw(Main.MagicPixel, new Rectangle(X, Y, width, height), color * alpha);
                     break;
                 case FoliageID.StoneLarge:
                     color = Color.Gray;
-                    sb.Draw(Main.Temporal, new Rectangle(X, Y, width, height), color);
+                    sb.Draw(Main.Temporal, new Rectangle(X, Y, width, height), color * alpha);
                     break;
             }
         }
@@ -225,7 +244,10 @@ namespace MonoGamePort
             }
             else alpha = 1f;
             if ((light || discovered) && onScreen)
-                sb.Draw(texture, hitbox, Color.White * alpha);
+            {
+                color = Color.Gray;
+                sb.Draw(texture, hitbox, DynamicTorch(120f) * alpha);
+            }
         }
         public void Dispose()
         {

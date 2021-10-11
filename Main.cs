@@ -311,13 +311,13 @@ namespace MonoGamePort
                 }
                 foreach (Foliage stuff in foliage.Where(t => t != null))
                 { 
+                    stuff.Update();
                     stuff.collide = false;
                     stuff.colUp = false;
                     stuff.colDown = false;
                     stuff.colRight = false;
                     stuff.colLeft = false;
                     stuff.Collision(LocalPlayer);
-                    stuff.Update();
                 }
                 foreach (Light l in Light.light)
                     l?.Update();
@@ -382,6 +382,9 @@ namespace MonoGamePort
             //  Old player placement
             //Main.stair.Where(t => t.transition == Staircase.Transition.GoingUp).First().position;
             Main.UpdateBrushes();
+            
+            //Selecting rooms to diversify
+            Room.Initialize();
         }
         public bool KeyUp(Keys key)
         {
@@ -405,6 +408,8 @@ namespace MonoGamePort
         }
         protected void PostUpdate()
         {
+            Room.Update();
+
             //if (KeyDown(Key.NumPad0) && npc[0] == null)
             //{
             //    NPC.NewNPC(0, 0, -1, System.Drawing.Color.White, 500);

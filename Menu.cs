@@ -130,6 +130,15 @@ namespace MonoGamePort
                             }
                             MoveItem(Current);
                             goto default;
+                        case "Combine":
+                            var item2 = player.Armory[GUI.Purse].Item?.purse;
+                            if (item2 != null && Current.purse != null)
+                            {
+                                item2.Combine(Current.purse);
+                                Current.Kill();
+                                Inventory.itemList.Remove(Current);
+                            }
+                            goto default;
                         case "Unequip":
                             gui.Item?.Unequip();
                             if (gui.Item.type != GUI.Pack)

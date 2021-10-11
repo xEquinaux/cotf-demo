@@ -42,6 +42,7 @@ namespace MonoGamePort
         public float alpha = 1f;
         public Stats stats;
         public bool collide, colUp, colDown, colRight, colLeft;
+        public bool lit = true;
         public static float Distance(Vector2 one, Vector2 two)
         {
             Vector2 v1 = one;
@@ -87,6 +88,24 @@ namespace MonoGamePort
             flag = collide || colUp || colDown || colLeft || colRight;
             return flag;
         }
+        public Color ColorShift(Color newColor, float distance)
+        {
+            return new Color(
+                (byte)Math.Min(color.R + (byte)(newColor.R * distance), 255), 
+                (byte)Math.Min(color.G + (byte)(newColor.G * distance), 255), 
+                (byte)Math.Min(color.B + (byte)(newColor.B * distance), 255), 
+                color.A);
+        }
+        public float RangeNormal(Vector2 to, Vector2 from, float range = 100f)
+        {
+            return Math.Max((Distance(from, to) * -1f + range) / range, 0);
+        }
+        public Color DynamicTorch(float range = 100f)
+        {
+            var list = Light.entity;
+            float num = RangeNormal(Center, list.OrderBy(t => t.Distance(this.Center, t.Center)).First(t => t != null && t.active && t.lit).Center, range);
+            return ColorShift(Light.TorchLight, num);
+        }
     }
     public class SimpleEntity
     {
@@ -106,7 +125,7 @@ namespace MonoGamePort
         public bool active;
         public int type;
         public int maxLife;
-        public int statLife;
+        public int statLife;                                                               
         public int timeLeft;
         public Vector2 position;
         public Vector2 velocity;
@@ -118,6 +137,7 @@ namespace MonoGamePort
         public bool discovered;
         public float alpha = 1f;
         public Stats stats;
+        public bool lit = true;
         public Vector2 Center
         {
             get { return new Vector2(position.X + width / 2, position.Y + height / 2); }
@@ -202,6 +222,42 @@ namespace MonoGamePort
                 ent.colLeft = true;
             
             return collide || colUp || colDown || colLeft || colRight;
+        }
+        public static bool Collision(SimpleEntity whoAmI, Entity collider, int buffer = 4)
+        {
+            if (!whoAmI.active) return false;
+
+            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y, whoAmI.width, whoAmI.height)))
+                whoAmI.collide = true;
+            //  Directions
+            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y - buffer, whoAmI.width, 2)))
+                whoAmI.colUp = true;
+            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y + whoAmI.height + buffer, whoAmI.width, 2)))
+                whoAmI.colDown = true;
+            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X + whoAmI.width + buffer, (int)whoAmI.position.Y, 2, whoAmI.height)))
+                whoAmI.colRight = true;
+            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X - buffer, (int)whoAmI.position.Y, 2, whoAmI.height)))
+                whoAmI.colLeft = true;
+            
+            return whoAmI.collide || whoAmI.colUp || whoAmI.colDown || whoAmI.colLeft || whoAmI.colRight;
+        }
+        public Color ColorShift(Color newColor, float distance)
+        {
+            return new Color(
+                (byte)Math.Min(color.R + (byte)(newColor.R * distance), 255), 
+                (byte)Math.Min(color.G + (byte)(newColor.G * distance), 255), 
+                (byte)Math.Min(color.B + (byte)(newColor.B * distance), 255), 
+                color.A);
+        }
+        public float RangeNormal(Vector2 to, Vector2 from, float range = 100f)
+        {
+            return Math.Max((Distance(from, to) * -1f + range) / range, 0);
+        }
+        public Color DynamicTorch(float range = 100f)
+        {
+            var list = Light.entity;
+            float num = RangeNormal(Center, list.OrderBy(t => t.Distance(this.Center, t.Center)).First(t => t != null && t.active && t.lit).Center, range);
+            return ColorShift(Light.TorchLight, num);
         }
     }
 }

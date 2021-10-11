@@ -45,6 +45,7 @@ namespace MonoGamePort
             this.Y = y;
             this.width = width;
             this.height = height;
+            this.position = new Vector2(X, Y);
         }
         public static SquareBrush GetSafely(int x, int y)
         {
@@ -68,6 +69,7 @@ namespace MonoGamePort
             int m = Math.Min(x / width, Main.squareMulti.GetLength(0) - 1);
             int n = Math.Min(y / height, Main.squareMulti.GetLength(1) - 1);
             Main.squareMulti[m, n] = new SquareBrush(x, y, width, height);
+            Main.squareMulti[m, n].position = new Vector2(x, y);
             Main.squareMulti[m, n].active(active);
             Main.squareMulti[m, n].discovered = discovered;
             Main.squareMulti[m, n].whoAmI = Math.Max(num, 0);
@@ -77,6 +79,7 @@ namespace MonoGamePort
         }
         public void Update(float range)
         {
+            
             if (Distance(Center, Main.LocalPlayer.Center) < Math.Max(range, Light.range * Light.AddLight))
             {
                 discovered = true;
@@ -123,7 +126,8 @@ namespace MonoGamePort
                 alpha += 0.1f;
             }
             else alpha = 1f;
-            sb.Draw(Main.MagicPixel, Hitbox, Color.Red * alpha);
+            color = Color.Gray;
+            sb.Draw(Main.MagicPixel, Hitbox, DynamicTorch(Light.range) * alpha);
 
             //  TODO: torch lighting on brushes
             //if (NPC.Distance(Center, Main.player[0].Center) > Light.range)
@@ -133,7 +137,7 @@ namespace MonoGamePort
             //{ 
             //    for (int j = Hitbox.Y + n; j < Hitbox.Y + Hitbox.Height; j += 10)
             //    { 
-            //sb.Draw(Main.MagicPixel, Hitbox, Color.Orange * alpha * ((NPC.Distance(Center, Main.player[0].Center) * -1f + Light.range) / Light.range));
+            //sb.Draw(Main.MagicPixel, Hitbox, Color.Orange * alpha * ((Distance(Center, Main.player[0].Center) * -1f + Light.range) / Light.range));
             //    }
             //}
         }

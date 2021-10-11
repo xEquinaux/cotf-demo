@@ -29,6 +29,7 @@ namespace MonoGamePort
         public bool onScreen;
         public const float AddLight = 1.2f;
         public static Texture2D fow;
+        public static Color TorchLight = Color.Orange;
         public void Draw(SpriteBatch sb)
         {
             if (!lit /*&& bg?.light == false*/ && onScreen)
@@ -49,7 +50,7 @@ namespace MonoGamePort
                 position.Y >= Main.LocalPlayer.position.Y - (Main.ScreenHeight + Size * 5) / 2 &&
                 position.Y <= Main.LocalPlayer.position.Y + (Main.ScreenHeight + Size * 10) / 2;
             if (!onScreen) return;
-
+            
             foreach (var ent in entity)
             {
                 var center = ent.position + new Vector2(ent.width / 2, ent.height / 2);
