@@ -25,7 +25,7 @@ namespace MonoGamePort
         }
         public static Foliage NewFoliage(float x, float y, int width, int height, int type, bool cuttable = false, Background tile = null)
         {
-            int num = Main.foliage.Length;
+            int num = Main.foliage.Length - 1;
             for (int i = 0; i < num; i++)
             {
                 if (Main.foliage[i] == null || !Main.foliage[i].active)
@@ -59,17 +59,17 @@ namespace MonoGamePort
         {
             if (!active || type != FoliageID.StoneLarge) return;
 
-            if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y, Player.plrWidth, Player.plrHeight)))
-                player.collide = true;
-            //  Directions
-            if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y - buffer, Player.plrWidth, 2)))
-                player.colUp = true;
-            if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y + Player.plrHeight + buffer, Player.plrWidth, 2)))
-                player.colDown = true;
-            if (hitbox.Intersects(new Rectangle((int)player.position.X + Player.plrWidth + buffer, (int)player.position.Y, 2, Player.plrHeight)))
-                player.colRight = true;
-            if (hitbox.Intersects(new Rectangle((int)player.position.X - buffer, (int)player.position.Y, 2, Player.plrHeight)))
-                player.colLeft = true;
+            //if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y, Player.plrWidth, Player.plrHeight)))
+            //    player.collide = true;
+            ////  Directions
+            //if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y - buffer, Player.plrWidth, 2)))
+            //    player.colUp = true;
+            //if (hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y + Player.plrHeight + buffer, Player.plrWidth, 2)))
+            //    player.colDown = true;
+            //if (hitbox.Intersects(new Rectangle((int)player.position.X + Player.plrWidth + buffer, (int)player.position.Y, 2, Player.plrHeight)))
+            //    player.colRight = true;
+            //if (hitbox.Intersects(new Rectangle((int)player.position.X - buffer, (int)player.position.Y, 2, Player.plrHeight)))
+            //    player.colLeft = true;
         }
         public void NPCCollision(NPC npc, int buffer = 4)
         {
@@ -115,6 +115,8 @@ namespace MonoGamePort
         }
         public static void GenerateFoliage(int maxFoliage = 10)
         {
+            //  Worlgen should generate foliage,
+            //  rending this method useless
             for (int i = 0; i < maxFoliage; i++)
             {
                 Background bg = null;
@@ -204,7 +206,7 @@ namespace MonoGamePort
                 position.Y <= Main.LocalPlayer.position.Y + (Main.ScreenHeight + width * 10) / 2;
             if (!onScreen) return;
 
-            if (!discovered && Distance(Main.LocalPlayer.Center, Center) <= Math.Max(range, Light.range * Light.AddLight))
+            if (lit || !discovered && Distance(Main.LocalPlayer.Center, Center) <= Math.Max(range, Light.range * Light.AddLight))
                 discovered = true;
 
             if (!hitbox.Contains(Main.LocalPlayer.Center))
@@ -216,6 +218,12 @@ namespace MonoGamePort
             {
                 //foreground.light = true;
                 RoomItemUpdate(light);
+            }
+
+            if (Level.floorNumber < Level.litFloors)
+            {
+                lit = true;
+                light = true;
             }
         }
         private void RoomItemUpdate(bool active)

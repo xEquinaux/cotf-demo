@@ -94,6 +94,13 @@ namespace MonoGamePort
                                 }
                             }
                         }
+                        Room.NewRoom(
+                            (int)(node.X - W / 2), 
+                            (int)(node.Y - H / 2), 
+                            W + size / 2 - 1, 
+                            H + size / 2 - 1,  
+                            Main.rand.NextFloat() < 0.67f, 
+                            Level.floorNumber);
                         break;
                     case 1:
                         for (int i = 0; i < room0.GetLength(0); i++)
@@ -110,6 +117,7 @@ namespace MonoGamePort
                                 }
                             }
                         }
+                        Room.NewRoom(W, H, width, height, Main.rand.NextFloat() < 0.67f, Level.floorNumber);
                         break;
                     default:
                         break;
@@ -315,6 +323,7 @@ namespace MonoGamePort
             int numItems = 0;
             int numNPCs = 0;
             int numTorches = 0;
+            int numFoliage = 0;
             const float mult = 1.5f;
             SquareBrush.InitializeArray(brush.Length);
             while (numDown == 0 || numUp == 0)
@@ -408,6 +417,12 @@ namespace MonoGamePort
                                         }
                                     }
                                     break;
+                                case TileID.Stone:
+                                    if (numFoliage++ < 7)
+                                    {
+                                        Foliage.NewFoliage((int)randv2.X, (int)randv2.Y, 40, 35, FoliageID.StoneLarge);
+                                    }
+                                    break;
                                 default:
                                     break;
                             }
@@ -443,7 +458,7 @@ namespace MonoGamePort
             {
                 for (int i = 0; i < width; i += size)
                 {
-                    brush[i / size, j / size] = SquareBrush.NewBrush(i, j, size, size);
+                    brush[i / size, j / size] = SquareBrush.NewBrush(i, j, size, size, true, Level.floorNumber <= Level.litFloors);
                 }
             }
 
@@ -464,7 +479,7 @@ namespace MonoGamePort
             {
                 foreach (Vector2 node in nodes)
                 {
-                    if (NPC.Distance(node, b.Center) < range)
+                    if (Distance(node, b.Center) < range)
                     {
                         b.active(false);
                     }
@@ -483,7 +498,7 @@ namespace MonoGamePort
                     start.Y += line.Y;
                     foreach (var b in brush)
                     {
-                        if (NPC.Distance(start, b.Center) < size * 1.34f)
+                        if (Distance(start, b.Center) < size * 1.34f)
                         {
                             b.active(false);
                         }
@@ -502,7 +517,7 @@ namespace MonoGamePort
                     start.Y += line.Y;
                     foreach (var b in brush)
                     {
-                        if (NPC.Distance(start, b.Center) < size * 1.34f)
+                        if (Distance(start, b.Center) < size * 1.34f)
                         {
                             b.active(false);
                         }
@@ -545,6 +560,7 @@ namespace MonoGamePort
             int numItems = 0;
             int numNpcs = 0;
             int numTorches = 0;
+            int numFoliage = 0;
             SquareBrush.InitializeArray(brush.Length);
             while (numDown == 0 || numUp == 0)
             {
@@ -629,6 +645,12 @@ namespace MonoGamePort
                                             Staircase.NewStairs((int)vector2.X, (int)vector2.Y, size, 0, Staircase.Transition.GoingUp);
                                             numUp++;
                                         }
+                                    }
+                                    break;
+                                case TileID.Stone:
+                                    if (numFoliage++ < 7)
+                                    {
+                                        Foliage.NewFoliage((int)randv2.X - size / 2, (int)randv2.Y - size / 2, 40, 35, FoliageID.StoneLarge);
                                     }
                                     break;
                                 default:

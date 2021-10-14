@@ -27,6 +27,15 @@ namespace MonoGamePort.NPCs
                 if (!proj.Friendly(proj.type)) continue;
                 if (proj.hitbox.Intersects(hitbox) && stats.iFrames <= 0)
                 {
+                    switch (Main.player[proj.owner].itemType)
+                    {
+                        case Item.Type.Sword_OneHand:
+                            stat.hitStun = 30;  //45
+                            break;
+                        case Item.Type.Sword_TwoHand:
+                            stat.hitStun = 60;  //80
+                            break;
+                    }
                     stats.currentLife -= proj.damage;
                     stats.iFrames = maxIFrames;
                     return true;

@@ -25,13 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:Alpha Tiles Scratches.png
 
-#begin Arial.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Arial.spritefont
-
 #begin background2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -115,4 +108,25 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:temp_bg.png
+
+#begin Arial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Arial.spritefont
+
+#begin Consolas.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Consolas.spritefont
+
+#begin Lucida Console.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Lucida Console.spritefont
 

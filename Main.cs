@@ -39,6 +39,7 @@ namespace MonoGamePort
         public static Light[] light = new Light[1001];
         public static Staircase[] stair = new Staircase[51];
         public static Foliage[] foliage = new Foliage[201];
+        public static Room[] room = new Room[101];
 
         public static Texture2D MagicPixel;
         public static Texture2D Temporal;
@@ -156,6 +157,16 @@ namespace MonoGamePort
         public void LogoDisplay(SpriteBatch sb)
         {
             sb.DrawString(Game.Font[FontID.Arial], "Demo", new Vector2(10, 30), Color.Red);
+            // TODO: remove after DEMO
+            sb.DrawString(Game.Font[FontID.LucidaConsole], 
+                "Controls\n" +
+                "Left click...activates selected skill\n" +
+                "Right click..activates equipped torch\n" +
+                "Enter........use on stairwells\n" +
+                "O............opens inventory\n" +
+                "M............opens map\n" +
+                "Esc..........closes game", 
+                new Vector2(10, 75), Color.Red);
         }
 
         internal void MainDraw(SpriteBatch sb)
@@ -370,21 +381,24 @@ namespace MonoGamePort
             LevelWidth = width;
             LevelHeight = height;
 
-            //int rand = Main.rand.Next(2);
-            //if (rand == 0)
-            Main.squareMulti = worldgen.CastleGen(size, width, height, maxNodes);
-            //else if (rand == 1)
-            //    worldgen.DungeonGen(size, width, height, maxNodes, 250f);
+            int rand = Main.rand.Next(2);
+            if (rand == 0)
+                Main.squareMulti = worldgen.CastleGen(size, width, height, maxNodes);
+            else if (rand == 1)
+                Main.squareMulti = worldgen.DungeonGen(size, width, height, maxNodes, 250f);
 
             Light.Create(0, 0, Main.LevelWidth, Main.LevelHeight, null);
-            Foliage.GenerateFoliage(12);
+            
+            //  Worldgen generates better foliage
+            //Foliage.GenerateFoliage(12);
 
             //  Old player placement
             //Main.stair.Where(t => t.transition == Staircase.Transition.GoingUp).First().position;
             Main.UpdateBrushes();
             
+            //  Getting room data from level generation instead
             //Selecting rooms to diversify
-            Room.Initialize();
+            //Room.Initialize();
         }
         public bool KeyUp(Keys key)
         {
@@ -408,7 +422,12 @@ namespace MonoGamePort
         }
         protected void PostUpdate()
         {
-            Room.Update();
+            foreach (Room room in Main.room.Where(t => t != null))
+            {
+                room.Update();
+            }
+            //  Getting room data from level generation instead
+            //Room.Update();
 
             //if (KeyDown(Key.NumPad0) && npc[0] == null)
             //{

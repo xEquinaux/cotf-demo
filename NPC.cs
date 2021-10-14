@@ -169,6 +169,29 @@ namespace MonoGamePort
         {
             stat.currentLife -= proj.damage;
             velocity += Helper.AngleToSpeed(Helper.AngleTo(player.Center, this.Center), proj.knockBack);
+
+            switch (player.itemType)
+            {
+                case Item.Type.Sword_OneHand:
+                    stat.hitStun = 30;  //45
+                    break;
+                case Item.Type.Sword_TwoHand:
+                    stat.hitStun = 60;  //80
+                    break;
+                //case ItemID.RedRust:
+                //    stat.hitStun = 15;
+                //    break;
+                //case ItemID.SilverLongsword:
+                //    stat.hitStun = 30;
+                //    break;
+                //case ItemID.Zweihander:
+                //    stat.hitStun = 60;
+                //    break;
+                //case ItemID.Dirk:
+                //    stat.hitStun = 10;
+                //    break;
+            }
+
             if (stat.currentLife <= 0)
             {
                 NPCLoot();
@@ -185,6 +208,28 @@ namespace MonoGamePort
                 case NPCID.Kobold:
                     if (Main.rand.NextBool())
                         Item.NewItem(x, y, 32, 32, Item.Owner_World, Main.rand.Next(ItemID.Purse + 1));
+                    else
+                    { 
+                        int rand = Main.rand.Next(5);
+                        switch (rand)
+                        {
+                            case 0:
+                                Item.NewItem(x, y, 32, 32, Item.Owner_World, ItemID.CoinIron);
+                                break;
+                            case 1:
+                                Item.NewItem(x, y, 32, 32, Item.Owner_World, ItemID.CoinCopper);
+                                break;
+                            case 2:
+                                Item.NewItem(x, y, 32, 32, Item.Owner_World, ItemID.CoinSilver);
+                                break;
+                            case 3:
+                                Item.NewItem(x, y, 32, 32, Item.Owner_World, ItemID.CoinGold);
+                                break;
+                            case 4:
+                                Item.NewItem(x, y, 32, 32, Item.Owner_World, ItemID.CoinPlatinum);
+                                break;
+                        }
+                    }
                     break;
             }
         }
@@ -353,6 +398,10 @@ namespace MonoGamePort
                         proj = 0;
                         launch = false;
                     }
+                    
+                    VelocityMech.BasicSlowClamp(this, moveSpeed, stopSpeed, maxSpeed);
+                    if (stat.hitStun-- > 0)
+                        return;
 
                     if (collide)
                     {
@@ -376,8 +425,6 @@ namespace MonoGamePort
                         position.Y += velocity.Y;
                     if (!colDown & velocity.Y > 0f)
                         position.Y += velocity.Y;
-
-                    VelocityMech.BasicSlowClamp(this, moveSpeed, stopSpeed, maxSpeed);
                     break;
             }
         }

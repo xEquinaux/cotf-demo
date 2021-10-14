@@ -12,7 +12,9 @@ namespace MonoGamePort
     public class FontID
     {
         public const byte
-            Arial = 0;
+            Arial = 0,
+            Consolas = 1,
+            LucidaConsole = 2;
     }
     public class BackgroundID
     {
@@ -91,6 +93,8 @@ namespace MonoGamePort
         public int level;
         public float lifeMultiplier;
         public float manaMultiplier;
+        // DEMO Extra
+        public int hitStun;
     }
     public class Attributes
     {

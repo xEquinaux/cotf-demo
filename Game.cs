@@ -18,7 +18,7 @@ namespace MonoGamePort
             get { return Main.Instance; }
         }
 
-        public static SpriteFont[] Font = new SpriteFont[1];
+        public static SpriteFont[] Font = new SpriteFont[3];
         public Game()
         {
             Main.Instance = new Main();
@@ -40,7 +40,7 @@ namespace MonoGamePort
 
             Dialog.CoinColor = new Color[] 
             {
-                //Color.FromNonPremultiplied(new Vector4(0.722f, 0.451f, 0.20f, 1f)),
+                Color.FromNonPremultiplied(new Vector4(0.722f, 0.451f, 0.20f, 1f)),
                 Color.FromNonPremultiplied(new Vector4(0.804f, 0.498f, 0.196f, 1f)),
                 Color.Silver,                                                          
                 Color.Gold,
@@ -56,6 +56,8 @@ namespace MonoGamePort
 
             // TODO: use this.Content to load your game content here
             Font[FontID.Arial] = this.Content.Load<SpriteFont>("Arial");
+            Font[FontID.Consolas] = this.Content.Load<SpriteFont>("Consolas");
+            Font[FontID.LucidaConsole] = this.Content.Load<SpriteFont>("Lucida Console");
             Main.MagicPixel = this.Content.Load<Texture2D>("MagicPixel");
             Main.Temporal = this.Content.Load<Texture2D>("temp");
             Background.BGs[BackgroundID.Tiles] = this.Content.Load<Texture2D>("Alpha Tiles Scratches");

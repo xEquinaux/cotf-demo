@@ -129,7 +129,7 @@ namespace MonoGamePort
             color = Color.Gray;
             sb.Draw(Main.MagicPixel, Hitbox, DynamicTorch(Light.range) * alpha);
 
-            //  TODO: torch lighting on brushes
+            //  DEBUG: lighting color mask
             //if (NPC.Distance(Center, Main.player[0].Center) > Light.range)
             //    return;
             //for (int n = 0; n < 50; n += 10)

@@ -110,6 +110,7 @@ namespace MonoGamePort
             return Armory[index].Item != null && Armory[index].Item.equipped;
         }
         private bool phase = true;
+        //  TODO: fix phase door
         private bool PhaseDoorEffect(float spellRange)
         {
             if (Phasing)
@@ -366,17 +367,21 @@ namespace MonoGamePort
             npcCollide.Clear();
 
             //  Armory status
-            foreach (GUI gui in Armory.Where(t => t != null && t.active))
+            foreach (GUI gui in Armory.Where(t => t != null))
             {
-                switch (gui.Item.itemType)
+                switch (gui.Item?.itemType)
                 {
                     case Item.Type.Sword_OneHand:
+                        itemType = Item.Type.Sword_OneHand;
                         switch (gui.Item.type)
                         {
-
+                            
                             default:
                                 break;
                         }
+                        break;
+                    case Item.Type.Sword_TwoHand:
+                        itemType = Item.Type.Sword_TwoHand;
                         break;
                     default:
                         break;
@@ -645,7 +650,17 @@ namespace MonoGamePort
         }
         public void Kill()
         {
-            
+            //  TODO: Make kill method into a wound status instead of death effect
+            //  Each enemy only adds a certain status
+            //  The player MIGHT only die under certain status effects, or after a threshold of status' is reached
+            Stats.currentLife = 100;
+            Stats.mana = 20;
+            Background bg = null;
+            do
+            {
+                bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+            } while (bg == null || !bg.active);
+            Main.LocalPlayer.position = bg.position;
         }
 
         public void ToggleZoom()

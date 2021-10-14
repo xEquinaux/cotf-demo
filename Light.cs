@@ -20,7 +20,7 @@ namespace MonoGamePort
         public int size;
         public Vector2 position;
         public Rectangle hitbox => new Rectangle(x, y, width, height);
-        public Vector2 Center => new Vector2(x + width / 2, y + height / 2);
+        public Vector2 Center => new Vector2(position.X + width / 2, position.Y + height / 2);
         public static IList<SimpleEntity> entity = new List<SimpleEntity>();
         public static IList<Light> light = new List<Light>();
         public static float range = 100f;
@@ -30,10 +30,11 @@ namespace MonoGamePort
         public const float AddLight = 1.2f;
         public static Texture2D fow;
         public static Color TorchLight = Color.Orange;
+        private float alpha = 1f;
         public void Draw(SpriteBatch sb)
         {
             if (!lit /*&& bg?.light == false*/ && onScreen)
-                sb.Draw(fow, new Rectangle((int)position.X - 10, (int)position.Y - 10, Size * 3, Size * 3), Color.Black * Math.Min(Main.LocalPlayer.Distance(Center) / (range * 2f), 1f));
+                sb.Draw(fow, new Rectangle((int)position.X - 10, (int)position.Y - 10, Size * 3, Size * 3), Color.Black * alpha * Math.Min(Main.LocalPlayer.Distance(Center) / (range * 2f), 1f));
             updating = false;
 
             //  Comment out for fog of war
@@ -50,7 +51,7 @@ namespace MonoGamePort
                 position.Y >= Main.LocalPlayer.position.Y - (Main.ScreenHeight + Size * 5) / 2 &&
                 position.Y <= Main.LocalPlayer.position.Y + (Main.ScreenHeight + Size * 10) / 2;
             if (!onScreen) return;
-            
+
             foreach (var ent in entity)
             {
                 var center = ent.position + new Vector2(ent.width / 2, ent.height / 2);
@@ -85,6 +86,23 @@ namespace MonoGamePort
                             }
                             lit = true;
                         }
+                    }
+                }
+            }
+
+            if (bg != null && bg.active && bg.lit) 
+            { 
+                alpha = 0.25f;
+                return;
+            }
+
+            for (int i = 0; i < Main.room.Length; i++)
+            {
+                if (Main.room[i] != null && Main.room[i].active() && Main.room[i].lit)
+                {
+                    if (Main.room[i].Hitbox.Contains(Center))
+                    {
+                        alpha = 0.5f;
                     }
                 }
             }
@@ -135,6 +153,12 @@ namespace MonoGamePort
             {
                 for (int j = y; j < y + height; j += Size)
                 {
+                    Background ground = null;
+                    var sequence = Main.ground.Where(t => t != null && t.active && t.hitbox.Contains(new Point(i, j)));
+                    if (sequence.Count() > 0)
+                    {
+                        ground = sequence.First();
+                    }
                     light.Add(new Light()
                     {
                         position = new Vector2(i, j),
@@ -142,7 +166,7 @@ namespace MonoGamePort
                         y = j,
                         active = true,
                         lit = false,
-                        bg = bg
+                        bg = ground
                     });
                 }
             }

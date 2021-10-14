@@ -133,6 +133,7 @@ namespace MonoGamePort
         }
         private void ClearPreviousLevel()
         {
+            Room.Clear();
             Light.entity.Clear();
             Light.light.Clear();
             foreach (var g in Main.ground)
@@ -169,6 +170,7 @@ namespace MonoGamePort
         private static BinaryReader read;
         private static BinaryWriter write;
         public static int floorNumber;
+        public static int litFloors = 3;
         public static string Name => "Dungeon";
 
         private static void Initialize(int floorIndex)
@@ -193,6 +195,7 @@ namespace MonoGamePort
             write.Write(Main.stair.Where(t => t != null).Count());
             write.Write(Main.npc.Where(t => t != null).Count());
             write.Write(Main.foliage.Where(t => t != null && t.active).Count());
+            write.Write(Main.room.Where(t => t != null).Count());
 
             foreach (SimpleEntity ent in Light.entity.Where(t => t.owner == Item.Owner_World && t.active == true))
             {
@@ -269,6 +272,14 @@ namespace MonoGamePort
                 write.Write(fol.height);
                 write.Write(fol.type);
             }
+            foreach (Room room in Main.room.Where(t => t != null))
+            {
+                write.Write(room.X);
+                write.Write(room.Y);
+                write.Write(room.Width);
+                write.Write(room.Height);
+                write.Write(room.lit);
+            }
             write.Flush();
             stream.Flush();
             stream.Close();
@@ -292,6 +303,7 @@ namespace MonoGamePort
             int stairLength = read.ReadInt32();
             int npcLength = read.ReadInt32();
             int foliageLength = read.ReadInt32();
+            int roomCount = read.ReadInt32();
 
             for (int n = 0; n < torchLength; n++)
             {
@@ -387,6 +399,7 @@ namespace MonoGamePort
                 stair.active = active;
                 stair.discovered = discovered;
             }
+            Main.npc = new NPC[npcLength];
             for (int n = 0; n < npcLength; n++)
             {
                 bool active = read.ReadBoolean();
@@ -401,6 +414,7 @@ namespace MonoGamePort
                 npc.active = active;
                 npc.statLife = statLife;
             }
+            Main.foliage = new Foliage[foliageLength];
             for (int n = 0; n < foliageLength; n++)
             {
                 bool discovered = read.ReadBoolean();
@@ -410,6 +424,16 @@ namespace MonoGamePort
                 int height = read.ReadInt32();
                 int type = read.ReadInt32();
                 Foliage.NewFoliage(x, y, width, height, type);
+            }
+            Main.room = new Room[roomCount];
+            for (int n = 0; n < roomCount; n++)
+            { 
+                int x = read.ReadInt32();
+                int y = read.ReadInt32();
+                int width = read.ReadInt32();
+                int height = read.ReadInt32();
+                bool lit = read.ReadBoolean();
+                Room.NewRoom(x, y, width, height, lit, Level.floorNumber);
             }
             stream.Flush();
             stream.Close();

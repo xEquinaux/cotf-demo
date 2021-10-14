@@ -332,6 +332,31 @@ namespace MonoGamePort
                     texture = Main.Temporal;
                     color = Color.Purple;
                     goto default;
+                case Type.Coin_Iron:
+                    color = Dialog.CoinColor[0];
+                    Name = "Iron coin";
+                    texture = Main.Temporal;
+                    break;
+                case Type.Coin_Copper:
+                    color = Dialog.CoinColor[1];
+                    Name = "Copper coin";
+                    texture = Main.Temporal;
+                    break;
+                case Type.Coin_Silver:
+                    color = Dialog.CoinColor[2];
+                    Name = "Silver coin";
+                    texture = Main.Temporal;
+                    break;
+                case Type.Coin_Gold:
+                    color = Dialog.CoinColor[3];
+                    Name = "Gold coin";
+                    texture = Main.Temporal;
+                    break;
+                case Type.Coin_Platinum:
+                    color = Dialog.CoinColor[4];
+                    Name = "Platinum coin";
+                    texture = Main.Temporal;
+                    break;
                 default:
                     Description = new string[]
                     {
