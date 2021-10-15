@@ -13,9 +13,7 @@ namespace MonoGamePort
     public class NPC : Entity, IDisposable
     {
         public float knockBack = 1f;
-        public Stats stat;
         public int iFrameCounter;
-        public Traits traits;
         public NPC()
         {
 
@@ -42,9 +40,18 @@ namespace MonoGamePort
             Main.npc[index].active = true;
             Main.npc[index].color = color;
             Main.npc[index].whoAmI = index;
-            Main.npc[index].stat = new Stats();
+            Main.npc[index].stats = new Stats();
             Main.npc[index].Initialize();
             return Main.npc[index];
+        }
+        public static void Clear(int preInitIndex)
+        {
+            for (int i = 0; i < Main.npc.Length; i++)
+            {
+                Main.npc[i].active = false;
+                Main.npc[i] = null;
+            }
+            Main.npc = new NPC[preInitIndex];
         }
         private void Initialize()
         {
@@ -58,14 +65,14 @@ namespace MonoGamePort
                     knockBack = 3f;
                     break;
                 case NPCID.Kobold:
-                    stat.currentLife = Main.rand.Next(20, 35);
-                    stat.totalLife = stat.currentLife;
-                    stat.damage = 8;
-                    stat.defense = 2;
-                    stat.knockback = 1.2f;
-                    stat.totalLife = maxLife;
-                    stat.kbResistance = 1f;
-                    stat.iFrames = 60;
+                    stats.currentLife = Main.rand.Next(20, 35);
+                    stats.totalLife = stats.currentLife;
+                    stats.damage = 8;
+                    stats.defense = 2;
+                    stats.knockback = 1.2f;
+                    stats.totalLife = maxLife;
+                    stats.kbResistance = 1f;
+                    stats.iFrames = 60;
                     maxSpeed = 1.5f;
                     moveSpeed = 0.20f;
                     width = 24;
@@ -136,7 +143,7 @@ namespace MonoGamePort
                 {
                     if (iFrameCounter == 0 && this.hitbox.Contains(proj.strikePoint))
                     {
-                        iFrameCounter = stat.iFrames;
+                        iFrameCounter = stats.iFrames;
                         NPCHurt(Main.LocalPlayer, proj);
                         break;
                     }
@@ -167,16 +174,16 @@ namespace MonoGamePort
         private Dust target;
         public void NPCHurt(Player player, Projectile proj)
         {
-            stat.currentLife -= proj.damage;
+            stats.currentLife -= proj.damage;
             velocity += Helper.AngleToSpeed(Helper.AngleTo(player.Center, this.Center), proj.knockBack);
 
             switch (player.itemType)
             {
                 case Item.Type.Sword_OneHand:
-                    stat.hitStun = 30;  //45
+                    stats.hitStun = 30;  //45
                     break;
                 case Item.Type.Sword_TwoHand:
-                    stat.hitStun = 60;  //80
+                    stats.hitStun = 60;  //80
                     break;
                 //case ItemID.RedRust:
                 //    stat.hitStun = 15;
@@ -192,7 +199,7 @@ namespace MonoGamePort
                 //    break;
             }
 
-            if (stat.currentLife <= 0)
+            if (stats.currentLife <= 0)
             {
                 NPCLoot();
                 Kill();
@@ -400,7 +407,7 @@ namespace MonoGamePort
                     }
                     
                     VelocityMech.BasicSlowClamp(this, moveSpeed, stopSpeed, maxSpeed);
-                    if (stat.hitStun-- > 0)
+                    if (stats.hitStun-- > 0)
                         return;
 
                     if (collide)

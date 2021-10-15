@@ -640,7 +640,7 @@ namespace MonoGamePort
         }
         public void PlayerHurt(NPC npc)
         {
-            Stats.currentLife -= npc.stat.damage;
+            Stats.currentLife -= npc.stats.damage;
             //  TODO: Causes blackhole effect
             //velocity += Helper.AngleToSpeed(Helper.AngleTo(Center, npc.Center), npc.stat.knockback);
             if (Stats.currentLife <= 0)

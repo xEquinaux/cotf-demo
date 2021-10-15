@@ -19,6 +19,7 @@ namespace MonoGamePort.NPCs
         const int maxIFrames = 15;
         private int length;
         public float rotation;
+        bool init = false;
         public bool IsHit()
         {
             foreach (Projectile proj in Main.projectile)
@@ -30,10 +31,10 @@ namespace MonoGamePort.NPCs
                     switch (Main.player[proj.owner].itemType)
                     {
                         case Item.Type.Sword_OneHand:
-                            stat.hitStun = 30;  //45
+                            stats.hitStun = 30;  //45
                             break;
                         case Item.Type.Sword_TwoHand:
-                            stat.hitStun = 60;  //80
+                            stats.hitStun = 60;  //80
                             break;
                     }
                     stats.currentLife -= proj.damage;
@@ -75,21 +76,6 @@ namespace MonoGamePort.NPCs
             wurm.height = 32;
             wurm.position = new Vector2(x, y);
             wurm.active = true;
-            wurm.stats = new Stats()
-            {
-                totalLife = 100,
-                currentLife = 100,
-                damage = 10,
-                defense = 3,
-                iFrames = maxIFrames
-            };
-            wurm.traits = new Traits()
-            {
-                bookSmarts = 0.01f,
-                streetSmarts = 0.1f,
-                courage = 0.25f,
-                wellBeing = 0.02f
-            };
             for (int i = 0; i < Main.wurm.Length; i++)
             {
                 int num = 100;
@@ -102,9 +88,28 @@ namespace MonoGamePort.NPCs
                 if (i == num)
                 {
                     Main.wurm[num] = wurm;
+                    break;
                 }
             }
             return wurm;
+        }
+        private void Initialize()
+        {
+            stats = new Stats()
+            {
+                totalLife = 100,
+                currentLife = 100,
+                damage = 10,
+                defense = 3,
+                iFrames = maxIFrames
+            };
+            traits = new Traits()
+            {
+                bookSmarts = 0.01f,
+                streetSmarts = 0.1f,
+                courage = 0.25f,
+                wellBeing = 0.02f
+            };
         }
         public override void Kill()
         {
@@ -117,6 +122,15 @@ namespace MonoGamePort.NPCs
         public override void AI()
         {
             if (!active) return;
+
+            if (!init)
+            {
+                Initialize();
+                init = true;
+            }
+
+            if (stats.hitStun-- > 0)
+                return;
             
             foreach (Foliage stuff in Main.foliage.Where(t => t != null))
             {

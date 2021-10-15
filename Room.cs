@@ -61,13 +61,17 @@ namespace MonoGamePort
             Main.room[num].lit = lit;
             return Main.room[num];
         }
-        public static void Clear()
+        public static void Clear(int reInitIndex)
         {
             for (int i = 0; i < Main.room.Length; i++)
             {
-                Main.room[i].active(false);
-                Main.room[i] = null;
+                if (Main.room[i] != null)
+                { 
+                    Main.room[i].active(false);
+                    Main.room[i] = null;
+                }
             }
+            Main.room = new Room[reInitIndex];
         }
         public void Update()
         {

@@ -39,13 +39,16 @@ namespace MonoGamePort
         public static Light[] light = new Light[1001];
         public static Staircase[] stair = new Staircase[51];
         public static Foliage[] foliage = new Foliage[201];
-        public static Room[] room = new Room[101];
+        public static Room[] room = new Room[RoomMax];
 
         public static Texture2D MagicPixel;
         public static Texture2D Temporal;
         public static Texture2D[] NPCTexture = new Texture2D[2];
         public static Texture2D[] ProjTexture = new Texture2D[1];
 
+        public const int RoomMax = 101;
+        public const int NPCMax = 501;
+        public const int GroundMax = 2001;
         public static int TimeScale = 1;
         public static int mainFrameRate => 1000 / 60;
 

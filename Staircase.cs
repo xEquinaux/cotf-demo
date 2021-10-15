@@ -133,19 +133,17 @@ namespace MonoGamePort
         }
         private void ClearPreviousLevel()
         {
-            Room.Clear();
+            Room.Clear(Main.RoomMax);
+            NPC.Clear(Main.NPCMax);
+            Background.Clear(Main.GroundMax);
             Light.entity.Clear();
             Light.light.Clear();
-            foreach (var g in Main.ground)
-                g?.Dispose();
             foreach (var i in Main.item)
                 i?.Dispose();
             foreach (var t in Main.trap)
                 t?.Dispose();
             foreach (var s in Main.stair)
                 s?.Dispose();
-            foreach (var n in Main.npc)
-                n?.Dispose();
             SquareBrush.ClearBrushes();
         }
         public void Draw(SpriteBatch sb)
@@ -170,7 +168,7 @@ namespace MonoGamePort
         private static BinaryReader read;
         private static BinaryWriter write;
         public static int floorNumber;
-        public static int litFloors = 3;
+        public const int litFloors = 3;
         public static string Name => "Dungeon";
 
         private static void Initialize(int floorIndex)

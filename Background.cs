@@ -206,7 +206,7 @@ namespace MonoGamePort
                 position.Y <= Main.LocalPlayer.position.Y + (Main.ScreenHeight + width * 10) / 2;
             if (!onScreen) return;
 
-            if (lit || !discovered && Distance(Main.LocalPlayer.Center, Center) <= Math.Max(range, Light.range * Light.AddLight))
+            if (!discovered && Distance(Main.LocalPlayer.Center, Center) <= Math.Max(range, Light.range * Light.AddLight))
                 discovered = true;
 
             if (!hitbox.Contains(Main.LocalPlayer.Center))
@@ -256,6 +256,15 @@ namespace MonoGamePort
                 color = Color.Gray;
                 sb.Draw(texture, hitbox, DynamicTorch(120f) * alpha);
             }
+        }
+        public static void Clear(int preInitIndex)
+        {
+            for (int i = 0; i < Main.ground.Length; i++)
+            {
+                Main.ground[i].active = false;
+                Main.ground[i] = null;
+            }
+            Main.ground = new Background[preInitIndex];
         }
         public void Dispose()
         {
