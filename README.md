@@ -18,7 +18,7 @@ reset all floors and player data.
 
 Comments and suggestions can be sent to ooprefect@gmail.com.
 
-==Installation==
+### ==Installation==
 
 Run extract.cmd to unpack the 'dotnet core runtime v3.1.18 x64' 
 installer. Install the runtime, then unpack the 'CotF vDEMO.zip' 
