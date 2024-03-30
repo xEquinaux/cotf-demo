@@ -106,7 +106,7 @@ namespace MonoGamePort
                 for (int i = 0; i < CoinColor.Length; i++)
                 {
                     sb.Draw(texture, new Rectangle(Hitbox.X + 32 * i, Hitbox.Y, 32, 32), CoinColor[i]);
-                    sb.DrawString(Game.Font[FontID.Arial], new string[] { item.copper.ToString(), item.silver.ToString(), item.gold.ToString(), item.platinum.ToString() }[i], new Vector2(Hitbox.X + 32 * i, Hitbox.Y), Color.Red, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+                    sb.DrawString(Game.Font[FontID.Arial], new string[] { "0", item.copper.ToString(), item.silver.ToString(), item.gold.ToString(), item.platinum.ToString() }[i], new Vector2(Hitbox.X + 32 * i, Hitbox.Y), Color.Red, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                 }
                 return;
             }

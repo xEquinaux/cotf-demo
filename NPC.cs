@@ -48,8 +48,11 @@ namespace MonoGamePort
         {
             for (int i = 0; i < Main.npc.Length; i++)
             {
-                Main.npc[i].active = false;
-                Main.npc[i] = null;
+                if (Main.npc[i] != null)
+                { 
+                    Main.npc[i].active = false;
+                    Main.npc[i] = null;
+                }
             }
             Main.npc = new NPC[preInitIndex];
         }
