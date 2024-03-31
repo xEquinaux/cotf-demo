@@ -1,16 +1,18 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Foreground : SimpleEntity
     {
@@ -24,12 +26,12 @@ namespace MonoGamePort
             active = true;
             this.bg = bg;
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!active)
                 return;
             if (!light)
-                sb.Draw(Main.MagicPixel, hitbox, Color.Black);
+                rb.Draw(Main.MagicPixel, hitbox);//, Color.Black);
         }
     }
 }

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Room
     {
@@ -80,7 +82,7 @@ namespace MonoGamePort
             {
                 if (player != null && player.active)
                 {
-                    if (Helper.Distance(Hitbox.Center.ToVector2(), player.Center) < Math.Max(Width, Height))
+                    if (Helper.Distance(new Vector2(Hitbox.X, Hitbox.Y), player.Center) < Math.Max(Width, Height))
                     {
                         active(true);
                     }

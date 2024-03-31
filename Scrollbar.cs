@@ -1,15 +1,17 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class ScrollBar : SimpleEntity
     {
@@ -59,14 +61,14 @@ namespace MonoGamePort
         {
             if (container.Contains(Main.WorldMouse.X, Main.WorldMouse.Y))
             {
-                if (Main.LocalPlayer.KeyDown(Keys.Down))
+                if (Main.LocalPlayer.KeyDown(Key.Down))
                 {
                     if (bar.value * bar.hitbox.Height < bar.hitbox.Height - 12)
                     {
                         bar.value += 0.04f;
                     }
                 }
-                if (Main.LocalPlayer.KeyDown(Keys.Up))
+                if (Main.LocalPlayer.KeyDown(Key.Up))
                 {
                     if (bar.value > 0f)
                     {
@@ -76,7 +78,7 @@ namespace MonoGamePort
                 }
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             const int size = 12;
 
@@ -90,8 +92,8 @@ namespace MonoGamePort
 
             for (int i = 0; i < 2; i++)
             {
-                sb.Draw(Main.MagicPixel, scroll[i].hitbox, Color.GhostWhite);
-                sb.Draw(Main.MagicPixel, new Rectangle(scroll[i].hitbox.X, (int)(scroll[i].hitbox.Y + scroll[i].hitbox.Height * scroll[i].value), size, size), Color.Blue);
+                rb.Draw(Main.MagicPixel, scroll[i].hitbox);//, Color.GhostWhite);
+                rb.Draw(Main.MagicPixel, new Rectangle(scroll[i].hitbox.X, (int)(scroll[i].hitbox.Y + scroll[i].hitbox.Height * scroll[i].value), size, size));//, Color.Blue);
             }
         }
     }

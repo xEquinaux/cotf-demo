@@ -1,14 +1,18 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Inventory : Main
     {
@@ -57,7 +61,7 @@ namespace MonoGamePort
         public new void Update()
         {
             //  Item inventory display from OWNER_WORLD
-            if (KeyDown(Keys.O) && flag % 2 == 0)
+            if (KeyDown(Key.O) && flag % 2 == 0)
             {
                 foreach (Item i in Main.item)
                 {
@@ -69,7 +73,7 @@ namespace MonoGamePort
                 open = !open;
                 flag = 1;
             }
-            if (KeyUp(Keys.O) && flag % 2 == 1)
+            if (KeyUp(Key.O) && flag % 2 == 1)
             {
                 flag = 0;
             }
@@ -96,25 +100,25 @@ namespace MonoGamePort
                 }
             }
         }
-        public new void PreDraw(SpriteBatch sb)
+        public new void PreDraw(RewBatch rb)
         {
             if (!open)
                 return;
-            sb.Draw(Background.BGs[BackgroundID.Temp], new Rectangle(0 - (int)Main.ScreenX, 0 - (int)Main.ScreenY, Width, Height), Color.White);
+            rb.Draw(Background.BGs[BackgroundID.Temp], new Rectangle(0 - (int)Main.ScreenX, 0 - (int)Main.ScreenY, Width, Height));//, Color.White);
             var array = new Rectangle[] { Items, Equipment, Armor };
             for (int i = 0; i < 3; i++)
             {
-                sb.Draw(Main.MagicPixel, array[i], Color.White);
+                rb.Draw(Main.MagicPixel, array[i]);//, Color.White);
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!open)
                 return;
             if (!listUpdate)
             {
-                DrawInventory(itemList, Items, sb);
-                DrawInventory(itemProximate, Equipment, sb);
+                DrawInventory(itemList, Items, rb);
+                DrawInventory(itemProximate, Equipment, rb);
             }
             listUpdate = false;
         }
@@ -127,7 +131,7 @@ namespace MonoGamePort
                 };
             }
         }
-        private void DrawInventory(IList<Item> list, Rectangle region, SpriteBatch sb)
+        private void DrawInventory(IList<Item> list, Rectangle region, RewBatch rb)
         {
             const int offset = 6;
             int c = (int)region.X + offset, r = (int)region.Y + offset;
@@ -135,7 +139,7 @@ namespace MonoGamePort
             {
                 if (i == null) continue;
                 int n = r - (int)(value[(int)i.placement] * region.Height);
-                i.DrawInventory(c, n, sb, n < region.Height + region.Y - 24 && n > region.Y);
+                i.DrawInventory(c, n, rb, n < region.Height + region.Y - 24 && n > region.Y);
                 c += 32;
                 if (c > region.Width + region.X - 24)
                 {
@@ -144,14 +148,8 @@ namespace MonoGamePort
                 }
             }
         }
-        public new bool KeyDown(Keys key)
-        {
-            return Keyboard.GetState().IsKeyDown(key);
-        }
-        public new bool KeyUp(Keys key)
-        {
-            return Keyboard.GetState().IsKeyUp(key);
-        }
+        public new bool KeyDown(Key key) => Game.KeyDown(key);
+        public new bool KeyUp(Key key) => Game.KeyUp(key);
         public bool LeftMouse()
         {
             return player.LeftMouse();

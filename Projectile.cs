@@ -1,14 +1,17 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Projectile : Entity
     {
@@ -291,7 +294,7 @@ namespace MonoGamePort
         {
             foreach (Foliage fol in Main.foliage.Where(t => t != null && t.active))
             {
-                if (fol.hitbox.Contains(strikePoint))
+                if (fol.hitbox.Contains((int)strikePoint.X, (int)strikePoint.Y))
                 {
                     return fol;
                 }
@@ -305,7 +308,7 @@ namespace MonoGamePort
         int ticks;
         int frameY;
         int totalFrames = 7;
-        public void PreDraw(SpriteBatch sb, bool animated = false)
+        public void PreDraw(RewBatch rb, bool animated = false)
         {
             if (texture == null || !active)
                 return;
@@ -316,14 +319,15 @@ namespace MonoGamePort
                     frameY++;
                 if (frameY == totalFrames)
                     frameY = 0;
-                sb.Draw(texture, hitbox, new Rectangle(0, frameY * frameHeight, width, height), Color.White);
+                rb.Draw(texture, hitbox);//, new Rectangle(0, frameY * frameHeight, width, height), Color.White);
             }
             else
             {
                 if (owner == Main.LocalPlayer.whoAmI)
                 {
                     float angle = OrientAngle(Main.player[owner].Center);
-                    sb.Draw(texture, Main.player[owner].Center + Helper.AngleToSpeed(angle, Player.plrWidth), new Rectangle(0, 0, width, height), color, angle + 90f, new Vector2(0, height / 2), 1f, SpriteEffects.None, 0);
+                    var v = Main.player[owner].Center + Helper.AngleToSpeed(angle, Player.plrWidth);
+                    rb.Draw(texture, (int)v.X, (int)v.Y);//, new Rectangle(0, 0, width, height), color, angle + 90f, new Vector2(0, height / 2), 1f, SpriteEffects.None, 0);
                     
                     strikePoint = Main.player[owner].Center + Helper.AngleToSpeed(angle + 27f * Draw.radian, height);
                     //  DEBUG drawing

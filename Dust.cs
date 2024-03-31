@@ -1,14 +1,17 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Dust : Entity
     {
@@ -105,7 +108,7 @@ namespace MonoGamePort
             {
                 if (proj.whoAmI == Main.LocalPlayer.whoAmI)
                 {
-                    if (hitbox.Intersects(proj.hitbox))
+                    if (hitbox.IntersectsWith(proj.hitbox))
                     {
                         var speed = NPC.AngleToSpeed(NPC.AngleTo(Main.LocalPlayer.Center, Center), moveSpeed);
                         velocity.X += speed.X;
@@ -114,14 +117,14 @@ namespace MonoGamePort
                 }
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             //  Room darkness & Culling
             for (int i = 0; i < Main.ground.Length; i++)
             {
                 if (Main.ground[i] != null)
                 {
-                    if (!Main.ground[i].hitbox.Contains(Main.LocalPlayer.Center))
+                    if (!Main.ground[i].hitbox.Contains((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y))
                     {
                         return;
                     }
@@ -135,7 +138,7 @@ namespace MonoGamePort
             //  Typical draw
             if (active)
             {
-                sb.Draw(texture, new Rectangle((int)x - width / 2, (int)y - width / 2, width, height), color);
+                rb.Draw(texture, new Rectangle((int)x - width / 2, (int)y - width / 2, width, height));//, color);
             }
         }
         private void Effect()

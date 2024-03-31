@@ -1,14 +1,16 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Trap : SimpleEntity, IDisposable
     {
@@ -59,9 +61,9 @@ namespace MonoGamePort
                 activated = true;
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
-            if (active && activated) sb.Draw(Main.Temporal, hitbox, Color.White);
+            if (active && activated) rb.Draw(Main.Temporal, hitbox);//, Color.White);
         }
         private void TrapEffects(Player player)
         {

@@ -1,15 +1,19 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Player : SimpleEntity
     {
@@ -76,15 +80,11 @@ namespace MonoGamePort
         internal IList<NPC> downedNPC = new List<NPC>();
         internal bool downedUpdate;
         public new Rectangle hitbox;
-        public KeyboardState keyboard;
+        public KeyboardDevice keyboard;
         public List<NPC> npcCollide = new List<NPC>();
-        private Keys[] PressedKeys
+        public void PreDraw(RewBatch rb)
         {
-            get { return keyboard.GetPressedKeys(); }
-        }
-        public void PreDraw(SpriteBatch sb)
-        {
-            if (Inventory.open)
+            if (Inventory.open || !init)
                 return;
 
             if (iFrameCounter > 0)
@@ -96,11 +96,11 @@ namespace MonoGamePort
             }
             else invulnDraw = false;
 
-            sb.Draw(texture, hitbox, Color.Blue * (invulnDraw ? 0f : alpha));
+            rb.Draw(texture, hitbox);//, Color.Blue * (invulnDraw ? 0f : alpha));
             
-            sb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 10, Stats.currentLife, 10), Color.Green * alpha);
-            sb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 22, Stats.mana, 10), Color.Blue * alpha);
-            sb.DrawString(Game.Font[FontID.Arial], string.Format("{0} / {1}\n{2} / {3}", Stats.currentLife, Stats.totalLife, Stats.mana, MaxMana), new Vector2(position.X, position.Y + plrHeight + 10), Color.Red * alpha);
+            rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 10, Stats.currentLife, 10));//, Color.Green * alpha);
+            rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 22, Stats.mana, 10));//, Color.Blue * alpha);
+            rb.DrawString(Game.Font[FontID.Arial], string.Format("{0} / {1}\n{2} / {3}", Stats.currentLife, Stats.totalLife, Stats.mana, MaxMana), new Vector2(position.X, position.Y + plrHeight + 10), Color.Red);// * alpha);
 
             width = plrWidth;
             height = plrHeight;
@@ -284,6 +284,7 @@ namespace MonoGamePort
                 init = true;
             }
 
+            position = new Vector2(300, 450);
             if (downedUpdate)
             {
                 foreach (NPC npc in downedNPC)
@@ -294,7 +295,7 @@ namespace MonoGamePort
                 downedUpdate = false;
             }
 
-            keyboard = Keyboard.GetState();
+            //keyboard = Keyboard.GetState();
 
             if (PhaseDoorEffect(300f))
             {
@@ -504,25 +505,25 @@ namespace MonoGamePort
             #endregion
 
             //  Controls
-            if (controlRight = !KeyDown(Keys.A) && KeyDown(Keys.D))
+            if (controlRight = !Game.KeyDown(Key.A) && Game.KeyDown(Key.D))
             {
                 // move right
                 Main.TimeScale = 1;
                 velocity.X += moveSpeed;
             }
-            if (controlLeft = KeyDown(Keys.A) && !KeyDown(Keys.D))
+            if (controlLeft = Game.KeyDown(Key.A) && !Game.KeyDown(Key.D))
             {
                 // move left
                 Main.TimeScale = 1;
                 velocity.X -= moveSpeed;
             }
-            if (controlDown = !KeyDown(Keys.W) && KeyDown(Keys.S))
+            if (controlDown = !Game.KeyDown(Key.W) && Game.KeyDown(Key.S))
             {
                 // move down
                 Main.TimeScale = 1;
                 velocity.Y += moveSpeed;
             }
-            if (controlUp = KeyDown(Keys.W) && !KeyDown(Keys.S))
+            if (controlUp = Game.KeyDown(Key.W) && !Game.KeyDown(Key.S))
             {
                 // move up
                 Main.TimeScale = 1;
@@ -532,26 +533,26 @@ namespace MonoGamePort
             //AuxMovement();
 
             //  GUI Hotbar
-            if (KeyDown(Keys.D1) || KeyDown(Keys.D2) || KeyDown(Keys.D3) || KeyDown(Keys.D4) || KeyDown(Keys.D5))
+            if (Game.KeyDown(Key.D1) || Game.KeyDown(Key.D2) || Game.KeyDown(Key.D3) || Game.KeyDown(Key.D4) || Game.KeyDown(Key.D5))
             {
                 foreach (GUI g in Main.gui.Where(t => t != null))
                     g.selected = false;
             }
-            if (KeyDown(Keys.D1))
+            if (Game.KeyDown(Key.D1))
                 Main.gui[0].selected = true;
-            else if (KeyDown(Keys.D2))
+            else if (Game.KeyDown(Key.D2))
                 Main.gui[1].selected = true;
-            else if (KeyDown(Keys.D3))
+            else if (Game.KeyDown(Key.D3))
                 Main.gui[2].selected = true;
-            else if (KeyDown(Keys.D4))
+            else if (Game.KeyDown(Key.D4))
                 Main.gui[3].selected = true;
-            else if (KeyDown(Keys.D5))
+            else if (Game.KeyDown(Key.D5))
                 Main.gui[4].selected = true;
 
             //  Time scaling
             if (Stats.mana < ScaledMaxMana || Stats.currentLife < ScaledMaxLife)
             {
-                if (KeyDown(Keys.R))
+                if (Game.KeyDown(Key.R))
                     Main.TimeScale = 15;
             }
             else Main.TimeScale = 1;
@@ -577,7 +578,7 @@ namespace MonoGamePort
                     flag4++;
                 }
             }
-            if (Main.MouseDevice.RightButton == ButtonState.Released && flag4 % 2 == 1)
+            if (Main.MouseDevice.RightButton == MouseButtonState.Released && flag4 % 2 == 1)
                 flag4 = 0;
 
             //  TODO: Torch light
@@ -621,7 +622,7 @@ namespace MonoGamePort
                 }
                 flag++;
             }
-            if (Main.MouseDevice.LeftButton == ButtonState.Released && flag % 2 == 1)
+            if (Main.MouseDevice.LeftButton == MouseButtonState.Released && flag % 2 == 1)
                 flag = 0;
         }
 
@@ -665,12 +666,12 @@ namespace MonoGamePort
 
         public void ToggleZoom()
         {
-            if (KeyDown(Keys.M) && flag3 % 2 == 0)
+            if (Game.KeyDown(Key.M) && flag3 % 2 == 0)
             {
                 flag3++;
                 Main.IsZoomed = !Main.IsZoomed;
             }
-            if (KeyUp(Keys.M))
+            if (Game.KeyUp(Key.M))
             {
                 flag3 = 0;
             }
@@ -679,7 +680,7 @@ namespace MonoGamePort
         {
             foreach (SquareBrush brush in Main.square.Where(t => t != null && t.active()))
             {
-                if (brush.Hitbox.Contains(this.Center))
+                if (brush.Hitbox.Contains((int)Center.X, (int)Center.Y))
                     return true;
             }
             return false;
@@ -688,13 +689,13 @@ namespace MonoGamePort
         {
             if (Main.IsZoomed)
             {
-                if (KeyDown(Keys.Down) && Main.MapY * Game.ScrollSpeed < Main.LevelHeight / 2)
+                if (Game.KeyDown(Key.Down) && Main.MapY * Game.ScrollSpeed < Main.LevelHeight / 2)
                     Main.MapY++;
-                if (KeyDown(Keys.Up) && Main.MapY * Game.ScrollSpeed > -Main.LevelHeight / 2)
+                if (Game.KeyDown(Key.Up) && Main.MapY * Game.ScrollSpeed > -Main.LevelHeight / 2)
                     Main.MapY--;
-                if (KeyDown(Keys.Right) && Main.MapX * Game.ScrollSpeed < Main.LevelHeight / 2)
+                if (Game.KeyDown(Key.Right) && Main.MapX * Game.ScrollSpeed < Main.LevelHeight / 2)
                     Main.MapX++;
-                if (KeyDown(Keys.Left) && Main.MapX * Game.ScrollSpeed > -Main.LevelHeight / 2)
+                if (Game.KeyDown(Key.Left) && Main.MapX * Game.ScrollSpeed > -Main.LevelHeight / 2)
                     Main.MapX--;
             }
             else
@@ -705,7 +706,7 @@ namespace MonoGamePort
         }
         public void OpenMenu()
         {
-            if (Main.MouseDevice.LeftButton == ButtonState.Pressed && flag2 % 2 == 0)
+            if (Main.MouseDevice.LeftButton == MouseButtonState.Pressed && flag2 % 2 == 0)
             {
                 flag2++;
                 if (Main.gui[GUI.SkillMenu].hitbox.Contains(Main.MousePosition.X, Main.MousePosition.Y))
@@ -716,7 +717,7 @@ namespace MonoGamePort
                     }
                 }
             }
-            if (Main.MouseDevice.LeftButton == ButtonState.Released && flag2 % 2 == 1)
+            if (Main.MouseDevice.LeftButton == MouseButtonState.Released && flag2 % 2 == 1)
                 flag2 = 0;
         }
         private int fuel = 3;
@@ -724,8 +725,8 @@ namespace MonoGamePort
         private void AuxMovement()
         {
             //clamp = fuel <= 0;
-            Vector2 mouse = Main.WorldMouse;
-            if (Main.MouseDevice.LeftButton == ButtonState.Pressed)
+            Point mouse = Main.WorldMouse;
+            if (Main.MouseDevice.LeftButton == MouseButtonState.Pressed)
             {
                 foreach (Dust dust in Main.dust.Where(t => t != null && t.active))
                 {
@@ -750,38 +751,42 @@ namespace MonoGamePort
             float sine = (float)(amount * Math.Sin(angle));
             return new Vector2(cos, sine);
         }
+        public static float AngleTo(Vector2 from, Point to)
+        {
+            return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+        }
         public static float AngleTo(Vector2 from, Vector2 to)
         {
             return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
         }
-        public bool KeyUp(Keys key)
+        public bool KeyUp(Key key)
         {
-            return keyboard.IsKeyUp(key);
+            return Game.KeyUp(key);
         }
-        public bool KeyDown(Keys key)
+        public bool KeyDown(Key key)
         {
-            return keyboard.IsKeyDown(key);
+            return Game.KeyDown(key);
         }
         
         public bool IsMovingNoCollide()
         {
-            return (KeyDown(Keys.Space) || KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
+            return (Game.KeyDown(Key.Space) || Game.KeyDown(Key.W) || Game.KeyDown(Key.A) || Game.KeyDown(Key.S) || Game.KeyDown(Key.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
         }
         public bool IsMoving()
         {
-            return !KeyDown(Keys.Space) && (KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f) && (!colDown || !colLeft || !colRight || !colUp);
+            return !Game.KeyDown(Key.Space) && (Game.KeyDown(Key.W) || Game.KeyDown(Key.A) || Game.KeyDown(Key.S) || Game.KeyDown(Key.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f) && (!colDown || !colLeft || !colRight || !colUp);
         }
         public bool Movement()
         {
-            return KeyDown(Keys.W) || KeyDown(Keys.A) || KeyDown(Keys.S) || KeyDown(Keys.D) || KeyDown(Keys.Space) || Main.TimeScale != 1;
+            return Game.KeyDown(Key.W) || Game.KeyDown(Key.A) || Game.KeyDown(Key.S) || Game.KeyDown(Key.D) || Game.KeyDown(Key.Space) || Main.TimeScale != 1;
         }
         public bool LeftMouse()
         {
-            return Main.MouseDevice.LeftButton == ButtonState.Pressed;
+            return Main.MouseDevice.LeftButton == MouseButtonState.Pressed;
         }
         public bool RightMouse()
         {
-            return Main.MouseDevice.RightButton == ButtonState.Pressed;
+            return Main.MouseDevice.RightButton == MouseButtonState.Pressed;
         }
     }
 }

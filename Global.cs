@@ -1,13 +1,16 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class FontID
     {
@@ -164,7 +167,7 @@ namespace MonoGamePort
     }
     public struct Tile
     {
-        public static Texture2D texture;
+        public static REW texture;
         public void type(int x, int y, ushort type)
         {
             //bmp.SetPixel(x, y, Main.types[type]);
@@ -420,7 +423,7 @@ namespace MonoGamePort
                 Vector2 line = new Vector2(cos, sin);
                 SquareBrush brush = SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50);
                 if (brush == null) return false;
-                if (brush.active() && brush.Hitbox.Contains(line))
+                if (brush.active() && brush.Hitbox.Contains((int)line.X, (int)line.Y))
                 {
                     return true;
                 }
