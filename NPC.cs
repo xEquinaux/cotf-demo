@@ -1,14 +1,17 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class NPC : Entity, IDisposable
     {
@@ -48,8 +51,11 @@ namespace MonoGamePort
         {
             for (int i = 0; i < Main.npc.Length; i++)
             {
-                Main.npc[i].active = false;
-                Main.npc[i] = null;
+                if (Main.npc[i] != null)
+                { 
+                    Main.npc[i].active = false;
+                    Main.npc[i] = null;
+                }
             }
             Main.npc = new NPC[preInitIndex];
         }
@@ -90,28 +96,28 @@ namespace MonoGamePort
             bool flag = false;
             foreach (Player player in Main.player.Where(t => t != null && t.active))
             {
-                if (player.hitbox.Intersects(new Rectangle((int)position.X, (int)position.Y, width, height)))
+                if (player.hitbox.IntersectsWith(new Rectangle((int)position.X, (int)position.Y, width, height)))
                 { 
                     collide = true;
                     player.collide = true;
                 }
                 //  Directions
-                if (player.hitbox.Intersects(new Rectangle((int)position.X, (int)position.Y - buffer, width, 2)))
+                if (player.hitbox.IntersectsWith(new Rectangle((int)position.X, (int)position.Y - buffer, width, 2)))
                 { 
                     colUp = true;
                     player.colDown = true;
                 }
-                if (player.hitbox.Intersects(new Rectangle((int)position.X, (int)position.Y + height + buffer, width, 2)))
+                if (player.hitbox.IntersectsWith(new Rectangle((int)position.X, (int)position.Y + height + buffer, width, 2)))
                 { 
                     colDown = true;
                     player.colUp = true;
                 }
-                if (player.hitbox.Intersects(new Rectangle((int)position.X + width + buffer, (int)position.Y, 2, height)))
+                if (player.hitbox.IntersectsWith(new Rectangle((int)position.X + width + buffer, (int)position.Y, 2, height)))
                 { 
                     colRight = true;
                     player.colLeft = true;
                 }
-                if (player.hitbox.Intersects(new Rectangle((int)position.X - buffer, (int)position.Y, 2, height)))
+                if (player.hitbox.IntersectsWith(new Rectangle((int)position.X - buffer, (int)position.Y, 2, height)))
                 { 
                     colLeft = true;
                     player.colRight = true;
@@ -141,7 +147,7 @@ namespace MonoGamePort
             {
                 if (proj.owner == Main.LocalPlayer.whoAmI)
                 {
-                    if (iFrameCounter == 0 && this.hitbox.Contains(proj.strikePoint))
+                    if (iFrameCounter == 0 && this.hitbox.Contains((int)proj.strikePoint.X, (int)proj.strikePoint.Y))
                     {
                         iFrameCounter = stats.iFrames;
                         NPCHurt(Main.LocalPlayer, proj);
@@ -314,7 +320,7 @@ namespace MonoGamePort
                         switch (target.type)
                         {
                             case Dust.Waypoint.Green:
-                                if (!this.hitbox.Contains(target.Center.X, target.Center.Y))
+                                if (!this.hitbox.Contains((int)target.Center.X, (int)target.Center.Y))
                                 {
                                     var speed = AngleToSpeed((float)Math.Atan2(position.Y - target.position.Y, position.X - target.position.X) + 180f * Draw.radian, moveSpeed);
                                     velocity.X += speed.X;
@@ -326,7 +332,7 @@ namespace MonoGamePort
                                 }
                                 break;
                             case Dust.Waypoint.Yellow:
-                                if (!this.hitbox.Contains(target.Center.X, target.Center.Y))
+                                if (!this.hitbox.Contains((int)target.Center.X, (int)target.Center.Y))
                                 {
                                     var speed = AngleToSpeed((float)Math.Atan2(position.Y - target.position.Y, position.X - target.position.X) + 180f * Draw.radian, moveSpeed);
                                     velocity.X += speed.X;
@@ -435,6 +441,10 @@ namespace MonoGamePort
                     break;
             }
         }
+        public static float AngleTo(Vector2 from, Point to)
+        {
+            return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+        }
         public static float AngleTo(Vector2 from, Vector2 to)
         {
             return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
@@ -455,14 +465,14 @@ namespace MonoGamePort
                 Vector2 line = new Vector2(cos, sin);
                 SquareBrush brush = SquareBrush.GetSafely((int)line.X / 50, (int)line.Y / 50);
                 if (brush == null) return false;
-                if (brush.active() && brush.Hitbox.Contains(line))
+                if (brush.active() && brush.Hitbox.Contains((int)line.X, (int)line.Y))
                 {
                     return true;
                 }
             }
             return false;
         }
-        public void PreDraw(SpriteBatch sb)
+        public void PreDraw(RewBatch rb)
         {
             if (!discovered || !active || hidden || texture == null)
                 return;
@@ -471,7 +481,7 @@ namespace MonoGamePort
                 color = Color.Red;
             else color = Color.Gray;
 
-            sb.Draw(texture, hitbox, DynamicTorch(120f));
+            rb.Draw(texture, hitbox);//, DynamicTorch(120f));
         }
         public void Dispose()
         {

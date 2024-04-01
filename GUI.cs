@@ -1,17 +1,20 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class GUI : Entity
     {
@@ -61,7 +64,7 @@ namespace MonoGamePort
         {
             get { return Main.LocalPlayer.Armory[style].Item != null && Main.LocalPlayer.Armory[style].Item.active; }
         }
-        public static GUI NewElement(int x, int y, int width, int height, string text, Texture2D texture, int owner, int type, Action onClick)
+        public static GUI NewElement(int x, int y, int width, int height, string text, REW texture, int owner, int type, Action onClick)
         {
             int num = 128;
             for (int i = 0; i < num; i++)
@@ -92,7 +95,7 @@ namespace MonoGamePort
             Main.gui[num].Initialize();
             return Main.gui[num];
         }
-        public static GUI NewMenu(int x, int y, int width, int height, string text, Texture2D texture, int owner, int whoAmI, int type, Action onClick)
+        public static GUI NewMenu(int x, int y, int width, int height, string text, REW texture, int owner, int whoAmI, int type, Action onClick)
         {
             Main.gui[whoAmI] = new GUI();
             Main.gui[whoAmI].whoAmI = whoAmI;
@@ -110,7 +113,7 @@ namespace MonoGamePort
             Main.gui[whoAmI].Initialize();
             return Main.gui[whoAmI];
         }
-        public static GUI ArmoryGUI(int width, int height, short styleID, Item.Type type, Item.Style style, string name, int owner, int whoAmI, Vector2 v2 = default(Vector2), Texture2D texture = null, Action onClick = null)
+        public static GUI ArmoryGUI(int width, int height, short styleID, Item.Type type, Item.Style style, string name, int owner, int whoAmI, Vector2 v2 = default(Vector2), REW texture = null, Action onClick = null)
         {
             Player player = Main.LocalPlayer;
             player.Armory[whoAmI] = new GUI();
@@ -312,7 +315,7 @@ namespace MonoGamePort
             if (!unlocked)
                 return;
             
-            if (Main.MouseDevice.LeftButton == ButtonState.Pressed && flag % 2 == 0 && whoAmI < SkillMenu)
+            if (Main.MouseDevice.LeftButton == System.Windows.Input.MouseButtonState.Pressed && flag % 2 == 0 && whoAmI < SkillMenu)
             {
                 flag++;
                 foreach (GUI menu in Main.skill)
@@ -335,10 +338,10 @@ namespace MonoGamePort
                 if (selected)
                     onClick?.Invoke();
             }
-            if (Main.MouseDevice.LeftButton == ButtonState.Released && flag % 2 == 1)
+            if (Main.MouseDevice.LeftButton == System.Windows.Input.MouseButtonState.Released && flag % 2 == 1)
                 flag = 0;
         }
-        private void MenuReplace(GUI menu, GUI g, Action click, string name, Texture2D tex, string text, int type)
+        private void MenuReplace(GUI menu, GUI g, Action click, string name, REW tex, string text, int type)
         {
             menu.Name = g.Name;
             menu.onClick = g.onClick;
@@ -352,40 +355,40 @@ namespace MonoGamePort
             g.type = type;
         }
         public static bool screenshot = false;
-        public void DrawArmory(SpriteBatch sb)
+        public void DrawArmory(RewBatch rb)
         {
             if (!Inventory.open)
                 return;
 
             drawBox = new Rectangle((int)position.X - (int)Main.ScreenX, (int)position.Y - (int)Main.ScreenY, width, height);
 
-            sb.Draw(texture, drawBox, Color.Silver);
+            rb.Draw(texture, drawBox);//, Color.Silver);
 
             if (Item != null && Item?.equipped == true)
-                sb.Draw(Item.texture, drawBox, Item.color);
+                rb.Draw(Item.texture, drawBox);//, Item.color);
 
             //  DEBUG
             //gfx.DrawRectangle(Item != null && Item?.equipped == true ? System.Drawing.Pens.Gold : Pens.Gray, drawBox.GetSDRectangle());
 
             if (drawBox.Contains(Main.WorldMouse))
-                sb.DrawString(Game.Font[FontID.Arial], text, new Vector2((int)(position.X - Main.ScreenX), (int)(position.Y - Main.ScreenY) + height), Color.Silver);
+                rb.DrawString(Game.Font[FontID.Arial], text, (int)(position.X - Main.ScreenX), (int)(position.Y - Main.ScreenY) + height, 100, 16, Color.Silver);
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch sb)
         {
             if (!active)
                 return;
 
-            sb.Draw(texture, new Rectangle((int)position.X, (int)position.Y, width, height), Color.White);
+            sb.Draw(texture, new Rectangle((int)position.X, (int)position.Y, width, height));//, Color.White);
             //  DEBUG
             //gfx.DrawRectangle(selected && unlocked ? System.Drawing.Pens.Gold : Pens.Gray, new System.Drawing.Rectangle((int)position.X, (int)position.Y, hitbox.Width, hitbox.Height));
         }
-        public void DrawMenuText(SpriteBatch sb)
+        public void DrawMenuText(RewBatch sb)
         {
             if (!active)
                 return;
 
             if (hitbox.Contains(Main.MousePosition.X, Main.MousePosition.Y))
-                sb.DrawString(Game.Font[FontID.Arial], text, position + new Vector2(0, height), Color.Silver);
+                sb.DrawString(Game.Font[FontID.Arial], text, (int)(position.X + new Vector2(0, height).X), (int)(position.Y + new Vector2(0, height).Y), 100, 16, Color.Silver);
         }
         public static GUI GetElement(string name)
         {

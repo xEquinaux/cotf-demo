@@ -1,15 +1,18 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Entity
     {
@@ -36,7 +39,7 @@ namespace MonoGamePort
         public Color color;
         public int width;
         public int height;
-        public Texture2D texture;
+        public REW texture;
         public string Name;
         public bool discovered;
         public float alpha = 1f;
@@ -57,16 +60,16 @@ namespace MonoGamePort
         {
             if (!active) return false;
 
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
                 ent.collide = true;
             //  Directions
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
                 ent.colUp = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
                 ent.colDown = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colRight = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colLeft = true;
 
             return collide || colUp || colDown || colLeft || colRight;
@@ -75,23 +78,23 @@ namespace MonoGamePort
         {
             if (!active) return false;
             bool flag = false;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
                 ent.collide = true;
             //  Directions
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
                 ent.colUp = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
                 ent.colDown = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colRight = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colLeft = true;
             flag = collide || colUp || colDown || colLeft || colRight;
             return flag;
         }
         public Color ColorShift(Color newColor, float distance)
         {
-            return new Color(
+            return Color.FromArgb(
                 (byte)Math.Min(color.R + (byte)(newColor.R * distance), 255), 
                 (byte)Math.Min(color.G + (byte)(newColor.G * distance), 255), 
                 (byte)Math.Min(color.B + (byte)(newColor.B * distance), 255), 
@@ -154,7 +157,7 @@ namespace MonoGamePort
         public Color color;
         public int width;
         public int height;
-        public Texture2D texture;
+        public REW texture;
         public string text;
         public string Name;
         public bool collide, colUp, colDown, colRight, colLeft;
@@ -192,16 +195,16 @@ namespace MonoGamePort
         {
             if (!active) return false;
 
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
                 ent.collide = true;
             //  Directions
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
                 ent.colUp = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
                 ent.colDown = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colRight = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colLeft = true;
 
             return collide || colUp || colDown || colLeft || colRight;
@@ -210,16 +213,16 @@ namespace MonoGamePort
         {
             if (!active) return false;
 
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y, ent.width, ent.height)))
                 ent.collide = true;
             //  Directions
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y - buffer, ent.width, 2)))
                 ent.colUp = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X, (int)ent.position.Y + ent.height + buffer, ent.width, 2)))
                 ent.colDown = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X + ent.width + buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colRight = true;
-            if (hitbox.Intersects(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
+            if (hitbox.IntersectsWith(new Rectangle((int)ent.position.X - buffer, (int)ent.position.Y, 2, ent.height)))
                 ent.colLeft = true;
             
             return collide || colUp || colDown || colLeft || colRight;
@@ -228,23 +231,23 @@ namespace MonoGamePort
         {
             if (!whoAmI.active) return false;
 
-            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y, whoAmI.width, whoAmI.height)))
+            if (collider.hitbox.IntersectsWith(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y, whoAmI.width, whoAmI.height)))
                 whoAmI.collide = true;
             //  Directions
-            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y - buffer, whoAmI.width, 2)))
+            if (collider.hitbox.IntersectsWith(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y - buffer, whoAmI.width, 2)))
                 whoAmI.colUp = true;
-            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y + whoAmI.height + buffer, whoAmI.width, 2)))
+            if (collider.hitbox.IntersectsWith(new Rectangle((int)whoAmI.position.X, (int)whoAmI.position.Y + whoAmI.height + buffer, whoAmI.width, 2)))
                 whoAmI.colDown = true;
-            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X + whoAmI.width + buffer, (int)whoAmI.position.Y, 2, whoAmI.height)))
+            if (collider.hitbox.IntersectsWith(new Rectangle((int)whoAmI.position.X + whoAmI.width + buffer, (int)whoAmI.position.Y, 2, whoAmI.height)))
                 whoAmI.colRight = true;
-            if (collider.hitbox.Intersects(new Rectangle((int)whoAmI.position.X - buffer, (int)whoAmI.position.Y, 2, whoAmI.height)))
+            if (collider.hitbox.IntersectsWith(new Rectangle((int)whoAmI.position.X - buffer, (int)whoAmI.position.Y, 2, whoAmI.height)))
                 whoAmI.colLeft = true;
             
             return whoAmI.collide || whoAmI.colUp || whoAmI.colDown || whoAmI.colLeft || whoAmI.colRight;
         }
         public Color ColorShift(Color newColor, float distance)
         {
-            return new Color(
+            return Color.FromArgb(
                 (byte)Math.Min(color.R + (byte)(newColor.R * distance), 255), 
                 (byte)Math.Min(color.G + (byte)(newColor.G * distance), 255), 
                 (byte)Math.Min(color.B + (byte)(newColor.B * distance), 255), 

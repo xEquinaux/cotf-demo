@@ -1,14 +1,18 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
+using System.Windows.Input;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Staircase : IDisposable
     {
@@ -35,7 +39,7 @@ namespace MonoGamePort
         public int whoAmI;
         public static bool goingDown;
         private static int flag = 0;
-        public const Keys useStairs = Keys.Enter;
+        public const Key useStairs = Key.Enter;
         public bool discovered;
         public const float range = 300f;
         public enum Transition
@@ -88,7 +92,7 @@ namespace MonoGamePort
             //if (player.KeyDown(Keys.Up))
             //    player.position = Main.stair.Where(t => t.transition == Transition.GoingUp).First().position;
 
-            if ((proximity = player.hitbox.Intersects(hitbox)) && player.KeyDown(useStairs) && flag++ == 0)
+            if ((proximity = player.hitbox.IntersectsWith(hitbox)) && player.KeyDown(useStairs) && flag++ == 0)
             {
                 switch (transition)
                 {
@@ -146,14 +150,14 @@ namespace MonoGamePort
                 s?.Dispose();
             SquareBrush.ClearBrushes();
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!active || !discovered) return;
 
-            sb.Draw(Main.MagicPixel, hitbox, Color.White);
+            rb.Draw(Main.MagicPixel, hitbox);//, Color.White);
             if (proximity)
             {
-                sb.DrawString(Game.Font[FontID.Arial], transition == Transition.GoingDown ? "Down" : "Up", position + new Vector2(0, height), Color.Silver);
+                rb.DrawString(Game.Font[FontID.Arial], transition == Transition.GoingDown ? "Down" : "Up", position + new Vector2(0, height), Color.Silver);
             }
         }
         public void Dispose()
@@ -387,7 +391,7 @@ namespace MonoGamePort
                 bool active = read.ReadBoolean();
                 bool discovered = read.ReadBoolean();
                 string text2 = read.ReadString();
-                Enum.TryParse(typeof(Staircase.Transition), text2, out object transition);
+                Enum.TryParse<Staircase.Transition>(text2, out Staircase.Transition transition);
                 int x = read.ReadInt32();
                 int y = read.ReadInt32();
                 int width = read.ReadInt32();

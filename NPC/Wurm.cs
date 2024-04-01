@@ -1,13 +1,16 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort.NPCs
+
+
+
+namespace cotf_rewd.NPCs
 {
     public class Wurm_Head : NPC
     {
@@ -26,7 +29,7 @@ namespace MonoGamePort.NPCs
             {
                 if (proj == null || !proj.active) continue;
                 if (!proj.Friendly(proj.type)) continue;
-                if (proj.hitbox.Intersects(hitbox) && stats.iFrames <= 0)
+                if (proj.hitbox.IntersectsWith(hitbox) && stats.iFrames <= 0)
                 {
                     switch (Main.player[proj.owner].itemType)
                     {
@@ -194,23 +197,23 @@ namespace MonoGamePort.NPCs
                 head.position += head.velocity;
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!active || hidden) return;
 
             //  Head
-            sb.Draw(Main.MagicPixel, hitbox, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            rb.Draw(Main.MagicPixel, hitbox);//, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Tail + 1
-            sb.Draw(Main.MagicPixel, body[0].hitbox, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(body[0].Center, body[1].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            rb.Draw(Main.MagicPixel, body[0].hitbox);//, new Rectangle(0, 0, width, height));//, Color.Blue, Helper.AngleTo(body[0].Center, body[1].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Body
             for (int i = 1; i < length; i++)
             {
                 var previous = body[i - 1];
                 var segment = body[i]; 
-                sb.Draw(Main.MagicPixel, segment.hitbox, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(previous.Center, segment.Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+                rb.Draw(Main.MagicPixel, segment.hitbox);//, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(previous.Center, segment.Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             }
             //  Tail
-            sb.Draw(Main.MagicPixel, tail.hitbox, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(tail.Center, body[0].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            rb.Draw(Main.MagicPixel, tail.hitbox);//, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(tail.Center, body[0].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
         }
 
         private Color IFrames(Color color)

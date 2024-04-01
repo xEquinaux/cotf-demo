@@ -1,16 +1,19 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class SquareBrush : Entity, IDisposable
     {
@@ -89,35 +92,35 @@ namespace MonoGamePort
         {
             if (!Active) return;
 
-            if (Hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y, Player.plrWidth, Player.plrHeight)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)player.position.X, (int)player.position.Y, Player.plrWidth, Player.plrHeight)))
                 player.collide = true;
             //  Directions
-            if (Hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y - buffer, Player.plrWidth, 2)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)player.position.X, (int)player.position.Y - buffer, Player.plrWidth, 2)))
                 player.colUp = true;
-            if (Hitbox.Intersects(new Rectangle((int)player.position.X, (int)player.position.Y + Player.plrHeight + buffer, Player.plrWidth, 2)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)player.position.X, (int)player.position.Y + Player.plrHeight + buffer, Player.plrWidth, 2)))
                 player.colDown = true;
-            if (Hitbox.Intersects(new Rectangle((int)player.position.X + Player.plrWidth + buffer, (int)player.position.Y, 2, Player.plrHeight)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)player.position.X + Player.plrWidth + buffer, (int)player.position.Y, 2, Player.plrHeight)))
                 player.colRight = true;
-            if (Hitbox.Intersects(new Rectangle((int)player.position.X - buffer, (int)player.position.Y, 2, Player.plrHeight)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)player.position.X - buffer, (int)player.position.Y, 2, Player.plrHeight)))
                 player.colLeft = true;
         }
         public void NPCCollision(NPC npc, int buffer = 4)
         {
             if (!Active) return;
 
-            if (Hitbox.Intersects(new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height)))
                 npc.collide = true;
             //  Directions
-            if (Hitbox.Intersects(new Rectangle((int)npc.position.X, (int)npc.position.Y - buffer, npc.width, 2)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)npc.position.X, (int)npc.position.Y - buffer, npc.width, 2)))
                 npc.colUp = true;
-            if (Hitbox.Intersects(new Rectangle((int)npc.position.X, (int)npc.position.Y + npc.height + buffer, npc.width, 2)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)npc.position.X, (int)npc.position.Y + npc.height + buffer, npc.width, 2)))
                 npc.colDown = true;
-            if (Hitbox.Intersects(new Rectangle((int)npc.position.X + npc.width + buffer, (int)npc.position.Y, 2, npc.height)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)npc.position.X + npc.width + buffer, (int)npc.position.Y, 2, npc.height)))
                 npc.colRight = true;
-            if (Hitbox.Intersects(new Rectangle((int)npc.position.X - buffer, (int)npc.position.Y, 2, npc.height)))
+            if (Hitbox.IntersectsWith(new Rectangle((int)npc.position.X - buffer, (int)npc.position.Y, 2, npc.height)))
                 npc.colLeft = true;
         }
-        public void PreDraw(SpriteBatch sb)
+        public void PreDraw(RewBatch rb)
         {        
             if (!Active || !discovered)
                 return;
@@ -127,7 +130,7 @@ namespace MonoGamePort
             }
             else alpha = 1f;
             color = Color.Gray;
-            sb.Draw(Main.MagicPixel, Hitbox, DynamicTorch(Light.range) * alpha);
+            rb.Draw(Main.MagicPixel, Hitbox);//, DynamicTorch(Light.range) * alpha);
 
             //  DEBUG: lighting color mask
             //if (NPC.Distance(Center, Main.player[0].Center) > Light.range)

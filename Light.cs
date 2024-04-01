@@ -1,13 +1,16 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Light
     {
@@ -28,13 +31,13 @@ namespace MonoGamePort
         public static bool updating;
         public bool onScreen;
         public const float AddLight = 1.2f;
-        public static Texture2D fow;
+        public static REW fow;
         public static Color TorchLight = Color.Orange;
         private float alpha = 1f;
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch sb)
         {
             if (!lit /*&& bg?.light == false*/ && onScreen)
-                sb.Draw(fow, new Rectangle((int)position.X - 10, (int)position.Y - 10, Size * 3, Size * 3), Color.Black * alpha * Math.Min(Main.LocalPlayer.Distance(Center) / (range * 2f), 1f));
+                sb.Draw(fow, new Rectangle((int)position.X - 10, (int)position.Y - 10, Size * 3, Size * 3));//, Color.Black * alpha * Math.Min(Main.LocalPlayer.Distance(Center) / (range * 2f), 1f));
             updating = false;
 
             //  Comment out for fog of war
@@ -100,7 +103,7 @@ namespace MonoGamePort
             {
                 if (Main.room[i] != null && Main.room[i].active() && Main.room[i].lit)
                 {
-                    if (Main.room[i].Hitbox.Contains(Center))
+                    if (Main.room[i].Hitbox.Contains((int)Center.X, (int)Center.Y))
                     {
                         alpha = 0.5f;
                     }

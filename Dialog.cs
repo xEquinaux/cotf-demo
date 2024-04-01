@@ -1,14 +1,17 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Dialog : SimpleEntity, IDisposable
     {
@@ -22,7 +25,7 @@ namespace MonoGamePort
         {
             get; private set;
         }
-        public Texture2D CoinIcon => Main.Temporal;
+        public REW CoinIcon => Main.Temporal;
         private string[] coinName => new string[] { "0", "0", "0", "0" };
         public static Color[] CoinColor;
         public static Dialog NewDialog(int x, int y, string[] contents, Item item)
@@ -94,7 +97,7 @@ namespace MonoGamePort
                 }
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!active || Menu.Select?.active == true) return;
 
@@ -102,21 +105,21 @@ namespace MonoGamePort
             var item = purse.Item?.purse;
             if (purse.Item != null && item != null && purse.Item.equipped && (Item.Style)Selected?.itemStyle == Item.Style.Purse)
             {
-                sb.Draw(Main.MagicPixel, Hitbox, Color.Black);
+                rb.Draw(Main.MagicPixel, Hitbox.X, Hitbox.Y);//, Color.Black);
                 for (int i = 0; i < CoinColor.Length; i++)
                 {
-                    sb.Draw(texture, new Rectangle(Hitbox.X + 32 * i, Hitbox.Y, 32, 32), CoinColor[i]);
-                    sb.DrawString(Game.Font[FontID.Arial], new string[] { item.copper.ToString(), item.silver.ToString(), item.gold.ToString(), item.platinum.ToString() }[i], new Vector2(Hitbox.X + 32 * i, Hitbox.Y), Color.Red, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+                    rb.Draw(texture, new Rectangle(Hitbox.X + 32 * i, Hitbox.Y, 32, 32));//, CoinColor[i]);
+                    rb.DrawString(Game.Font[FontID.Arial], new string[] { "0", item.copper.ToString(), item.silver.ToString(), item.gold.ToString(), item.platinum.ToString() }[i], Hitbox.X + 32 * i, Hitbox.Y, 16, 64, Color.Red);//, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                 }
                 return;
             }
 
             if (contents != null)
             {
-                sb.Draw(Main.MagicPixel, Hitbox, Color.Black);
+                rb.Draw(Main.MagicPixel, Hitbox.X, Hitbox.Y);//, Color.Black);
                 for (int j = 0; j < contents.Length; j++)
                 {
-                    sb.DrawString(Game.Font[FontID.Arial], contents[j], position + new Vector2(0, j * 12), Color.Silver);
+                    rb.DrawString(Game.Font[FontID.Arial], contents[j], position + new Vector2(0, j * 12), Color.Silver);
                 }
             }
         }

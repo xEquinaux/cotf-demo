@@ -1,15 +1,18 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Menu : SimpleEntity, IDisposable
     {
@@ -196,24 +199,24 @@ namespace MonoGamePort
             if (Current != null) Current.menu = false;
             active = false;
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!active) return;
 
-            sb.Draw(Main.MagicPixel, hitbox, Color.Black);
+            rb.Draw(Main.MagicPixel, hitbox);//, Color.Black);
             for (int i = 0; i < options.Length; i++)
             {
                 Rectangle select = new Rectangle((int)position.X, (int)position.Y + i * textHeight, hitbox.Width, textHeight);
                 if (select.Contains(Main.WorldMouse))
                 {
-                    sb.Draw(Main.MagicPixel, select, Color.Blue);
+                    rb.Draw(Main.MagicPixel, select);//, Color.Blue);
                     Selected = options[i];
                     break;
                 }
             }
             for (int j = 0; j < options.Length; j++)
             {
-                sb.DrawString(Game.Font[FontID.Arial], options[j], position + new Vector2(0, j * 12), Color.White);
+                rb.DrawString(Game.Font[FontID.Arial], options[j], position + new Vector2(0, j * 12), Color.White);
             }
         }
         int flag = 0;
@@ -227,7 +230,7 @@ namespace MonoGamePort
                     return true;
                 }
             }
-            if (Main.MouseDevice.LeftButton == ButtonState.Released)
+            if (Main.MouseDevice.LeftButton == System.Windows.Input.MouseButtonState.Released)
             {
                 if (flag % 2 == 1)
                 {

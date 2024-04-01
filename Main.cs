@@ -1,18 +1,22 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -41,10 +45,10 @@ namespace MonoGamePort
         public static Foliage[] foliage = new Foliage[201];
         public static Room[] room = new Room[RoomMax];
 
-        public static Texture2D MagicPixel;
-        public static Texture2D Temporal;
-        public static Texture2D[] NPCTexture = new Texture2D[2];
-        public static Texture2D[] ProjTexture = new Texture2D[1];
+        public static REW MagicPixel;
+        public static REW Temporal;
+        public static REW[] NPCTexture = new REW[2];
+        public static REW[] ProjTexture = new REW[1];
 
         public const int RoomMax = 101;
         public const int NPCMax = 501;
@@ -113,16 +117,10 @@ namespace MonoGamePort
             private set;
         }
         public static int MapX, MapY;
-        public static Vector2 WorldMouse;
-        public static Vector2 MousePosition
-        {
-            get { return MouseDevice.Position.ToVector2(); }
-        }
-        public static MouseState MouseDevice
-        {
-            get { return Mouse.GetState(); }
-        }
-        public static MouseState OldMouse;
+        public static System.Drawing.Point WorldMouse;
+        public static System.Drawing.Point MousePosition => Game.MousePosition;
+        public static MouseDevice MouseDevice => Mouse.PrimaryDevice;
+        public static MouseDevice OldMouse;
 
         public Vector2 ScreenPosition
         {
@@ -140,10 +138,6 @@ namespace MonoGamePort
         {
             get { return player[0]; }
         }
-        private GameWindow Window
-        {
-            get { return Game.Instance?.Window; }
-        }
         public Rectangle WindowBox
         {
             get { return new Rectangle(0, 0, ScreenWidth, ScreenHeight); }
@@ -157,11 +151,11 @@ namespace MonoGamePort
         {
             worldgen = new Worldgen();
         }
-        public void LogoDisplay(SpriteBatch sb)
+        public void LogoDisplay(RewBatch rb)
         {
-            sb.DrawString(Game.Font[FontID.Arial], "Demo", new Vector2(10, 30), Color.Red);
+            rb.DrawString(Game.Font[FontID.Arial], "Demo", 10, 30, 100, 16, Color.Red);
             // TODO: remove after DEMO
-            sb.DrawString(Game.Font[FontID.LucidaConsole], 
+            rb.DrawString(Game.Font[FontID.LucidaConsole], 
                 "Controls\n" +
                 "Left click...activates selected skill\n" +
                 "Right click..activates equipped torch\n" +
@@ -169,10 +163,10 @@ namespace MonoGamePort
                 "O............opens inventory\n" +
                 "M............opens map\n" +
                 "Esc..........closes game", 
-                new Vector2(10, 75), Color.Red);
+                10, 75, 300, 112, Color.Red);
         }
 
-        internal void MainDraw(SpriteBatch sb)
+        internal void MainDraw(RewBatch rb)
         {
             Logo = false;
             ScrollBar scroll = new ScrollBar();
@@ -215,7 +209,7 @@ namespace MonoGamePort
             }
             else
             {
-                WorldMouse = new Vector2(MousePosition.X - ScreenX, MousePosition.Y - ScreenY);
+                WorldMouse = new System.Drawing.Point((int)(MousePosition.X - ScreenX), (int)(MousePosition.Y - ScreenY));
                 if (LocalPlayer.IsMoving())
                 {
                     if (!LocalPlayer.colLeft && !LocalPlayer.colRight)
@@ -226,68 +220,68 @@ namespace MonoGamePort
                 if (!IsZoomed)
                 {
                     foreach (Background g in ground.Where(t => t != null))
-                        g.PreDraw(sb);
+                        g.PreDraw(rb);
                 }
-                PreDraw(sb);
+                PreDraw(rb);
                 if (!InventoryOpen)
                 {
                     foreach (Foliage stuff in Main.foliage)
-                        stuff?.Draw(sb);
+                        stuff?.Draw(rb);
                     foreach (Trap traps in trap.Where(t => t != null))
-                        traps.Draw(sb);
+                        traps.Draw(rb);
                     foreach (Staircase s in Main.stair)
-                        s?.Draw(sb);   
+                        s?.Draw(rb);   
                     foreach (NPC n in npc.Where(t => t != null))
-                        n.PreDraw(sb);
+                        n.PreDraw(rb);
                     foreach (Dust d in dust.Where(t => t != null))
-                        d.Draw(sb);
+                        d.Draw(rb);
                     foreach (Item i in item.Where(t => t != null))
-                        i.Draw(sb);
+                        i.Draw(rb);
                     foreach (Foreground fg in Fg)
-                        fg?.Draw(sb);
+                        fg?.Draw(rb);
                     foreach (NPCs.Wurm_Head w in Main.wurm)
-                        w?.Draw(sb);
+                        w?.Draw(rb);
                     foreach (SquareBrush sq in square)
-                        sq?.PreDraw(sb);
+                        sq?.PreDraw(rb);
                     if (!IsZoomed)
                     {
-                        foreach (Light l in Light.light)
-                            l?.Draw(sb);
+                        //foreach (Light l in Light.light)
+                        //    l?.Draw(rb);
                         foreach (Light l in Main.light)
                         {
                             if (l?.active == true)
-                                l?.Draw(sb);
+                                l?.Draw(rb);
                         }
                         foreach (GUI g in gui.Where(t => t != null))
-                            g.Draw(sb);
+                            g.Draw(rb);
                         foreach (GUI g in gui.Where(t => t != null))
-                            g.DrawMenuText(sb);
+                            g.DrawMenuText(rb);
                     }
                 }
                 foreach (Player p in player.Where(t => t != null))
                 {
-                    p.PreDraw(sb);
+                    p.PreDraw(rb);
                     if (InventoryOpen)
                     {
-                        p.inventory.PreDraw(sb);
-                        p.inventory.Draw(sb);
+                        p.inventory.PreDraw(rb);
+                        p.inventory.Draw(rb);
                     }
                 }
                 if (InventoryOpen)
                 {
                     foreach (GUI g in Main.LocalPlayer.Armory)
-                        g?.DrawArmory(sb);
-                    ScrollBar.scroll[0].Draw(sb);
-                    ScrollBar.scroll[1].Draw(sb);
+                        g?.DrawArmory(rb);
+                    ScrollBar.scroll[0].Draw(rb);
+                    ScrollBar.scroll[1].Draw(rb);
                     foreach (Item n in Inventory.itemList)
-                        n?.Draw(sb);
-                    Menu.Select?.Draw(sb);
-                    Dialog.Instance?.Draw(sb);
+                        n?.Draw(rb);
+                    Menu.Select?.Draw(rb);
+                    Dialog.Instance?.Draw(rb);
                 }
                 else
                 {
                     foreach (Projectile pr in projectile.Where(t => t != null))
-                        pr.PreDraw(sb, pr.animated);
+                        pr.PreDraw(rb, pr.animated);
                 }
             }
         }
@@ -403,16 +397,16 @@ namespace MonoGamePort
             //Selecting rooms to diversify
             //Room.Initialize();
         }
-        public bool KeyUp(Keys key)
+        public bool KeyUp(Key key)
         {
-            return Keyboard.GetState().IsKeyUp(key);
+            return Game.KeyUp(key);
         }
-        public bool KeyDown(Keys key)
+        public bool KeyDown(Key key)
         {
-            return Keyboard.GetState().IsKeyDown(key);
+            return Game.KeyDown(key);
         }
         float ticks = 0;
-        protected virtual void PreDraw(SpriteBatch sb)
+        protected virtual void PreDraw(RewBatch rb)
         {
             //ticks += Keyboard.IsKeyDown(Key.NumPad0) ? 0.05f : 0.017f;
             //float cos = ScreenWidth / 2 + ScreenWidth / 2 * (float)Math.Cos(ticks);
@@ -457,6 +451,7 @@ namespace MonoGamePort
             using (BinaryWriter bw = new BinaryWriter(stream))
             {
                 Player player = LocalPlayer;
+                if (player == null) return false;
                 bw.Write(player.Name);
 
                 //  Map ID

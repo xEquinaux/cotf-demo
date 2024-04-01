@@ -1,15 +1,18 @@
-﻿using System;
+﻿using FoundationR;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGamePort
+
+
+
+namespace cotf_rewd
 {
     public class Item : SimpleEntity, IDisposable
     {
@@ -406,13 +409,13 @@ namespace MonoGamePort
                 MENU.active = true;
             }
         }
-        public void Draw(SpriteBatch sb)
+        public void Draw(RewBatch rb)
         {
             if (!active || !discovered || Inventory.itemList.Contains(this) || Inventory.itemProximate.Contains(this))
                 return;
-            if (owner == Owner_World && texture != null) sb.Draw(texture, new Vector2(X, Y), color);
+            if (owner == Owner_World && texture != null) rb.Draw(texture, X, Y);//, color);
         }
-        public void DrawInventory(int x, int y, SpriteBatch sb, bool onScreen = true)
+        public void DrawInventory(int x, int y, RewBatch rb, bool onScreen = true)
         {
             //  Draw Inventory Items
             if (!active)
@@ -420,7 +423,7 @@ namespace MonoGamePort
             position = new Vector2(x, y);
             if (visible = onScreen)
             {
-                if (texture != null) sb.Draw(texture, new Rectangle(X, Y, DrawSize, DrawSize), color);
+                if (texture != null) rb.Draw(texture, new Rectangle(X, Y, DrawSize, DrawSize));//, color);
             }
             PostMenuPositionAdjust();
         }
