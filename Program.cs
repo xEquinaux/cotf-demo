@@ -10,6 +10,7 @@ using System.Windows.Input;
 using FoundationR;
 using Microsoft.Win32;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace cotf_rewd
 {
@@ -122,6 +123,7 @@ namespace cotf_rewd
             };
         }
 
+        Stopwatch GameTime = new Stopwatch();
         protected void Draw(DrawingArgs e)
         {
             // TODO: Add your drawing code here
@@ -129,7 +131,9 @@ namespace cotf_rewd
             if (flag)
             {
                 Main.MainDraw(e.rewBatch);
-            }
+            }                                                                          
+            e.rewBatch.DrawString("Arial", (GameTime.Elapsed.Milliseconds / 1000M * 60M).ToString(), RewBatch.Viewport.X + 50, RewBatch.Viewport.Y + 50, 200, 60, Color.White);
+            GameTime.Restart();
         }
 
         protected void Update(UpdateArgs e)
