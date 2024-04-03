@@ -73,6 +73,10 @@ namespace cotf_rewd
 
         protected void Camera(CameraArgs e)
         {
+            if (!Main.Instance.once)
+            {     
+                e.CAMERA.position = Main.LocalPlayer.position - new Vector2(Main.ScreenWidth / 2 - Main.LocalPlayer.width / 2, Main.ScreenHeight / 2 - Main.LocalPlayer.height / 2);
+            }
         }
 
         protected void PreDraw(PreDrawArgs e)

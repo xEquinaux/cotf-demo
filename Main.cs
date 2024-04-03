@@ -94,7 +94,7 @@ namespace cotf_rewd
            get { return height; }
         }*/
         public static bool IsZoomed;               
-        private bool once = true;
+        public bool once = true;
         public static int ScreenWidth;
         public static int ScreenHeight;
         

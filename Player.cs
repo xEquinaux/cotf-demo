@@ -284,7 +284,6 @@ namespace cotf_rewd
                 init = true;
             }
 
-            position = new Vector2(300, 450);
             if (downedUpdate)
             {
                 foreach (NPC npc in downedNPC)
