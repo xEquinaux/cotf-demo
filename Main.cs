@@ -241,8 +241,12 @@ namespace cotf_rewd
                         fg?.Draw(rb);
                     foreach (NPCs.Wurm_Head w in Main.wurm)
                         w?.Draw(rb);
-                    foreach (SquareBrush sq in square)
-                        sq?.PreDraw(rb);
+                    try
+                    { 
+                        foreach (SquareBrush sq in square)
+                            sq?.PreDraw(rb);
+                    }
+                    catch { }
                     if (!IsZoomed)
                     {
                         //foreach (Light l in Light.light)

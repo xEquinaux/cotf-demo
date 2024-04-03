@@ -47,6 +47,7 @@ namespace cotf_rewd
         public static string RootDirectory = ".\\Content";
         bool flag;
         bool init;
+        REW cans;
 
         internal Game()
         {
@@ -93,15 +94,16 @@ namespace cotf_rewd
             Font[FontID.Arial] = "Arial";
             Font[FontID.Consolas] = "Consolas";
             Font[FontID.LucidaConsole] = "LucidaConsole";
+            //Asset.LoadFromFile($"{RootDirectory}\\MagicPixel.rew", out Main.MagicPixel);
             Asset.ConvertFromFile($"{RootDirectory}\\MagicPixel.png", out Main.MagicPixel);
-            Asset.ConvertFromFile($"{RootDirectory}\\temp.png", out Main.Temporal);
-            Asset.ConvertFromFile($"{RootDirectory}\\Alpha Tiles Scratches.png", out cotf_rewd.Background.BGs[BackgroundID.Tiles]);
-            Asset.ConvertFromFile($"{RootDirectory}\\temp_bg.png", out cotf_rewd.Background.BGs[BackgroundID.Temp]);
-            Asset.ConvertFromFile($"{RootDirectory}\\background2.png", out cotf_rewd.Background.BGs[BackgroundID.SmallTiles]);
-            Asset.ConvertFromFile($"{RootDirectory}\\Necrosis.png", out Main.NPCTexture[NPCID.Necrosis + 1]);
-            Asset.ConvertFromFile($"{RootDirectory}\\temp.png", out Main.NPCTexture[NPCID.Kobold + 1]);
-            Asset.ConvertFromFile($"{RootDirectory}\\Orb.png", out Main.ProjTexture[ProjectileID.Orb]);
-            Asset.ConvertFromFile($"{RootDirectory}\\fow.png", out Light.fow);
+            Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.Temporal);
+            Asset.LoadFromFile($"{RootDirectory}\\Alpha Tiles Scratches.rew", out cotf_rewd.Background.BGs[BackgroundID.Tiles]);
+            Asset.LoadFromFile($"{RootDirectory}\\temp_bg.rew", out cotf_rewd.Background.BGs[BackgroundID.Temp]);
+            Asset.LoadFromFile($"{RootDirectory}\\background2.rew", out cotf_rewd.Background.BGs[BackgroundID.SmallTiles]);
+            Asset.LoadFromFile($"{RootDirectory}\\Necrosis.rew", out Main.NPCTexture[NPCID.Necrosis + 1]);
+            Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.NPCTexture[NPCID.Kobold + 1]);
+            Asset.LoadFromFile($"{RootDirectory}\\Orb.rew", out Main.ProjTexture[ProjectileID.Orb]);
+            Asset.LoadFromFile($"{RootDirectory}\\fow.rew", out Light.fow);
         }
 
         public static Color FromAlpha(float r, float g, float b, float a)
