@@ -70,7 +70,9 @@ namespace cotf_rewd
 
         protected void Input(InputArgs e)
         {
-            MousePosition = e.mouse;
+            int x = e.mouse.X + RewBatch.Viewport.X;
+            int y = e.mouse.Y + RewBatch.Viewport.Y;
+            MousePosition = new Point(x, y);
         }
 
         protected void Camera(CameraArgs e)
@@ -94,7 +96,6 @@ namespace cotf_rewd
             Font[FontID.Arial] = "Arial";
             Font[FontID.Consolas] = "Consolas";
             Font[FontID.LucidaConsole] = "LucidaConsole";
-            //Asset.LoadFromFile($"{RootDirectory}\\MagicPixel.rew", out Main.MagicPixel);
             Asset.ConvertFromFile($"{RootDirectory}\\MagicPixel.png", out Main.MagicPixel);
             Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.Temporal);
             Asset.LoadFromFile($"{RootDirectory}\\Alpha Tiles Scratches.rew", out cotf_rewd.Background.BGs[BackgroundID.Tiles]);
@@ -133,7 +134,8 @@ namespace cotf_rewd
             if (flag)
             {
                 Main.MainDraw(e.rewBatch);
-            }                                                                          
+            }                            
+            e.rewBatch.Draw(Light.fow, MousePosition.X, MousePosition.Y);
             e.rewBatch.DrawString("Arial", (GameTime.Elapsed.Milliseconds / 1000M * 60M).ToString(), RewBatch.Viewport.X + 50, RewBatch.Viewport.Y + 50, 200, 60, Color.White);
             GameTime.Restart();
         }
