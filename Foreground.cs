@@ -1,6 +1,7 @@
 ﻿using FoundationR;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -31,7 +32,7 @@ namespace cotf_rewd
             if (!active)
                 return;
             if (!light)
-                rb.Draw(Main.MagicPixel, hitbox);//, Color.Black);
+                rb.Draw(Main.MagicPixel, hitbox, Color.Black);
         }
     }
 }

@@ -45,6 +45,8 @@ namespace cotf_rewd
         public const int FontSize = 12;
         public static string[] Font = new string[4];
         public static string RootDirectory = ".\\Content";
+        public static bool mouseLeft;
+        public static bool mouseRight;
         bool flag;
         bool init;
         int ticks = 1;
@@ -74,7 +76,9 @@ namespace cotf_rewd
         {
             int x = e.mouse.X + RewBatch.Viewport.X;
             int y = e.mouse.Y + RewBatch.Viewport.Y;
-            MousePosition = new Point(x, y);
+            MousePosition = new Point(x + 8, y + 31);
+            mouseLeft = false;
+            mouseRight = false;
         }
 
         protected void Camera(CameraArgs e)
@@ -116,6 +120,8 @@ namespace cotf_rewd
 
         protected void Initialize(InitializeArgs e)
         {
+            e.form.MouseClick += Form_MouseClick;
+
             matrix = new Matrix();
 
             Dialog.CoinColor = new Color[]
@@ -128,6 +134,18 @@ namespace cotf_rewd
             };
         }
 
+        private void Form_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseLeft = true;
+            }
+            if (e.Button == MouseButtons.Right)
+            {
+                mouseRight = true;
+            }
+        }
+
         Stopwatch GameTime = new Stopwatch();
         protected void Draw(DrawingArgs e)
         {
@@ -136,10 +154,10 @@ namespace cotf_rewd
             if (flag)
             {
                 Main.MainDraw(e.rewBatch);
-            }                       
-            e.rewBatch.Draw(Main.ProjTexture[ProjectileID.Orb].Animate(frame, 44, 38), MousePosition.X, MousePosition.Y, 38, 44);
-            //e.rewBatch.Draw(Light.fow, MousePosition.X, MousePosition.Y);
-            e.rewBatch.DrawString("Arial", (GameTime.Elapsed.Milliseconds / 1000M * 60M).ToString(), RewBatch.Viewport.X + 50, RewBatch.Viewport.Y + 50, 200, 60, Color.White);
+                //e.rewBatch.Draw(Main.ProjTexture[ProjectileID.Orb].Animate(frame, 44, 38), MousePosition.X, MousePosition.Y, 38, 44);
+                e.rewBatch.Draw(Light.fow, MousePosition.X, MousePosition.Y);
+                e.rewBatch.DrawString("Arial", (GameTime.Elapsed.Milliseconds / 1000M * 60M).ToString(), RewBatch.Viewport.X + 50, RewBatch.Viewport.Y + 50, 200, 60, Color.White);
+            }
             GameTime.Restart();
         }
 
@@ -186,7 +204,7 @@ namespace cotf_rewd
             }
         }
 
-        protected new bool Resize()
+        protected new bool Resize(ResizeArgs e)
         {
             return false;
         }

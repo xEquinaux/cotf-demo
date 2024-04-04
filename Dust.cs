@@ -138,7 +138,7 @@ namespace cotf_rewd
             //  Typical draw
             if (active)
             {
-                rb.Draw(texture, new Rectangle((int)x - width / 2, (int)y - width / 2, width, height));//, color);
+                rb.Draw(texture, new Rectangle((int)x - width / 2, (int)y - width / 2, width, height), color);
             }
         }
         private void Effect()

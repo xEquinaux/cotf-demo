@@ -203,13 +203,13 @@ namespace cotf_rewd
         {
             if (!active) return;
 
-            rb.Draw(Main.MagicPixel, hitbox);//, Color.Black);
+            rb.Draw(Main.MagicPixel, hitbox, Color.Black);
             for (int i = 0; i < options.Length; i++)
             {
                 Rectangle select = new Rectangle((int)position.X, (int)position.Y + i * textHeight, hitbox.Width, textHeight);
                 if (select.Contains(Main.WorldMouse))
                 {
-                    rb.Draw(Main.MagicPixel, select);//, Color.Blue);
+                    rb.Draw(Main.MagicPixel, select, Color.Blue);
                     Selected = options[i];
                     break;
                 }

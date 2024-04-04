@@ -153,7 +153,7 @@ namespace cotf_rewd
         }
         public void LogoDisplay(RewBatch rb)
         {
-            rb.DrawString(Game.Font[FontID.Arial], "Demo", 10, 30, 100, 16, Color.Red);
+            rb.DrawString(Game.Font[FontID.Arial], "alpha", 10, 30, 100, 24, Color.White);
             // TODO: remove after DEMO
             rb.DrawString(Game.Font[FontID.LucidaConsole], 
                 "Controls\n" +
@@ -163,7 +163,7 @@ namespace cotf_rewd
                 "O............opens inventory\n" +
                 "M............opens map\n" +
                 "Esc..........closes game", 
-                10, 75, 300, 112, Color.Red);
+                10, 75, 300, 112, Color.White);
         }
 
         internal void MainDraw(RewBatch rb)

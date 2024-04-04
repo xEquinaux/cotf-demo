@@ -98,9 +98,9 @@ namespace cotf_rewd
 
             rb.Draw(texture, hitbox);//, Color.Blue * (invulnDraw ? 0f : alpha));
             
-            rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 10, Stats.currentLife, 10));//, Color.Green * alpha);
-            rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 22, Stats.mana, 10));//, Color.Blue * alpha);
-            rb.DrawString(Game.Font[FontID.Arial], string.Format("{0} / {1}\n{2} / {3}", Stats.currentLife, Stats.totalLife, Stats.mana, MaxMana), new Vector2(position.X, position.Y + plrHeight + 10), Color.Red);// * alpha);
+            rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 10, Stats.currentLife, 10), Color.Green);// * alpha);
+            rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 22, Stats.mana, 10), Color.Blue);// * alpha);
+            rb.DrawString(Game.Font[FontID.Arial], string.Format("{0} / {1}\n{2} / {3}", Stats.currentLife, Stats.totalLife, Stats.mana, MaxMana), new Vector2(position.X, position.Y + plrHeight + 10), Color.White);// * alpha);
 
             width = plrWidth;
             height = plrHeight;
@@ -621,7 +621,7 @@ namespace cotf_rewd
                 }
                 flag++;
             }
-            if (Main.MouseDevice.LeftButton == MouseButtonState.Released && flag % 2 == 1)
+            if (!Game.mouseLeft && flag % 2 == 1)
                 flag = 0;
         }
 
@@ -705,7 +705,7 @@ namespace cotf_rewd
         }
         public void OpenMenu()
         {
-            if (Main.MouseDevice.LeftButton == MouseButtonState.Pressed && flag2 % 2 == 0)
+            if (Game.mouseLeft && flag2 % 2 == 0)
             {
                 flag2++;
                 if (Main.gui[GUI.SkillMenu].hitbox.Contains(Main.MousePosition.X, Main.MousePosition.Y))
@@ -716,7 +716,7 @@ namespace cotf_rewd
                     }
                 }
             }
-            if (Main.MouseDevice.LeftButton == MouseButtonState.Released && flag2 % 2 == 1)
+            if (!Game.mouseLeft && flag2 % 2 == 1)
                 flag2 = 0;
         }
         private int fuel = 3;
@@ -725,7 +725,7 @@ namespace cotf_rewd
         {
             //clamp = fuel <= 0;
             Point mouse = Main.WorldMouse;
-            if (Main.MouseDevice.LeftButton == MouseButtonState.Pressed)
+            if (Game.mouseLeft)
             {
                 foreach (Dust dust in Main.dust.Where(t => t != null && t.active))
                 {
@@ -781,11 +781,11 @@ namespace cotf_rewd
         }
         public bool LeftMouse()
         {
-            return Main.MouseDevice.LeftButton == MouseButtonState.Pressed;
+            return Game.mouseLeft;
         }
         public bool RightMouse()
         {
-            return Main.MouseDevice.RightButton == MouseButtonState.Pressed;
+            return Game.mouseRight;
         }
     }
 }

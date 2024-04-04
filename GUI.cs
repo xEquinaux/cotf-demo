@@ -300,7 +300,7 @@ namespace cotf_rewd
         {
             if (!Inventory.open || Item?.equipped == false)
                 return;
-            if (drawBox.Contains(Main.WorldMouse) && player.LeftMouse())
+            if (drawBox.Contains(Main.MousePosition) && player.LeftMouse())
             {
                 Menu.NewMenu(position.X + width - Main.ScreenX, position.Y - Main.ScreenY, new string[] { "Unequip", "Close" }, this);
             }
@@ -314,8 +314,8 @@ namespace cotf_rewd
             
             if (!unlocked)
                 return;
-            
-            if (Main.MouseDevice.LeftButton == System.Windows.Input.MouseButtonState.Pressed && flag % 2 == 0 && whoAmI < SkillMenu)
+
+            if (Game.mouseLeft && flag % 2 == 0 && whoAmI < SkillMenu)
             {
                 flag++;
                 foreach (GUI menu in Main.skill)
@@ -338,7 +338,7 @@ namespace cotf_rewd
                 if (selected)
                     onClick?.Invoke();
             }
-            if (Main.MouseDevice.LeftButton == System.Windows.Input.MouseButtonState.Released && flag % 2 == 1)
+            if (!Game.mouseLeft && flag % 2 == 1)
                 flag = 0;
         }
         private void MenuReplace(GUI menu, GUI g, Action click, string name, REW tex, string text, int type)
@@ -362,23 +362,23 @@ namespace cotf_rewd
 
             drawBox = new Rectangle((int)position.X - (int)Main.ScreenX, (int)position.Y - (int)Main.ScreenY, width, height);
 
-            rb.Draw(texture, drawBox);//, Color.Silver);
+            rb.Draw(texture, drawBox, Color.Silver);
 
             if (Item != null && Item?.equipped == true)
-                rb.Draw(Item.texture, drawBox);//, Item.color);
+                rb.Draw(Item.texture, drawBox, Item.color);
 
             //  DEBUG
             //gfx.DrawRectangle(Item != null && Item?.equipped == true ? System.Drawing.Pens.Gold : Pens.Gray, drawBox.GetSDRectangle());
 
             if (drawBox.Contains(Main.WorldMouse))
-                rb.DrawString(Game.Font[FontID.Arial], text, (int)(position.X - Main.ScreenX), (int)(position.Y - Main.ScreenY) + height, 100, 16, Color.Silver);
+                rb.DrawString(Game.Font[FontID.Arial], text, (int)(position.X - Main.ScreenX), (int)(position.Y - Main.ScreenY) + height, 100, 16, Color.White);
         }
         public void Draw(RewBatch sb)
         {
             if (!active)
                 return;
 
-            sb.Draw(texture, new Rectangle((int)position.X, (int)position.Y, width, height));//, Color.White);
+            sb.Draw(texture, new Rectangle((int)position.X, (int)position.Y, width, height), Color.White);
             //  DEBUG
             //gfx.DrawRectangle(selected && unlocked ? System.Drawing.Pens.Gold : Pens.Gray, new System.Drawing.Rectangle((int)position.X, (int)position.Y, hitbox.Width, hitbox.Height));
         }
@@ -388,7 +388,7 @@ namespace cotf_rewd
                 return;
 
             if (hitbox.Contains(Main.MousePosition.X, Main.MousePosition.Y))
-                sb.DrawString(Game.Font[FontID.Arial], text, (int)(position.X + new Vector2(0, height).X), (int)(position.Y + new Vector2(0, height).Y), 100, 16, Color.Silver);
+                sb.DrawString(Game.Font[FontID.Arial], text, (int)(position.X + new Vector2(0, height).X), (int)(position.Y + new Vector2(0, height).Y), 100, 16, Color.White);
         }
         public static GUI GetElement(string name)
         {

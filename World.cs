@@ -130,7 +130,7 @@ namespace cotf_rewd
             }
             else alpha = 1f;
             color = Color.Gray;
-            rb.Draw(Main.MagicPixel, Hitbox);//, DynamicTorch(Light.range) * alpha);
+            rb.Draw(Main.MagicPixel, Hitbox, DynamicTorch(Light.range));// * alpha);
 
             //  DEBUG: lighting color mask
             //if (NPC.Distance(Center, Main.player[0].Center) > Light.range)

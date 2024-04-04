@@ -1,6 +1,7 @@
 ﻿using FoundationR;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -63,7 +64,7 @@ namespace cotf_rewd
         }
         public void Draw(RewBatch rb)
         {
-            if (active && activated) rb.Draw(Main.Temporal, hitbox);//, Color.White);
+            if (active && activated) rb.Draw(Main.Temporal, hitbox, Color.White);
         }
         private void TrapEffects(Player player)
         {

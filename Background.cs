@@ -139,15 +139,15 @@ namespace cotf_rewd
             {
                 case FoliageID.Dirt:
                     color = Color.Brown;
-                    sb.Draw(Main.MagicPixel, X, Y);//, color * alpha);
+                    sb.Draw(Main.MagicPixel, X, Y, color);// * alpha);
                     break;
                 case FoliageID.Puddle:
                     color = Color.DeepSkyBlue;
-                    sb.Draw(Main.MagicPixel, X, Y);//, color * alpha);
+                    sb.Draw(Main.MagicPixel, X, Y, color);// * alpha);
                     break;
                 case FoliageID.StoneLarge:
                     color = Color.Gray;
-                    sb.Draw(Main.Temporal, X, Y);//, color * alpha);
+                    sb.Draw(Main.Temporal, X, Y, color);// * alpha);
                     break;
             }
         }
@@ -257,7 +257,7 @@ namespace cotf_rewd
             if ((light || discovered) && onScreen)
             {
                 color = Color.Gray;
-                rb.Draw(texture, hitbox.X, hitbox.Y);//, DynamicTorch(120f) * alpha);
+                rb.Draw(texture, hitbox.X, hitbox.Y, DynamicTorch(120f));// * alpha);
             }
         }
         public static void Clear(int preInitIndex)

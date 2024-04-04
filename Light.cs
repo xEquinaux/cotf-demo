@@ -37,7 +37,7 @@ namespace cotf_rewd
         public void Draw(RewBatch sb)
         {
             if (!lit /*&& bg?.light == false*/ && onScreen)
-                sb.Draw(fow, new Rectangle((int)position.X - 10, (int)position.Y - 10, Size * 3, Size * 3));//, Color.Black * alpha * Math.Min(Main.LocalPlayer.Distance(Center) / (range * 2f), 1f));
+                sb.Draw(fow, new Rectangle((int)position.X - 10, (int)position.Y - 10, Size * 3, Size * 3), Color.Black);// * alpha * Math.Min(Main.LocalPlayer.Distance(Center) / (range * 2f), 1f));
             updating = false;
 
             //  Comment out for fog of war

@@ -154,10 +154,10 @@ namespace cotf_rewd
         {
             if (!active || !discovered) return;
 
-            rb.Draw(Main.MagicPixel, hitbox);//, Color.White);
+            rb.Draw(Main.MagicPixel, hitbox, Color.White);
             if (proximity)
             {
-                rb.DrawString(Game.Font[FontID.Arial], transition == Transition.GoingDown ? "Down" : "Up", position + new Vector2(0, height), Color.Silver);
+                rb.DrawString(Game.Font[FontID.Arial], transition == Transition.GoingDown ? "Down" : "Up", position + new Vector2(0, height), Color.White);
             }
         }
         public void Dispose()

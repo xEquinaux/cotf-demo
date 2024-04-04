@@ -92,8 +92,8 @@ namespace cotf_rewd
 
             for (int i = 0; i < 2; i++)
             {
-                rb.Draw(Main.MagicPixel, scroll[i].hitbox);//, Color.GhostWhite);
-                rb.Draw(Main.MagicPixel, new Rectangle(scroll[i].hitbox.X, (int)(scroll[i].hitbox.Y + scroll[i].hitbox.Height * scroll[i].value), size, size));//, Color.Blue);
+                rb.Draw(Main.MagicPixel, scroll[i].hitbox, Color.GhostWhite);
+                rb.Draw(Main.MagicPixel, new Rectangle(scroll[i].hitbox.X, (int)(scroll[i].hitbox.Y + scroll[i].hitbox.Height * scroll[i].value), size, size), Color.Blue);
             }
         }
     }

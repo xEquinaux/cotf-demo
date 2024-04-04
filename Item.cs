@@ -413,7 +413,7 @@ namespace cotf_rewd
         {
             if (!active || !discovered || Inventory.itemList.Contains(this) || Inventory.itemProximate.Contains(this))
                 return;
-            if (owner == Owner_World && texture != null) rb.Draw(texture, X, Y);//, color);
+            if (owner == Owner_World && texture != null) rb.Draw(texture, X, Y, color);
         }
         public void DrawInventory(int x, int y, RewBatch rb, bool onScreen = true)
         {
@@ -423,7 +423,7 @@ namespace cotf_rewd
             position = new Vector2(x, y);
             if (visible = onScreen)
             {
-                if (texture != null) rb.Draw(texture, new Rectangle(X, Y, DrawSize, DrawSize));//, color);
+                if (texture != null) rb.Draw(texture, new Rectangle(X, Y, DrawSize, DrawSize), color);
             }
             PostMenuPositionAdjust();
         }

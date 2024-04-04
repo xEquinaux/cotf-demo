@@ -104,11 +104,11 @@ namespace cotf_rewd
         {
             if (!open)
                 return;
-            rb.Draw(Background.BGs[BackgroundID.Temp], new Rectangle(0 - (int)Main.ScreenX, 0 - (int)Main.ScreenY, Width, Height));//, Color.White);
+            rb.Draw(Background.BGs[BackgroundID.Temp], new Rectangle(0 - (int)Main.ScreenX, 0 - (int)Main.ScreenY, Width, Height), Color.White);
             var array = new Rectangle[] { Items, Equipment, Armor };
             for (int i = 0; i < 3; i++)
             {
-                rb.Draw(Main.MagicPixel, array[i]);//, Color.White);
+                rb.Draw(Main.MagicPixel, array[i], Color.White);
             }
         }
         public void Draw(RewBatch rb)

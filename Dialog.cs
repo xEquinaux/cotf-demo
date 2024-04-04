@@ -105,10 +105,10 @@ namespace cotf_rewd
             var item = purse.Item?.purse;
             if (purse.Item != null && item != null && purse.Item.equipped && (Item.Style)Selected?.itemStyle == Item.Style.Purse)
             {
-                rb.Draw(Main.MagicPixel, Hitbox.X, Hitbox.Y);//, Color.Black);
+                rb.Draw(Main.MagicPixel, Hitbox.X, Hitbox.Y, Color.Black);
                 for (int i = 0; i < CoinColor.Length; i++)
                 {
-                    rb.Draw(texture, new Rectangle(Hitbox.X + 32 * i, Hitbox.Y, 32, 32));//, CoinColor[i]);
+                    rb.Draw(texture, new Rectangle(Hitbox.X + 32 * i, Hitbox.Y, 32, 32), CoinColor[i]);
                     rb.DrawString(Game.Font[FontID.Arial], new string[] { "0", item.copper.ToString(), item.silver.ToString(), item.gold.ToString(), item.platinum.ToString() }[i], Hitbox.X + 32 * i, Hitbox.Y, 16, 64, Color.Red);//, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                 }
                 return;
@@ -116,7 +116,7 @@ namespace cotf_rewd
 
             if (contents != null)
             {
-                rb.Draw(Main.MagicPixel, Hitbox.X, Hitbox.Y);//, Color.Black);
+                rb.Draw(Main.MagicPixel, Hitbox.X, Hitbox.Y, Color.Black);
                 for (int j = 0; j < contents.Length; j++)
                 {
                     rb.DrawString(Game.Font[FontID.Arial], contents[j], position + new Vector2(0, j * 12), Color.Silver);
