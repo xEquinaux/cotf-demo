@@ -96,7 +96,7 @@ namespace cotf_rewd
             }
             else invulnDraw = false;
 
-            rb.Draw(texture, hitbox);//, Color.Blue * (invulnDraw ? 0f : alpha));
+            rb.Draw(texture, hitbox, Color.Blue);// * (invulnDraw ? 0f : alpha));
             
             rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 10, Stats.currentLife, 10), Color.Green);// * alpha);
             rb.Draw(Main.MagicPixel, new Rectangle((int)position.X, (int)position.Y + plrHeight + 22, Stats.mana, 10), Color.Blue);// * alpha);

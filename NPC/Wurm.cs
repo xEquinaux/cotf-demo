@@ -202,18 +202,18 @@ namespace cotf_rewd.NPCs
             if (!active || hidden) return;
 
             //  Head
-            rb.Draw(Main.MagicPixel, hitbox);//, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            rb.Draw(Main.MagicPixel, hitbox, Color.Blue);//, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Tail + 1
-            rb.Draw(Main.MagicPixel, body[0].hitbox);//, new Rectangle(0, 0, width, height));//, Color.Blue, Helper.AngleTo(body[0].Center, body[1].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            rb.Draw(Main.MagicPixel, body[0].hitbox, Color.Blue);//, new Rectangle(0, 0, width, height));//, Color.Blue, Helper.AngleTo(body[0].Center, body[1].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Body
             for (int i = 1; i < length; i++)
             {
                 var previous = body[i - 1];
                 var segment = body[i]; 
-                rb.Draw(Main.MagicPixel, segment.hitbox);//, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(previous.Center, segment.Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+                rb.Draw(Main.MagicPixel, segment.hitbox, Color.Blue);//, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(previous.Center, segment.Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             }
             //  Tail
-            rb.Draw(Main.MagicPixel, tail.hitbox);//, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(tail.Center, body[0].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            rb.Draw(Main.MagicPixel, tail.hitbox, Color.Blue);//, new Rectangle(0, 0, width, height), Color.Blue, Helper.AngleTo(tail.Center, body[0].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
         }
 
         private Color IFrames(Color color)

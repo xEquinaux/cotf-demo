@@ -250,8 +250,9 @@ namespace cotf_rewd
             return Color.FromArgb(
                 (byte)Math.Min(color.R + (byte)(newColor.R * distance), 255), 
                 (byte)Math.Min(color.G + (byte)(newColor.G * distance), 255), 
-                (byte)Math.Min(color.B + (byte)(newColor.B * distance), 255), 
-                color.A);
+                (byte)Math.Min(color.B + (byte)(newColor.B * distance), 255),
+                 color.A
+               );
         }
         public float RangeNormal(Vector2 to, Vector2 from, float range = 100f)
         {
