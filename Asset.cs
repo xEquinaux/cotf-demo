@@ -36,5 +36,12 @@ namespace cotf_rewd
                 (image = new REW()).ReadData(new BinaryReader(fs));
             }
         }
+        public static void LoadFromFile(string path, int frameCount, out REW image)
+        {
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                (image = new REW(frameCount)).ReadData(new BinaryReader(fs));
+            }
+        }
     }
 }

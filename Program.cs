@@ -47,6 +47,8 @@ namespace cotf_rewd
         public static string RootDirectory = ".\\Content";
         bool flag;
         bool init;
+        int ticks = 1;
+        int frame;
         REW cans;
 
         internal Game()
@@ -103,7 +105,7 @@ namespace cotf_rewd
             Asset.LoadFromFile($"{RootDirectory}\\background2.rew", out cotf_rewd.Background.BGs[BackgroundID.SmallTiles]);
             Asset.LoadFromFile($"{RootDirectory}\\Necrosis.rew", out Main.NPCTexture[NPCID.Necrosis + 1]);
             Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.NPCTexture[NPCID.Kobold + 1]);
-            Asset.LoadFromFile($"{RootDirectory}\\Orb.rew", out Main.ProjTexture[ProjectileID.Orb]);
+            Asset.LoadFromFile($"{RootDirectory}\\Orb.rew", 7, out Main.ProjTexture[ProjectileID.Orb]);
             Asset.LoadFromFile($"{RootDirectory}\\fow.rew", out Light.fow);
         }
 
@@ -134,8 +136,9 @@ namespace cotf_rewd
             if (flag)
             {
                 Main.MainDraw(e.rewBatch);
-            }                            
-            e.rewBatch.Draw(Light.fow, MousePosition.X, MousePosition.Y);
+            }                       
+            e.rewBatch.Draw(Main.ProjTexture[ProjectileID.Orb].Animate(frame, 44, 38), MousePosition.X, MousePosition.Y, 38, 44);
+            //e.rewBatch.Draw(Light.fow, MousePosition.X, MousePosition.Y);
             e.rewBatch.DrawString("Arial", (GameTime.Elapsed.Milliseconds / 1000M * 60M).ToString(), RewBatch.Viewport.X + 50, RewBatch.Viewport.Y + 50, 200, 60, Color.White);
             GameTime.Restart();
         }
@@ -169,6 +172,18 @@ namespace cotf_rewd
             //else matrix = Matrix.CreateTranslation(0, 0, 0);
             if (KeyDown(Key.Space))
                 flag = true;
+
+            if (ticks % 1000 == 0)
+            {
+                if (++frame == 7)
+                {
+                    frame = 0;
+                }
+            }
+            if (ticks++ == 1000)
+            {
+                ticks = 1;
+            }
         }
 
         protected new bool Resize()
