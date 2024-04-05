@@ -608,12 +608,12 @@ namespace cotf_rewd
                 if (LeftMouse())
                 {
                     Item item = Armory[GUI.MainHand].Item;
-                    if (GUI.GetElement(GUI.ID.SwordSwing).selected)
+                    if (GUI.GetElement(GUI.ID.SwordSwing) != null && GUI.GetElement(GUI.ID.SwordSwing).selected)
                     {
                         Projectile.NewProjectile(0, 0, Projectile.SwordSwing, item == null ? 0 : item.style, Color.White, 10, whoAmI);
                         ManageMana(0);
                     }
-                    if (GUI.GetElement(GUI.ID.SwordSwipe).selected)
+                    if (GUI.GetElement(GUI.ID.SwordSwipe) != null && GUI.GetElement(GUI.ID.SwordSwipe).selected)
                     {
                         Projectile.NewProjectile(0, 0, Projectile.SwordSwipe, item == null ? 0 : item.style, Color.White, 60, whoAmI);
                         ManageMana(1);
@@ -708,7 +708,7 @@ namespace cotf_rewd
             if (Game.mouseLeft && flag2 % 2 == 0)
             {
                 flag2++;
-                if (Main.gui[GUI.SkillMenu].hitbox.Contains(Main.MousePosition.X, Main.MousePosition.Y))
+                if (Main.gui[GUI.SkillMenu] != null && Main.gui[GUI.SkillMenu].hitbox.Contains(Main.MousePosition.X, Main.MousePosition.Y))
                 {
                     foreach (GUI menu in Main.skill)
                     {

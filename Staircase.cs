@@ -307,6 +307,12 @@ namespace cotf_rewd
             int foliageLength = read.ReadInt32();
             int roomCount = read.ReadInt32();
 
+            if (bgLength < 1)
+            {
+                Main.GenerateLevel();
+                return;
+            }
+
             for (int n = 0; n < torchLength; n++)
             {
                 int owner = read.ReadInt32();

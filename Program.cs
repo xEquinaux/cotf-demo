@@ -171,7 +171,7 @@ namespace cotf_rewd
             }
 
             // TODO: Add your update logic here
-            if (!init && Main.LocalPlayer != null)
+            if (!init)
             {
                 Main.LoadPlayer();
                 init = true;
@@ -204,16 +204,16 @@ namespace cotf_rewd
             }
         }
 
-        protected new bool Resize(ResizeArgs e)
+        protected bool Resize(ResizeArgs e)
         {
             return false;
         }
 
-        public static new bool KeyDown(Key k)
+        public static bool KeyDown(Key k)
         {
             return Keyboard.PrimaryDevice.IsKeyDown(k);
         }
-        public static new bool KeyUp(Key k)
+        public static bool KeyUp(Key k)
         {
             return Keyboard.PrimaryDevice.IsKeyUp(k);
         }

@@ -296,7 +296,7 @@ namespace cotf_rewd
             foreach (Player p in player.Where(t => t != null))
             {
                 p.Update();
-                p.inventory.Update();
+                p.inventory?.Update();
                 p.collide = false;
                 p.colUp = false;
                 p.colDown = false;
@@ -484,16 +484,22 @@ namespace cotf_rewd
             }
             return true;
         }
-        public static bool LoadPlayer()
+        public static bool LoadPlayer()             
         {
-            Player player = LocalPlayer;
+            Player player = Main.player[0] = new Player();
             if (File.Exists("player"))
             {
                 using (FileStream stream = new FileStream("player", FileMode.OpenOrCreate, FileAccess.Read))
-                using (BinaryReader br = new BinaryReader(stream))
-                {
-                    try
-                    { 
+                { 
+                    using (BinaryReader br = new BinaryReader(stream))
+                    {
+                        if (stream.Length == 0)
+                        {
+                            if (!LoadLevel(Level.floorNumber))
+                                GenerateLevel(); 
+                            return false;
+                        }
+
                         player.Name = br.ReadString();
 
                         Level.floorNumber = br.ReadInt32();
@@ -522,23 +528,19 @@ namespace cotf_rewd
                         player.Traits.streetSmarts = br.ReadSingle();
                         player.Traits.wellBeing = br.ReadSingle();
                     }
-                    catch
-                    {
-                        return false;
-                    }
+                    //  DEBUG set player position
+                    //  MOVED to player init
+                    //if (Level.floorNumber == 0 || player.PlayerInWall())
+                    //{
+                    //    Background bg = null;
+                    //    do
+                    //    {
+                    //        bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+                    //    } while (bg == null || !bg.active);
+                    //    Main.LocalPlayer.position = bg.position;
+                    //}
+                    return true;
                 }
-                //  DEBUG set player position
-                //  MOVED to player init
-                //if (Level.floorNumber == 0 || player.PlayerInWall())
-                //{
-                //    Background bg = null;
-                //    do
-                //    {
-                //        bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
-                //    } while (bg == null || !bg.active);
-                //    Main.LocalPlayer.position = bg.position;
-                //}
-                return true;
             }
             if (!LoadLevel(Level.floorNumber))
                 GenerateLevel();                              
