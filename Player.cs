@@ -191,6 +191,9 @@ namespace cotf_rewd
         {
             if (!init)
             {
+                // DEBUG pre rendering levels until update priority is sorted
+                Main.GenerateLevel();
+
                 Name = "Player001";
                 //  DEBUG adding player and singular light source
                 Light.entity.Add(this);

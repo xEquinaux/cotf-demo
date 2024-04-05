@@ -178,12 +178,13 @@ namespace cotf_rewd
         private static void Initialize(int floorIndex)
         {
             floorNumber = floorIndex;
-            stream = new FileStream(Name + floorNumber, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            read = new BinaryReader(stream);
-            write = new BinaryWriter(stream);
+            //stream = new FileStream(Name + floorNumber, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            //read = new BinaryReader(stream);
+            //write = new BinaryWriter(stream);
         }
         public static void Save(int floorIndex)
         {
+            return;
             Initialize(floorIndex);
 
             write.Write(Name);
@@ -290,6 +291,8 @@ namespace cotf_rewd
         {
             Initialize(floorIndex);
 
+            Main.GenerateLevel();
+            return;
             //  Iterate through unused values
             string text = read.ReadString();
 

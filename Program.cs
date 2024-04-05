@@ -102,7 +102,8 @@ namespace cotf_rewd
             Font[FontID.Arial] = "Arial";
             Font[FontID.Consolas] = "Consolas";
             Font[FontID.LucidaConsole] = "LucidaConsole";
-            Asset.ConvertFromFile($"{RootDirectory}\\MagicPixel.png", out Main.MagicPixel);
+            //Asset.ConvertFromFile($"{RootDirectory}\\MagicPixel.png", out Main.MagicPixel);
+            Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.MagicPixel);
             Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.Temporal);
             Asset.LoadFromFile($"{RootDirectory}\\Alpha Tiles Scratches.rew", out cotf_rewd.Background.BGs[BackgroundID.Tiles]);
             Asset.LoadFromFile($"{RootDirectory}\\temp_bg.rew", out cotf_rewd.Background.BGs[BackgroundID.Temp]);
@@ -190,18 +191,6 @@ namespace cotf_rewd
             //else matrix = Matrix.CreateTranslation(0, 0, 0);
             if (KeyDown(Key.Space))
                 flag = true;
-
-            if (ticks % 1000 == 0)
-            {
-                if (++frame == 7)
-                {
-                    frame = 0;
-                }
-            }
-            if (ticks++ == 1000)
-            {
-                ticks = 1;
-            }
         }
 
         protected bool Resize(ResizeArgs e)
