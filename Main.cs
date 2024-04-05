@@ -492,33 +492,40 @@ namespace cotf_rewd
                 using (FileStream stream = new FileStream("player", FileMode.OpenOrCreate, FileAccess.Read))
                 using (BinaryReader br = new BinaryReader(stream))
                 {
-                    player.Name = br.ReadString();
+                    try
+                    { 
+                        player.Name = br.ReadString();
 
-                    Level.floorNumber = br.ReadInt32();
-                    if (!LoadLevel(Level.floorNumber))
-                        GenerateLevel();
+                        Level.floorNumber = br.ReadInt32();
+                        if (!LoadLevel(Level.floorNumber))
+                            GenerateLevel();
 
-                    //  Reading previous player coordinates
-                    float x = br.ReadSingle();
-                    float y = br.ReadSingle();
+                        //  Reading previous player coordinates
+                        float x = br.ReadSingle();
+                        float y = br.ReadSingle();
 
-                    player.position = new Vector2(x, y);
+                        player.position = new Vector2(x, y);
 
-                    //  DEBUG reset player position
-                    //player.position = Main.stair.First(t => t.transition == Staircase.Transition.GoingUp).position;
+                        //  DEBUG reset player position
+                        //player.position = Main.stair.First(t => t.transition == Staircase.Transition.GoingUp).position;
 
-                    player.Stats = new Stats();
-                    player.Stats.totalLife = br.ReadInt32();
-                    player.Stats.currentLife = br.ReadInt32();
-                    player.Stats.totalMana = br.ReadInt32();
-                    player.Stats.mana = br.ReadInt32();
-                    player.Stats.iFrames = br.ReadInt32();
+                        player.Stats = new Stats();
+                        player.Stats.totalLife = br.ReadInt32();
+                        player.Stats.currentLife = br.ReadInt32();
+                        player.Stats.totalMana = br.ReadInt32();
+                        player.Stats.mana = br.ReadInt32();
+                        player.Stats.iFrames = br.ReadInt32();
 
-                    player.Traits = new Traits();
-                    player.Traits.bookSmarts = br.ReadSingle();
-                    player.Traits.courage = br.ReadSingle();
-                    player.Traits.streetSmarts = br.ReadSingle();
-                    player.Traits.wellBeing = br.ReadSingle();
+                        player.Traits = new Traits();
+                        player.Traits.bookSmarts = br.ReadSingle();
+                        player.Traits.courage = br.ReadSingle();
+                        player.Traits.streetSmarts = br.ReadSingle();
+                        player.Traits.wellBeing = br.ReadSingle();
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 }
                 //  DEBUG set player position
                 //  MOVED to player init
