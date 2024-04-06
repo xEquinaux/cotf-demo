@@ -331,7 +331,7 @@ namespace cotf_rewd
                     
                     strikePoint = Main.player[owner].Center + Helper.AngleToSpeed(angle + 27f * Draw.radian, height);
                     //  DEBUG drawing
-                    //sb.Draw(Main.MagicPixel, new Rectangle((int)strikePoint.X - 5, (int)strikePoint.Y - 5, 10, 10), Color.Red);
+                    rb.Draw(Main.MagicPixel, new Rectangle((int)strikePoint.X - 5, (int)strikePoint.Y - 5, 10, 10), Color.Red);
                 }
             }
         }

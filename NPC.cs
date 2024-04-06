@@ -481,7 +481,7 @@ namespace cotf_rewd
                 color = Color.Red;
             else color = Color.Gray;
 
-            rb.Draw(texture, hitbox, DynamicTorch(120f));
+            //rb.Draw(texture, hitbox, DynamicTorch(120f));
         }
         public void Dispose()
         {

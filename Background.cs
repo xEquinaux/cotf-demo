@@ -257,6 +257,7 @@ namespace cotf_rewd
             if ((light || discovered) && onScreen)
             {
                 color = Color.Gray;
+                //  DEBUG
                 rb.Draw(texture, hitbox.X, hitbox.Y, DynamicTorch(120f));// * alpha);
             }
         }

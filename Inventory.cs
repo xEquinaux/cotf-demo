@@ -109,7 +109,7 @@ namespace cotf_rewd
             for (int i = 0; i < 3; i++)
             {
                 //  DEBUG comment to avoid crash
-                //rb.Draw(Main.MagicPixel, array[i], Color.White);
+                rb.Draw(Main.MagicPixel, array[i], Color.White);
             }
         }
         public void Draw(RewBatch rb)

@@ -154,6 +154,7 @@ namespace cotf_rewd
         {
             if (!active || !discovered) return;
 
+            //  DEBUG
             rb.Draw(Main.MagicPixel, hitbox, Color.White);
             if (proximity)
             {

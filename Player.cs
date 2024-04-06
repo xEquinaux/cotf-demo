@@ -189,9 +189,18 @@ namespace cotf_rewd
         }
         public void Update()
         {
+            if (PlayerInWall())
+            {
+                Background bg = null;
+                do
+                {
+                    bg = Main.ground[(int)Main.rand.Next(0, Main.ground.Length)];
+                } while (bg == null || !bg.active);
+                Main.LocalPlayer.position = bg.position;
+            }
             if (!init)
             {
-                // DEBUG pre rendering levels until update priority is sorted
+                //  DEBUG pre rendering levels until update priority is sorted
                 Main.GenerateLevel();
 
                 Name = "Player001";

@@ -377,7 +377,7 @@ namespace cotf_rewd
         {
             if (!active)
                 return;
-
+            //  DEBUG
             sb.Draw(texture, new Rectangle((int)position.X, (int)position.Y, width, height), Color.White);
             //  DEBUG
             //gfx.DrawRectangle(selected && unlocked ? System.Drawing.Pens.Gold : Pens.Gray, new System.Drawing.Rectangle((int)position.X, (int)position.Y, hitbox.Width, hitbox.Height));
