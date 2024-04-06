@@ -11,6 +11,9 @@ using FoundationR;
 using Microsoft.Win32;
 using System.Windows.Controls;
 using System.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace cotf_rewd
 {
@@ -49,9 +52,11 @@ namespace cotf_rewd
         public static bool mouseRight;
         bool flag;
         bool init;
+        bool exit = false;
         int ticks = 1;
         int frame;
         REW cans;
+        static IList<Keys> keyboard = new List<Keys>();
 
         internal Game()
         {
@@ -70,15 +75,26 @@ namespace cotf_rewd
             Foundation.MainMenuEvent += MainMenu;
             Foundation.PreDrawEvent += PreDraw;
             Foundation.CameraEvent += Camera;
+            Foundation.ExitEvent += ExitApp;
+        }
+
+        protected bool ExitApp(ExitArgs e)
+        {
+            return exit;
         }
 
         protected void Input(InputArgs e)
         {
-            int x = e.mouse.X + RewBatch.Viewport.X;
-            int y = e.mouse.Y + RewBatch.Viewport.Y;
+            int x = e.mousePosition.X + RewBatch.Viewport.X;
+            int y = e.mousePosition.Y + RewBatch.Viewport.Y;
             MousePosition = new Point(x + 8, y + 31);
-            mouseLeft = false;
-            mouseRight = false;
+            mouseLeft = e.mouseLeft;
+            keyboard = e.keyboard;
+        }
+
+        public override void ClearInput()
+        {
+            base.ClearInput();
         }
 
         protected void Camera(CameraArgs e)
@@ -126,10 +142,6 @@ namespace cotf_rewd
 
         protected void Initialize(InitializeArgs e)
         {
-            e.form.MouseClick += Form_MouseClick;
-
-            matrix = new Matrix();
-
             Dialog.CoinColor = new Color[]
             {
                 FromAlpha(0.722f, 0.451f, 0.20f, 1f),
@@ -138,18 +150,6 @@ namespace cotf_rewd
                 Color.Gold,
                 FromAlpha(0.898f, 0.894f, 0.886f, 1f)
             };
-        }
-
-        private void Form_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                mouseLeft = true;
-            }
-            if (e.Button == MouseButtons.Right)
-            {
-                mouseRight = true;
-            }
         }
 
         Stopwatch GameTime = new Stopwatch();
@@ -169,11 +169,12 @@ namespace cotf_rewd
 
         protected void Update(UpdateArgs e)
         {
-            if (KeyDown(Key.Escape))
+            if (KeyDown(Keys.Escape))
             {
                 Main.SavePlayer();
                 Level.Save(Level.floorNumber);
-                Environment.Exit(1);
+                exit = true;
+                return;
             }
 
             // TODO: Add your update logic here
@@ -194,7 +195,7 @@ namespace cotf_rewd
                 //matrix = Matrix.CreateTranslation(camera + offset + (Main.IsZoomed ? new Vector3(Main.ScreenWidth * 0.5f - Main.MapX * ScrollSpeed, Main.ScreenHeight * 0.5f - Main.MapY * ScrollSpeed, 0) : Vector3.Zero)) * Matrix.CreateScale(Main.IsZoomed ? 0.5f : 1f);
             }
             //else matrix = Matrix.CreateTranslation(0, 0, 0);
-            if (KeyDown(Key.Space))
+            if (KeyDown(Keys.Space))
                 flag = true;
         }
 
@@ -203,13 +204,13 @@ namespace cotf_rewd
             return false;
         }
 
-        public static bool KeyDown(Key k)
+        public new static bool KeyDown(Keys k)
         {
-            return Keyboard.PrimaryDevice.IsKeyDown(k);
+            return keyboard.Contains(k);
         }
-        public static bool KeyUp(Key k)
+        public new static bool KeyUp(Keys k)
         {
-            return Keyboard.PrimaryDevice.IsKeyUp(k);
+            return !keyboard.Contains(k);
         }
     }
 }

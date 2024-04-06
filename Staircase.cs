@@ -39,7 +39,7 @@ namespace cotf_rewd
         public int whoAmI;
         public static bool goingDown;
         private static int flag = 0;
-        public const Key useStairs = Key.Enter;
+        public const Key useStairs = Keys.Enter;
         public bool discovered;
         public const float range = 300f;
         public enum Transition

@@ -61,14 +61,14 @@ namespace cotf_rewd
         {
             if (container.Contains(Main.WorldMouse.X, Main.WorldMouse.Y))
             {
-                if (Main.LocalPlayer.KeyDown(Key.Down))
+                if (Main.LocalPlayer.KeyDown(Keys.Down))
                 {
                     if (bar.value * bar.hitbox.Height < bar.hitbox.Height - 12)
                     {
                         bar.value += 0.04f;
                     }
                 }
-                if (Main.LocalPlayer.KeyDown(Key.Up))
+                if (Main.LocalPlayer.KeyDown(Keys.Up))
                 {
                     if (bar.value > 0f)
                     {

@@ -61,7 +61,7 @@ namespace cotf_rewd
         public new void Update()
         {
             //  Item inventory display from OWNER_WORLD
-            if (KeyDown(Key.O) && flag % 2 == 0)
+            if (KeyDown(Keys.O) && flag % 2 == 0)
             {
                 foreach (Item i in Main.item)
                 {
@@ -73,7 +73,7 @@ namespace cotf_rewd
                 open = !open;
                 flag = 1;
             }
-            if (KeyUp(Key.O) && flag % 2 == 1)
+            if (KeyUp(Keys.O) && flag % 2 == 1)
             {
                 flag = 0;
             }

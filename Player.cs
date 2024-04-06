@@ -516,25 +516,25 @@ namespace cotf_rewd
             #endregion
 
             //  Controls
-            if (controlRight = !Game.KeyDown(Key.A) && Game.KeyDown(Key.D))
+            if (controlRight = !Game.KeyDown(Keys.A) && Game.KeyDown(Keys.D))
             {
                 // move right
                 Main.TimeScale = 1;
                 velocity.X += moveSpeed;
             }
-            if (controlLeft = Game.KeyDown(Key.A) && !Game.KeyDown(Key.D))
+            if (controlLeft = Game.KeyDown(Keys.A) && !Game.KeyDown(Keys.D))
             {
                 // move left
                 Main.TimeScale = 1;
                 velocity.X -= moveSpeed;
             }
-            if (controlDown = !Game.KeyDown(Key.W) && Game.KeyDown(Key.S))
+            if (controlDown = !Game.KeyDown(Keys.W) && Game.KeyDown(Keys.S))
             {
                 // move down
                 Main.TimeScale = 1;
                 velocity.Y += moveSpeed;
             }
-            if (controlUp = Game.KeyDown(Key.W) && !Game.KeyDown(Key.S))
+            if (controlUp = Game.KeyDown(Keys.W) && !Game.KeyDown(Keys.S))
             {
                 // move up
                 Main.TimeScale = 1;
@@ -544,26 +544,26 @@ namespace cotf_rewd
             //AuxMovement();
 
             //  GUI Hotbar
-            if (Game.KeyDown(Key.D1) || Game.KeyDown(Key.D2) || Game.KeyDown(Key.D3) || Game.KeyDown(Key.D4) || Game.KeyDown(Key.D5))
+            if (Game.KeyDown(Keys.D1) || Game.KeyDown(Keys.D2) || Game.KeyDown(Keys.D3) || Game.KeyDown(Keys.D4) || Game.KeyDown(Keys.D5))
             {
                 foreach (GUI g in Main.gui.Where(t => t != null))
                     g.selected = false;
             }
-            if (Game.KeyDown(Key.D1))
+            if (Game.KeyDown(Keys.D1))
                 Main.gui[0].selected = true;
-            else if (Game.KeyDown(Key.D2))
+            else if (Game.KeyDown(Keys.D2))
                 Main.gui[1].selected = true;
-            else if (Game.KeyDown(Key.D3))
+            else if (Game.KeyDown(Keys.D3))
                 Main.gui[2].selected = true;
-            else if (Game.KeyDown(Key.D4))
+            else if (Game.KeyDown(Keys.D4))
                 Main.gui[3].selected = true;
-            else if (Game.KeyDown(Key.D5))
+            else if (Game.KeyDown(Keys.D5))
                 Main.gui[4].selected = true;
 
             //  Time scaling
             if (Stats.mana < ScaledMaxMana || Stats.currentLife < ScaledMaxLife)
             {
-                if (Game.KeyDown(Key.R))
+                if (Game.KeyDown(Keys.R))
                     Main.TimeScale = 15;
             }
             else Main.TimeScale = 1;
@@ -677,12 +677,12 @@ namespace cotf_rewd
 
         public void ToggleZoom()
         {
-            if (Game.KeyDown(Key.M) && flag3 % 2 == 0)
+            if (Game.KeyDown(Keys.M) && flag3 % 2 == 0)
             {
                 flag3++;
                 Main.IsZoomed = !Main.IsZoomed;
             }
-            if (Game.KeyUp(Key.M))
+            if (Game.KeyUp(Keys.M))
             {
                 flag3 = 0;
             }
@@ -700,13 +700,13 @@ namespace cotf_rewd
         {
             if (Main.IsZoomed)
             {
-                if (Game.KeyDown(Key.Down) && Main.MapY * Game.ScrollSpeed < Main.LevelHeight / 2)
+                if (Game.KeyDown(Keys.Down) && Main.MapY * Game.ScrollSpeed < Main.LevelHeight / 2)
                     Main.MapY++;
-                if (Game.KeyDown(Key.Up) && Main.MapY * Game.ScrollSpeed > -Main.LevelHeight / 2)
+                if (Game.KeyDown(Keys.Up) && Main.MapY * Game.ScrollSpeed > -Main.LevelHeight / 2)
                     Main.MapY--;
-                if (Game.KeyDown(Key.Right) && Main.MapX * Game.ScrollSpeed < Main.LevelHeight / 2)
+                if (Game.KeyDown(Keys.Right) && Main.MapX * Game.ScrollSpeed < Main.LevelHeight / 2)
                     Main.MapX++;
-                if (Game.KeyDown(Key.Left) && Main.MapX * Game.ScrollSpeed > -Main.LevelHeight / 2)
+                if (Game.KeyDown(Keys.Left) && Main.MapX * Game.ScrollSpeed > -Main.LevelHeight / 2)
                     Main.MapX--;
             }
             else
@@ -781,15 +781,15 @@ namespace cotf_rewd
         
         public bool IsMovingNoCollide()
         {
-            return (Game.KeyDown(Key.Space) || Game.KeyDown(Key.W) || Game.KeyDown(Key.A) || Game.KeyDown(Key.S) || Game.KeyDown(Key.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
+            return (Game.KeyDown(Keys.Space) || Game.KeyDown(Keys.W) || Game.KeyDown(Keys.A) || Game.KeyDown(Keys.S) || Game.KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f);
         }
         public bool IsMoving()
         {
-            return !Game.KeyDown(Key.Space) && (Game.KeyDown(Key.W) || Game.KeyDown(Key.A) || Game.KeyDown(Key.S) || Game.KeyDown(Key.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f) && (!colDown || !colLeft || !colRight || !colUp);
+            return !Game.KeyDown(Keys.Space) && (Game.KeyDown(Keys.W) || Game.KeyDown(Keys.A) || Game.KeyDown(Keys.S) || Game.KeyDown(Keys.D)) && (velocity.X > 0f || velocity.X < 0f || velocity.Y > 0f || velocity.Y < 0f) && (!colDown || !colLeft || !colRight || !colUp);
         }
         public bool Movement()
         {
-            return Game.KeyDown(Key.W) || Game.KeyDown(Key.A) || Game.KeyDown(Key.S) || Game.KeyDown(Key.D) || Game.KeyDown(Key.Space) || Main.TimeScale != 1;
+            return Game.KeyDown(Keys.W) || Game.KeyDown(Keys.A) || Game.KeyDown(Keys.S) || Game.KeyDown(Keys.D) || Game.KeyDown(Keys.Space) || Main.TimeScale != 1;
         }
         public bool LeftMouse()
         {
