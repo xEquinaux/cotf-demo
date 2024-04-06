@@ -108,7 +108,7 @@ namespace cotf_rewd
             Font[FontID.Consolas] = "Consolas";
             Font[FontID.LucidaConsole] = "LucidaConsole";
             //Asset.ConvertFromFile($"{RootDirectory}\\MagicPixel.png", out Main.MagicPixel);
-            Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.MagicPixel);
+            Main.MagicPixel = REW.Create(50, 50, Color.White, Ext.GetFormat(4));
             Asset.LoadFromFile($"{RootDirectory}\\temp.rew", out Main.Temporal);
             Asset.LoadFromFile($"{RootDirectory}\\Alpha Tiles Scratches.rew", out cotf_rewd.Background.BGs[BackgroundID.Tiles]);
             Asset.LoadFromFile($"{RootDirectory}\\temp_bg.rew", out cotf_rewd.Background.BGs[BackgroundID.Temp]);
