@@ -83,9 +83,15 @@ namespace cotf_rewd
 
         protected void Camera(CameraArgs e)
         {
+            //var offset = new Vector2(Main.ScreenWidth / 2, Main.ScreenHeight / 2);
+            //var camera = new Vector2(-Main.LocalPlayer.position.X - Player.plrWidth / 2, -Main.LocalPlayer.position.Y - Player.plrHeight / 2);
+            //matrix = Matrix.CreateTranslation(camera + offset + (Main.IsZoomed ? new Vector3(Main.ScreenWidth * 0.5f - Main.MapX * ScrollSpeed, Main.ScreenHeight * 0.5f - Main.MapY * ScrollSpeed, 0) : Vector3.Zero)) * Matrix.CreateScale(Main.IsZoomed ? 0.5f : 1f);
+
+            //var old = Main.LocalPlayer.position - new Vector2(Main.ScreenWidth / 2 - Main.LocalPlayer.width / 2, Main.ScreenHeight / 2 - Main.LocalPlayer.height / 2);
             if (!Main.Instance.once)
             {     
-                e.CAMERA.position = Main.LocalPlayer.position - new Vector2(Main.ScreenWidth / 2 - Main.LocalPlayer.width / 2, Main.ScreenHeight / 2 - Main.LocalPlayer.height / 2);
+                e.CAMERA.position = new Vector2(500, 500);
+                Main.LocalPlayer.position = new Vector2(500, 500);
             }
         }
 

@@ -264,7 +264,6 @@ namespace cotf_rewd
         {
             for (int i = 0; i < Main.ground.Length; i++)
             {
-                Main.ground[i].active = false;
                 Main.ground[i] = null;
             }
             Main.ground = new Background[preInitIndex];

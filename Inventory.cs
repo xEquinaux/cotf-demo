@@ -108,7 +108,8 @@ namespace cotf_rewd
             var array = new Rectangle[] { Items, Equipment, Armor };
             for (int i = 0; i < 3; i++)
             {
-                rb.Draw(Main.MagicPixel, array[i], Color.White);
+                //  DEBUG comment to avoid crash
+                //rb.Draw(Main.MagicPixel, array[i], Color.White);
             }
         }
         public void Draw(RewBatch rb)

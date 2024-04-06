@@ -201,8 +201,11 @@ namespace cotf_rewd.NPCs
         {
             if (!active || hidden) return;
 
-            //  Head
-            rb.Draw(Main.MagicPixel, hitbox, Color.Blue);//, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            if (hitbox != Rectangle.Empty)
+            { 
+                //  Head
+                rb.Draw(Main.MagicPixel, hitbox, Color.Blue);//, new Rectangle(0, 0, width, height), IFrames(Color.Blue), rotation, new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
+            }
             //  Tail + 1
             rb.Draw(Main.MagicPixel, body[0].hitbox, Color.Blue);//, new Rectangle(0, 0, width, height));//, Color.Blue, Helper.AngleTo(body[0].Center, body[1].Center), new Vector2(width / 2, height / 2), SpriteEffects.None, 0f);
             //  Body
