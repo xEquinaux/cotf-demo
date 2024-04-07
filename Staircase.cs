@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using System.Windows.Input;
+using System.Windows.Forms;
 
 
 
@@ -39,7 +39,7 @@ namespace cotf_rewd
         public int whoAmI;
         public static bool goingDown;
         private static int flag = 0;
-        public const Key useStairs = Keys.Enter;
+        public const Keys useStairs = Keys.Enter;
         public bool discovered;
         public const float range = 300f;
         public enum Transition

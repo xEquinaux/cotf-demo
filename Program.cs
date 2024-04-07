@@ -195,7 +195,7 @@ namespace cotf_rewd
                 //matrix = Matrix.CreateTranslation(camera + offset + (Main.IsZoomed ? new Vector3(Main.ScreenWidth * 0.5f - Main.MapX * ScrollSpeed, Main.ScreenHeight * 0.5f - Main.MapY * ScrollSpeed, 0) : Vector3.Zero)) * Matrix.CreateScale(Main.IsZoomed ? 0.5f : 1f);
             }
             //else matrix = Matrix.CreateTranslation(0, 0, 0);
-            if (KeyDown(Keys.Space))
+            if (KeyDown(Keys.Space))        
                 flag = true;
         }
 

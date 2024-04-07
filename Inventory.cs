@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 
@@ -149,8 +150,8 @@ namespace cotf_rewd
                 }
             }
         }
-        public new bool KeyDown(Key key) => Game.KeyDown(key);
-        public new bool KeyUp(Key key) => Game.KeyUp(key);
+        public new bool KeyDown(Keys key) => Game.KeyDown(key);
+        public new bool KeyUp(Keys key) => Game.KeyUp(key);
         public bool LeftMouse()
         {
             return player.LeftMouse();

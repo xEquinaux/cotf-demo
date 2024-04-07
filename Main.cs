@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 
@@ -401,11 +402,11 @@ namespace cotf_rewd
             //Selecting rooms to diversify
             //Room.Initialize();
         }
-        public bool KeyUp(Key key)
+        public bool KeyUp(Keys key)
         {
             return Game.KeyUp(key);
         }
-        public bool KeyDown(Key key)
+        public bool KeyDown(Keys key)
         {
             return Game.KeyDown(key);
         }

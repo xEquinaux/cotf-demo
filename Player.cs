@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 
@@ -84,7 +85,7 @@ namespace cotf_rewd
         public List<NPC> npcCollide = new List<NPC>();
         public void PreDraw(RewBatch rb)
         {
-            if (Inventory.open || !init)
+            if (Inventory.open || !init || texture == null)
                 return;
 
             if (iFrameCounter > 0)
@@ -770,11 +771,11 @@ namespace cotf_rewd
         {
             return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
         }
-        public bool KeyUp(Key key)
+        public bool KeyUp(Keys key)
         {
             return Game.KeyUp(key);
         }
-        public bool KeyDown(Key key)
+        public bool KeyDown(Keys key)
         {
             return Game.KeyDown(key);
         }
