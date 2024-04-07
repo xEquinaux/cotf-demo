@@ -57,6 +57,7 @@ namespace cotf_rewd
         int frame;
         REW cans;
         static IList<Keys> keyboard = new List<Keys>();
+        static Form form;
 
         internal Game()
         {
@@ -85,8 +86,8 @@ namespace cotf_rewd
 
         protected void Input(InputArgs e)
         {
-            int x = e.mousePosition.X + RewBatch.Viewport.X;
-            int y = e.mousePosition.Y + RewBatch.Viewport.Y;
+            int x = e.mousePosition.X + RewBatch.Viewport.X - e.windowBounds.Left;
+            int y = e.mousePosition.Y + RewBatch.Viewport.Y - e.windowBounds.Top;
             MousePosition = new Point(x + 8, y + 31);
             mouseLeft = e.mouseLeft;
             keyboard = e.keyboard;
@@ -105,7 +106,8 @@ namespace cotf_rewd
 
             if (!Main.Instance.once)
             {
-                var old = Main.LocalPlayer.position - new Vector2(Main.ScreenWidth / 2 - Main.LocalPlayer.width / 2, Main.ScreenHeight / 2 - Main.LocalPlayer.height / 2);
+                var off = new Vector2(Main.ScreenWidth / 2 - Main.LocalPlayer.width / 2, Main.ScreenHeight / 2 - Main.LocalPlayer.height / 2);
+                var old = Main.LocalPlayer.position - off;
                 e.CAMERA.position = old;
             }
         }
@@ -116,6 +118,8 @@ namespace cotf_rewd
 
         protected void MainMenu(DrawingArgs e)
         {
+            Main.Logo = false;
+            flag = true;
         }
 
         protected void LoadResources()
@@ -204,11 +208,11 @@ namespace cotf_rewd
             return false;
         }
 
-        public new static bool KeyDown(Keys k)
+        public static bool KeyDown(Keys k)
         {
             return keyboard.Contains(k);
         }
-        public new static bool KeyUp(Keys k)
+        public static bool KeyUp(Keys k)
         {
             return !keyboard.Contains(k);
         }
