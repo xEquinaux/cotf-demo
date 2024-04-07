@@ -187,9 +187,7 @@ namespace cotf_rewd
                 Main.LoadPlayer();
                 init = true;
             }
-            Main.ScreenWidth = Program.Width;
-            Main.ScreenHeight = Program.Height;
-
+            
             Main.rand?.Seed();
             Main.Updater();
             if (Main.LocalPlayer != null)

@@ -96,8 +96,8 @@ namespace cotf_rewd
         }*/
         public static bool IsZoomed;               
         public bool once = true;
-        public static int ScreenWidth;
-        public static int ScreenHeight;
+        public static int ScreenWidth => RewBatch.Viewport.Width;
+        public static int ScreenHeight => RewBatch.Viewport.Height;
         
         public static int LevelWidth
         {
