@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static FoundationR.Foundation;
 
 namespace cotf_rewd
 {
@@ -75,7 +76,7 @@ namespace cotf_rewd
             Foundation.LoadResourcesEvent += LoadResources;
             Foundation.MainMenuEvent += MainMenu;
             Foundation.PreDrawEvent += PreDraw;
-            Foundation.CameraEvent += Camera;
+            Foundation.ViewportEvent += Viewport;
             Foundation.ExitEvent += ExitApp;
         }
 
@@ -98,7 +99,7 @@ namespace cotf_rewd
             base.ClearInput();
         }
 
-        protected void Camera(CameraArgs e)
+        protected void Viewport(ViewportArgs e)
         {
             //var offset = new Vector2(Main.ScreenWidth / 2, Main.ScreenHeight / 2);
             //var camera = new Vector2(-Main.LocalPlayer.position.X - Player.plrWidth / 2, -Main.LocalPlayer.position.Y - Player.plrHeight / 2);
