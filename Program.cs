@@ -66,7 +66,7 @@ namespace cotf_rewd
             Main.Instance = new Main();
         }
         
-        public override void RegisterHooks()
+        public override void RegisterHooks(Form form)
         {
             Foundation.UpdateEvent += Update;
             Foundation.ResizeEvent += Resize;
@@ -78,6 +78,32 @@ namespace cotf_rewd
             Foundation.PreDrawEvent += PreDraw;
             Foundation.ViewportEvent += Viewport;
             Foundation.ExitEvent += ExitApp;
+            Game.form = form;
+            form.KeyDown += Form_KeyDown;
+            form.MouseClick += Form_MouseClick;
+        }
+
+        private void Form_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                mouseLeft = true;
+            if (e.Button == MouseButtons.Right)
+                mouseRight = true;
+        }
+
+        public override void ClearInput()
+        {
+            mouseLeft = false;
+            mouseRight = false;
+            keyboard.Clear();
+        }
+
+        private void Form_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (!e.Handled)
+            { 
+                keyboard.Add(e.KeyCode);
+            }
         }
 
         protected bool ExitApp(ExitArgs e)
@@ -87,16 +113,20 @@ namespace cotf_rewd
 
         protected void Input(InputArgs e)
         {
-            int x = e.mousePosition.X + RewBatch.Viewport.X - e.windowBounds.Left;
-            int y = e.mousePosition.Y + RewBatch.Viewport.Y - e.windowBounds.Top;
-            MousePosition = new Point(x + 8, y + 31);
-            mouseLeft = e.mouseLeft;
-            keyboard = e.keyboard;
-        }
-
-        public override void ClearInput()
-        {
-            base.ClearInput();
+            try
+            {
+                form.Invoke(new Action(() => 
+                { 
+                    Point mouse = mouse = form.PointToClient(System.Windows.Forms.Cursor.Position);
+                    int x = mouse.X;
+                    int y = mouse.Y;
+                    MousePosition = new Point(x + 8, y + 31);
+                }));
+            }
+            catch
+            {
+                return;
+            }
         }
 
         protected void Viewport(ViewportArgs e)
@@ -108,8 +138,8 @@ namespace cotf_rewd
             if (!Main.Instance.once)
             {
                 var off = new Vector2(Main.ScreenWidth / 2 - Main.LocalPlayer.width / 2, Main.ScreenHeight / 2 - Main.LocalPlayer.height / 2);
-                var old = Main.LocalPlayer.position - off;
-                e.CAMERA.position = old;
+                var old = Main.LocalPlayer.position + off;
+                e.viewport.position = old;
             }
         }
 
