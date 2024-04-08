@@ -30,7 +30,7 @@ namespace cotf_rewd
         internal static int Height => 600;
         static int BitsPerPixel => 32;
         static string Title = "Castle of the Flame";
-        [STAThread]
+        [MTAThread]
         static void Main(string[] args)
         {
             Game m = null;
@@ -50,7 +50,7 @@ namespace cotf_rewd
         public static Main Main => Main.Instance;
         public static Point MousePosition;
         public const int ScrollSpeed = 10;
-        public const int FontSize = 12;
+        public new const int FontSize = 12;
         public static string[] Font = new string[4];
         public static string RootDirectory = ".\\Content";
         public static bool mouseLeft;
@@ -61,7 +61,7 @@ namespace cotf_rewd
         int ticks = 1;
         int frame;
         REW cans;
-        static IList<Keys> keyboard = new List<Keys>();
+        static IList<Key> keyboard = new List<Key>();
         static Form form;
 
         internal Game()
@@ -83,7 +83,6 @@ namespace cotf_rewd
             Foundation.ViewportEvent += Viewport;
             Foundation.ExitEvent += ExitApp;
             Game.form = form;
-            form.KeyDown += Form_KeyDown;
             form.MouseClick += Form_MouseClick;
         }
 
@@ -100,14 +99,6 @@ namespace cotf_rewd
             mouseLeft = false;
             mouseRight = false;
             keyboard.Clear();
-        }
-
-        private void Form_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            if (!e.Handled)
-            { 
-                keyboard.Add(e.KeyCode);
-            }
         }
 
         protected bool ExitApp(ExitArgs e)
@@ -153,8 +144,6 @@ namespace cotf_rewd
 
         protected void MainMenu(DrawingArgs e)
         {
-            Main.Logo = false;
-            flag = true;
         }
 
         protected void LoadResources()
@@ -208,7 +197,7 @@ namespace cotf_rewd
 
         protected void Update(UpdateArgs e)
         {
-            if (KeyDown(Keys.Escape))
+            if (KeyDown(Key.Escape))
             {
                 Main.SavePlayer();
                 Level.Save(Level.floorNumber);
@@ -232,7 +221,7 @@ namespace cotf_rewd
                 //matrix = Matrix.CreateTranslation(camera + offset + (Main.IsZoomed ? new Vector3(Main.ScreenWidth * 0.5f - Main.MapX * ScrollSpeed, Main.ScreenHeight * 0.5f - Main.MapY * ScrollSpeed, 0) : Vector3.Zero)) * Matrix.CreateScale(Main.IsZoomed ? 0.5f : 1f);
             }
             //else matrix = Matrix.CreateTranslation(0, 0, 0);
-            if (KeyDown(Keys.Space))        
+            if (KeyDown(Key.Space))        
                 flag = true;
         }
 
@@ -241,13 +230,13 @@ namespace cotf_rewd
             return false;
         }
 
-        public static bool KeyDown(Keys k)
+        public new static bool KeyDown(Key k)
         {
-            return keyboard.Contains(k);
+            return Keyboard.PrimaryDevice.IsKeyDown(k);
         }
-        public static bool KeyUp(Keys k)
+        public new static bool KeyUp(Key k)
         {
-            return !keyboard.Contains(k);
+            return Keyboard.PrimaryDevice.IsKeyUp(k);
         }
     }
 }

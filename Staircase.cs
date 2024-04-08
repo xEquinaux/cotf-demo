@@ -12,6 +12,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 
 
@@ -44,7 +45,7 @@ namespace cotf_rewd
         public int whoAmI;
         public static bool goingDown;
         private static int flag = 0;
-        public const Keys useStairs = Keys.Enter;
+        public const Key useStairs = Key.Enter;
         public bool discovered;
         public const float range = 300f;
         public enum Transition
@@ -92,9 +93,9 @@ namespace cotf_rewd
                 flag = 0;
             
             //  DEBUG Worldgen testing fast travel
-            //if (player.KeyDown(Keys.Down))
+            //if (player.KeyDown(Key.Down))
             //    player.position = Main.stair.Where(t => t.transition == Transition.GoingDown).First().position;
-            //if (player.KeyDown(Keys.Up))
+            //if (player.KeyDown(Key.Up))
             //    player.position = Main.stair.Where(t => t.transition == Transition.GoingUp).First().position;
 
             if ((proximity = player.hitbox.IntersectsWith(hitbox)) && player.KeyDown(useStairs) && flag++ == 0)

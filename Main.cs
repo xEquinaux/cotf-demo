@@ -407,18 +407,18 @@ namespace cotf_rewd
             //Selecting rooms to diversify
             //Room.Initialize();
         }
-        public bool KeyUp(Keys key)
+        public bool KeyUp(Key key)
         {
             return Game.KeyUp(key);
         }
-        public bool KeyDown(Keys key)
+        public bool KeyDown(Key key)
         {
             return Game.KeyDown(key);
         }
         float ticks = 0;
         protected virtual void PreDraw(RewBatch rb)
         {
-            //ticks += Keyboard.IsKeyDown(Keys.NumPad0) ? 0.05f : 0.017f;
+            //ticks += Keyboard.IsKeyDown(Key.NumPad0) ? 0.05f : 0.017f;
             //float cos = ScreenWidth / 2 + ScreenWidth / 2 * (float)Math.Cos(ticks);
             //float sin = ScreenHeight / 2 + ScreenHeight / 2 * (float)Math.Sin(ticks);
             //gfx.DrawLine(Pens.White, ScreenWidth / 2, ScreenHeight / 2, (int)cos, (int)sin);
@@ -436,7 +436,7 @@ namespace cotf_rewd
             //  Getting room data from level generation instead
             //Room.Update();
 
-            //if (KeyDown(Keys.NumPad0) && npc[0] == null)
+            //if (KeyDown(Key.NumPad0) && npc[0] == null)
             //{
             //    NPC.NewNPC(0, 0, -1, System.Drawing.Color.White, 500);
             //    Projectile.NewProjectile(300, 0, -1, System.Drawing.Color.White, 300);
@@ -449,7 +449,7 @@ namespace cotf_rewd
 
         private void ExitLogoScene()
         {
-            //if (!begin && !e.Handled && !e.IsRepeat && e.Keys.Equals(Keys.Enter))
+            //if (!begin && !e.Handled && !e.IsRepeat && e.Key.Equals(Key.Enter))
             //{
             //    begin = true;
             //    Button_Click(this, null);

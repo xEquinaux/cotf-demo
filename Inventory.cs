@@ -67,7 +67,7 @@ namespace cotf_rewd
         public new void Update()
         {
             //  Item inventory display from OWNER_WORLD
-            if (KeyDown(Keys.O) && flag % 2 == 0)
+            if (KeyDown(Key.O) && flag % 2 == 0)
             {
                 foreach (Item i in Main.item)
                 {
@@ -79,7 +79,7 @@ namespace cotf_rewd
                 open = !open;
                 flag = 1;
             }
-            if (KeyUp(Keys.O) && flag % 2 == 1)
+            if (KeyUp(Key.O) && flag % 2 == 1)
             {
                 flag = 0;
             }
@@ -155,8 +155,8 @@ namespace cotf_rewd
                 }
             }
         }
-        public new bool KeyDown(Keys key) => Game.KeyDown(key);
-        public new bool KeyUp(Keys key) => Game.KeyUp(key);
+        public new bool KeyDown(Key key) => Game.KeyDown(key);
+        public new bool KeyUp(Key key) => Game.KeyUp(key);
         public bool LeftMouse()
         {
             return player.LeftMouse();
