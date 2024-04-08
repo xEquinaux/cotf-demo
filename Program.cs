@@ -14,7 +14,11 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using static FoundationR.Foundation;
+using FoundationR.Lib;
+using FoundationR.Rew;
+using FoundationR.Loader;
+using FoundationR.Ext;
+using FoundationR.Headers;
 
 namespace cotf_rewd
 {
@@ -30,7 +34,7 @@ namespace cotf_rewd
         static void Main(string[] args)
         {
             Game m = null;
-            Thread t = new Thread(() => { (m = new Game()).Run(SurfaceType.WindowHandle_Loop, new FoundationR.Surface(StartX, StartY, Width, Height, Title, BitsPerPixel)); });
+            Thread t = new Thread(() => { (m = new Game()).Run(SurfaceType.WindowHandle_Loop, new Surface(StartX, StartY, Width, Height, Title, BitsPerPixel)); });
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
             while (Console.ReadLine() != "exit");
