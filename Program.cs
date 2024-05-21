@@ -34,7 +34,7 @@ namespace cotf_rewd
         static void Main(string[] args)
         {
             Game m = null;
-            Thread t = new Thread(() => { (m = new Game()).Run(SurfaceType.WindowHandle_Loop, new Surface(StartX, StartY, Width, Height, Title, BitsPerPixel)); });
+            Thread t = new Thread(() => { (m = new Game()).Run(new Surface(StartX, StartY, Width, Height, Title, BitsPerPixel)); });
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
             while (Console.ReadLine() != "exit");
